@@ -1,0 +1,11 @@
+<div class="siimple-list siimple-list--hover">
+    {{#each pages}}
+    {{#if (eq (join this.categories "/") (join ../page.categories "/"))}}
+    <a class="siimple-list-item {{#if (eq this.name ../page.name)}}siimple-list-item--selected{{/if}}" href="{{this.url}}">
+        <div class="siimple-list-title">{{{this.data.title}}}</div>
+        <div class="siimple-list-description">{{{this.data.description}}}</div>
+    </a>
+    {{/if}}
+    {{/each}}
+</div>
+
