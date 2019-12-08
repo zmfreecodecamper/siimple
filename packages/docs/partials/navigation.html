@@ -1,14 +1,14 @@
-<div class="siimple-press-navigation">
+<div class="siimple__nav">
 {{#if page.previous}}
-    <a class="siimple-press-navigation-prev" href="{{page.previous.url}}">
-        <div class="siimple-press-navigation-title">Previous</div>
-        <div class="siimple-press-navigation-detail">{{page.previous.data.title}}</div>
+    <a class="siimple__nav__prev" href="{{page.previous.url}}">
+        <div class="siimple__nav__title">Previous</div>
+        <div class="siimple__nav__detail">{{page.previous.data.title}}</div>
     </a>
 {{/if}}
 {{#if page.next}}
-    <a class="siimple-press-navigation-next" href="{{page.next.url}}">
-        <div class="siimple-press-navigation-title">Next</div>
-        <div class="siimple-press-navigation-detail">{{page.next.data.title}}</div>
+    <a class="siimple__nav__next" href="{{page.next.url}}">
+        <div class="siimple__nav__title">Next</div>
+        <div class="siimple__nav__detail">{{page.next.data.title}}</div>
     </a>
 {{/if}}
 </div>
