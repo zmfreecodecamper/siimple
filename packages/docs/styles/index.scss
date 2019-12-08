@@ -1,28 +1,33 @@
-//Import dependencies
 @import "@siimple/css/scss/variables.scss";
 @import "@siimple/css/scss/brand.scss";
 
-//Import variables
-@import "./variables.scss";
+@import "./navigation.scss";
+@import "./snippet.scss";
 
-//Import layout styles
-@import "./layout/home.scss";
-@import "./layout/documentation.scss";
-
-//Import  partials
-@import "./partials/analytics.scss";
-@import "./partials/navbar.scss";
-@import "./partials/navigation.scss";
-@import "./partials/footer.scss";
-
-//Import extra styles
-@import "./extra/code.scss";
-@import "./extra/search.scss";
-@import "./extra/snippet.scss";
-
-//Content class
-.#{$press-base}-content {
+//Documentation styles
+.siimple__content {
     padding-top: 30px;
     padding-bottom: 40px;
 }
+.siimple__title {
+    display: block;
+    font-size: 30px;
+    font-weight: 600;
+    color: siimple-default-color("dark");
+    margin-bottom: 5px;
+}
+.siimple__description {
+    display: block;
+    font-size: 18px;
+    color: siimple-default-color("dark", "light");
+    margin-bottom: 25px;
+}
+.siimple__changes {
+    display: block;
+    color: siimple-default-color("dark", "light");
+    font-size: 13px;
+    line-height: $siimple-default-line-height;
+    margin-top: 25px;
+}
+
 
