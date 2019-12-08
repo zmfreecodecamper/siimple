@@ -1,7 +1,7 @@
 //Snippet class
-.#{$press-base}-snippet,
+.siimple__snippet,
 .sd-snippet {
-    &-demo {
+    &__demo {
         display: block;
         padding: 10px;
         border: 2px solid siimple-default-color("light");
@@ -9,7 +9,7 @@
         border-top-right-radius: 5px;
         margin-bottom: 0px;
     }
-    &-code {
+    &__code {
         display: block;
         line-height: 22px;
         font-size: 14px;
