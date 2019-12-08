@@ -1,10 +1,14 @@
 ---
 layout: "default.html"
+show_home: False
 show_breadcrumb: True
 show_menu: True
 show_title: True
 show_navigation: True
 ---
+{{#if page.data.show_home }}
+{{> home.html }}
+{{/if}}
 <div class="siimple-content siimple__content siimple-content--large">
     {{#if page.data.show_breadcrumb }}
     {{> breadcrumbs.html}}
