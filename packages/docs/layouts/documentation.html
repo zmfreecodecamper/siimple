@@ -5,7 +5,7 @@ show_menu: True
 show_title: True
 show_navigation: True
 ---
-<div class="siimple-content siimple-press-content siimple-content--large">
+<div class="siimple-content siimple__content siimple-content--large">
     {{#if page.data.show_breadcrumb }}
     {{> breadcrumbs.html}}
     {{/if}}
@@ -16,19 +16,19 @@ show_navigation: True
             {{/if}}
             {{> support.html}}
         </div>
-        <div class="siimple-grid-col siimple-grid-col--9 siimple-grid-col-sm--12 siimple-press-column">
+        <div class="siimple-grid-col siimple-grid-col--9 siimple-grid-col-sm--12">
             {{#if page.data.show_title }}
             <div align="left">
-                <div class="siimple-press-documentation-title">
+                <div class="siimple__title">
                     {{{page.data.title}}}
                 </div>
-                <div class="siimple-press-documentation-description">
+                <div class="siimple__description">
                     {{{page.data.description}}}
                 </div>
             </div>
             {{/if}}
             {{ content }}
-            <div class="siimple-press-documentation-changes">
+            <div class="siimple__changes">
                 Found a mistake or want to help improve this documentation? 
                 <a href="{{site.issues}}" class="siimple-link" target="_blank">Suggest changes</a>.
             </div> 
