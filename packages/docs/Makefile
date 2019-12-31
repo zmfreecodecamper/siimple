@@ -5,6 +5,7 @@ NODE_BIN=../../node_modules/.bin
 
 # Build the documentation site
 build:
+	node ./build.js
 	@# Build documentation pages
 	cd ../../ && ./node_modules/@siimple/press/cli.js --config ./packages/docs/config.js
 	@# Build assets
