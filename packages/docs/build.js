@@ -11,8 +11,8 @@ process.nextTick(function () {
             "name": pkg.name,
             "description": pkg.description,
             "version": pkg.version,
-            "path": key,
-            "type": "css toolkit"
+            "path": path.join("/", key, "index.html"),
+            "type": "CSS TOOLKIT"
         };
     });
     //Write packages
