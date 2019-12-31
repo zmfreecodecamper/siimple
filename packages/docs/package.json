@@ -7,5 +7,9 @@
     "license": "MIT",
     "homepage": "http:/docs.siimple.xyz/",
     "repository": "https://github.com/siimple/siimple",
-    "dependencies": {}
+    "dependencies": {},
+    "packages": {
+        "css": "siimple-css",
+        "colors": "siimple-colors"
+    }
 }
