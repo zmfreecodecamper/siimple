@@ -10,21 +10,28 @@
 </div>
 <div class="siimple-content siimple-content--large">
     <div class="siimple-grid-row">
+        {{#each data.packages}}
         <div class="siimple-grid-col siimple-grid-col--6 siimple-grid-col--sm-12">
-            <div class="siimple-card">
-                <div class="siimple-card-body siimple--bg-light">
+            <div class="siimple-card siimple-card--light">
+                <div class="siimple-card-content">
+                    <strong style="font-size:11px;opacity:0.5;">
+                        {{this.type}}
+                    </strong>
+                </div>
+                <div class="siimple-card-content">
                     <div class="siimple-h4 siimple--mb-2 siimple--color-primary">
-                        @siimple/css
+                        {{this.name}}
                     </div>
-                    <div class="siimple-card-subtitle">
-                        Minimal CSS toolkit for flat and clean designs.
+                    <div class="siimple-small siimple--mb-3">
+                        {{this.description}}
                     </div>
                 </div>
-                <div class="siimple-card-link siimple--bg-light siimple--text-normal">
-                    Version <strong>v4.0.0</strong>
-                </div>
+                <a href="{{this.path}}" class="siimple-card-link">
+                    Version <strong>{{this.version}}</strong>
+                </a>
             </div>
         </div>
+        {{/each}}
     </div>
     <div class="siimple-rule"></div>
 </div>
