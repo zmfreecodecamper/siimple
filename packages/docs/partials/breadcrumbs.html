@@ -6,8 +6,8 @@
     {{#each page.categories}}
     <a class="siimple-breadcrumb-item">{{capitalize (replace this "-" " ")}}</a>
     {{/each}}
-    <a class="siimple-breadcrumb-item siimple-breadcrumb-item--selected">
+    <div class="siimple-breadcrumb-item siimple-breadcrumb-item--selected">
         {{ page.data.title }}
-    </a>
+    </div>
 </div>
 
