@@ -8,6 +8,7 @@ packages/*/dist
 packages/*/www
 
 # Custom paths
+packages/docs/data/packages.json
 packages/siimple-colors/docs/data
 packages/website/data/documentation.json
 
