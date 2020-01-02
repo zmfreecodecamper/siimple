@@ -1,28 +1,62 @@
 ---
 layout: "documentation"
-title: "Installation"
-description: "The guide to add <strong>siimple colors</strong> in your proyect"
-keywords: "installation,install,cdn,package,npm,node,bower,getting-started,css,version,download"
-updated_at: "2019-01-31"
+title: "Introduction"
+description: "Introducion and installation steps for <strong>siimple colors</strong>"
+keywords: "installation,install,cdn,package,npm,node,bower,getting-started,css,version,download,introduction"
+updated_at: "2020-01-02"
 --- 
 
+<div class="siimple-h4 siimple--mt-5">What is siimple colors</div>
 <div class="siimple-paragraph">
-    Get started with <strong>siimple colors</strong> adding it in your proyect. There are three ways to install it:
+    <strong>siimple colors</strong> is a flat color palette designed to extend the base colors of the <strong>siimple css</strong> toolkit. This palette includes fifteen base colors and four variants of each base color (two dark and two light).
 </div>
-<div class="siimple-h5">Using a package manager</div>
+<div class="siimple-paragraph">
+    You can use this color palette to style your application or webpage, or can be used to develop your custom brand palette.
+</div>
+
+<div class="siimple-h4 siimple--mt-5">Getting started</div>
+<div class="siimple-paragraph">
+    The <strong>siimple colors</strong> package contains the following files and folders:
+</div>
+<div class="siimple-table siimple-table--striped">
+    <div class="siimple-table-header">
+        <div class="siimple-table-row">
+            <div class="siimple-table-cell"><strong>Path</strong></div>
+            <div class="siimple-table-cell"><strong>Description</strong></div>
+        </div>
+    </div>
+    <div class="siimple-table-body">
+        <div class="siimple-table-row">
+            <div class="siimple-table-cell"><code class="siimple-code">/dist</code></div>
+            <div class="siimple-table-cell">Compiled stylesheets ready to be used in any HTML page</div>
+        </div>
+        <div class="siimple-table-row">
+            <div class="siimple-table-cell"><code class="siimple-code">/scss</code></div>
+            <div class="siimple-table-cell">SCSS files with all color variables and functions</div>
+        </div>
+        <div class="siimple-table-row">
+            <div class="siimple-table-cell"><code class="siimple-code">index.scss</code></div>
+            <div class="siimple-table-cell">Entry SCSS file that builds all CSS class-names</div>
+        </div>
+    </div>
+</div>
+
+<div class="siimple-h5">Install using a package manager</div>
 <div class="siimple-paragraph">
     You can easily download and install in your project the latest version of <strong>siimple colors</strong> using <a href="https://npmjs.com" target="_blank" class="siimple-link">npm</a> or <a href="https://yarnpkg.com/" target="_blank" class="siimple-link">yarn</a>:
 </div>
 <pre class="siimple-pre">$ npm install --save <strong>@siimple/colors</strong></pre>
 <pre class="siimple-pre">$ yarn add <strong>@siimple/colors</strong></pre>
 <div class="siimple-paragraph">
-    Now you can include the CSS of <strong>siimple colors</strong> in your project adding the following line in the <code class="siimple-code">&lt;head&gt;</code> of your HTML document: 
+    Now you should reference the <code class="siimple-code">dist/siimple-colors.min.css</code> if you are going to use the CSS classes, or the files in the <code class="siimple-code">scss</code> folder if you are going to import it in your SCSS project.
 </div>
-<pre class="siimple-pre">&lt;link rel="stylesheet" href="./node_modules/@siimple/colors/dist/siimple-colors.min.css"&gt;</pre>
 
 <div class="siimple-h5">Using a CDN</div>
 <div class="siimple-paragraph">
-    Import all CSS styles and classes of <strong>siimple colors</strong> adding the following line in the <code class="siimple-code">&lt;head&gt;</code> of each HTML document of your project or website:
+    <strong>siimple colors</strong> can be included in your HTML page from a CDN. Our recomendation is to use <a class="siimple-link" href="https://www.jsdelivr.com/package/npm/@siimple/colors" target="_blank">jsdelivr</a> to access to the files of this toolkit.
+</div>
+<div class="siimple-paragraph">
+    In order to get the latest version, just add the following line inside the <code class="siimple-code">&lt;head&gt;</code> tag of each HTML document of your project or website:
 </div>
 <pre class="siimple-pre">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@siimple/colors@{{ site.version }}/dist/siimple-colors.min.css"&gt;</pre>
 
