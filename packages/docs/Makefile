@@ -12,6 +12,7 @@ build:
 	mkdir -p ./www/assets/css 
 	#${NODE_BIN}/sass -I ../../node_modules ../press-theme-siimple/styles/index.scss ./www/assets/css/siimple-press.css
 	cp ../../node_modules/@siimple/css/dist/siimple.min.css ./www/assets/css/
+	cp ../../node_modules/@siimple/colors/dist/siimple-colors.min.css ./www/assets/css/
 	@# Copy images 
 	#mkdir -p ./www/assets/images && cp ./images/*.svg ./www/assets/images/
 	#cp -R ./images ./www/assets/images
