@@ -4,10 +4,11 @@ let docs = require("./package.json").packages;
 
 process.nextTick(function () {
     //Build documentation packages data
-    let data = Object.keys(docs).map(function (key) {
+    let data = {};
+    Object.keys(docs).map(function (key) {
         let inputPath = path.resolve(process.cwd(), path.join("..", docs[key], "package.json"));
         let pkg = JSON.parse(fs.readFileSync(inputPath, "utf8"));
-        return {
+        data[key] = {
             "name": pkg.name,
             "description": pkg.description,
             "version": pkg.version,
