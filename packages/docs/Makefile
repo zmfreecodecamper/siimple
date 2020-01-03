@@ -1,11 +1,11 @@
-.PHONY: build publish test
-
 # Binaries paths
 NODE_BIN=../../node_modules/.bin
 
 # Build the documentation site
+.PHONY: build
 build:
-	node ./build.js
+	node ./build.js ## Ignore data/packages.json
+	cp ../siimple-colors/colors.json ./data/ ## Ignore data/colors.json
 	@# Build documentation pages
 	cd ../../ && ./node_modules/@siimple/press/cli.js --config ./packages/docs/config.js
 	@# Build assets
@@ -20,10 +20,12 @@ build:
 	${NODE_BIN}/sass -I ../../node_modules ./styles/index.scss ./www/assets/css/style.css
 
 # Serve the documentation site
+.PHONY: test
 test:
 	${NODE_BIN}/stattic --port 5000 --folder ./www --cors
 
 # Publish the documentation website
+.PHONY: publish
 publish: 
 	#make build
 	#gsutil rsync -d -r ./_site gs://siimple-documentation.appspot.com/www
