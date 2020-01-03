@@ -7,11 +7,11 @@ description: "The 75 flat colors available in siimple colors"
 <div class="" align="center">
     {{#each data.colors.palette as |color|}}
     <!-- <div class="docs-colors-header">{{ color.name }}</div> -->
-    <div class="docs-colors" align="center">
+    <div class="siimple__colors" align="center">
         {{#each ../data.colors.lightness as |lightness|}}
-        <div class="docs-colors-item docs-colors-{{ color.name }}-{{ lightness.name }}" align="center">
-            <div class="docs-colors-item-name">{{ color.name }} {{ lightness.name }}</div>
-            <div class="docs-colors-item-hex"></div>
+        <div class="siimple__colors-item siimple__colors-{{ color.name }}-{{ lightness.name }}" align="center">
+            <div class="siimple__colors-item-name">{{ color.name }} {{ lightness.name }}</div>
+            <div class="siimple__colors-item-hex"></div>
         </div>
         {{/each }}
     </div>
