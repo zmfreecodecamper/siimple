@@ -3,10 +3,17 @@
 //Colors documentation
 .siimple__colors {
     //@include siimple-utils-clear;
-    //display: inline-block;
-    //width: 215px;
-    margin-bottom: 15px;
+    display: inline-block;
+    width: 349px; //225px;
+    //margin-bottom: 15px;
+    margin: 5px;
     border-radius: 5px;
+    //Container
+    &-content {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+    //Color item
     &-item {
         display: block;
         //width: calc(20% - 35px);
@@ -38,7 +45,7 @@
         //Item name 
         &-name {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 14px;
             float: left;
         }
         //Item color hex
@@ -59,6 +66,12 @@
             &-#{$color}-#{$color-id} &-item-hex::before {
                 content: quote(inspect($color-hex));
             }
+        }
+    }
+    //Media
+    @media (max-width: 600px) {
+        & {
+            width: calc(100% - 10px) !important;
         }
     }
 }
