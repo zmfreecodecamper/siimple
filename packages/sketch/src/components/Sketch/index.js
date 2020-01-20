@@ -1,8 +1,8 @@
 import React from "react";
 import {If, Renderer} from "@siimple/neutrine";
 
-import {Toolbar} from "./Toolbar/index.js";
-import {Stylebar} from "./Stylebar/index.js";
+import {Toolbar} from "./components/Toolbar/index.js";
+import {Stylebar} from "./components/Stylebar/index.js";
 import {color} from "./utils/colors.js";
 import {createElement, drawElement} from "./utils/elements.js";
 import {getResizePoints, resizeRadius, inResizePoint} from "./utils/resize.js";
@@ -40,7 +40,7 @@ export class Sketch extends React.Component {
             "currentElementPrevSelected": false,
             "currentElementDragging": false,
             "currentElementResizing": false,
-            "selectionCount": 0,
+            "selection": [],
             "dragged": false,
             "grid": false,
             "gridSize": 10,
@@ -61,6 +61,9 @@ export class Sketch extends React.Component {
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleElementUpdate = this.handleElementUpdate.bind(this);
         this.handleGridToggle = this.handleGridToggle.bind(this);
+        //Selection handlers
+        this.removeSelection = this.removeSelection.bind(this);
+        this.cloneSelection = this.cloneSelection.bind(this);
     }
     //Component did mount --> register event listeners
     componentDidMount() {
@@ -145,7 +148,7 @@ export class Sketch extends React.Component {
                 self.context.rect(xStart, yStart, xEnd - xStart, yEnd - yStart);
                 self.context.stroke();
                 //Check if is the unique selected elements
-                if (self.view.selectionCount === 1) {
+                if (self.view.selection.length === 1) {
                     return getResizePoints(element).forEach(function (point) {
                         self.context.beginPath();
                         self.context.fillStyle = selectionColor;
@@ -170,14 +173,7 @@ export class Sketch extends React.Component {
         //Check for backspace key --> remove elements
         if (event.key === "Backspace") {
             event.preventDefault();
-            //Remove current selection
-            this.data.elements = this.data.elements.filter(function (element) {
-                return !element.selected;
-            });
-            //Reset selection count
-            this.view.selectionCount = 0;
-            this.forceUpdate(); //Hide stylebar
-            return this.draw();
+            return this.removeSelection();
         }
         //Check for arrow keys --> move elements
         else if (isArrowKey(event.key) === true) {
@@ -222,13 +218,10 @@ export class Sketch extends React.Component {
         this.view.dragged = false;
         //this.view.selectionCount = 0; //Clear number of selected elements
         //Check if we are in a resize point
-        if (this.view.selectionCount === 1) {
-            let selectedElements = this.data.elements.filter(function (element) {
-                return element.selected;
-            });
-            let point = inResizePoint(selectedElements[0], this.view.lastX, this.view.lastY);
+        if (this.view.selection.length === 1) {
+            let point = inResizePoint(this.view.selection[0], this.view.lastX, this.view.lastY);
             if (point !== null) {
-                this.view.currentElement = selectedElements[0]; //Save current element
+                this.view.currentElement = this.view.selection[0]; //Save current element
                 this.view.resizeOrientation = point.orientation; //Save resize orientation
                 this.view.currentElementResizing = true; //Resizing element
                 return; //Stop event
@@ -258,7 +251,7 @@ export class Sketch extends React.Component {
                 //Toggle selection
                 el.selected = true;
                 //this.state.hasSelection = true; //At least has one selected element
-                this.view.selectionCount = countSelection(this.data.elements);
+                this.view.selection = getSelection(this.data.elements);
                 return; //Stop event
             }
             //If there is no elements --> clear selection
@@ -274,8 +267,7 @@ export class Sketch extends React.Component {
         });
         this.data.elements.push(element);
         this.view.currentElement = element; //Save dragging element
-        //Clear the current selection
-        this.view.selectionCount = 0;
+        this.view.selection = []; //Clear the current selection
         clearSelection(this.data.elements);
         this.forceUpdate(); //Force update to hide stylebar
     }
@@ -331,13 +323,11 @@ export class Sketch extends React.Component {
             }
         }
         //Check if we have selected elements
-        else if (this.view.currentElementDragging === true && this.view.selectionCount > 0) {
+        else if (this.view.currentElementDragging === true && this.view.selection.length > 0) {
             //Move all elements
-            this.data.elements.forEach(function (element) {
-                if (element.selected === true) {
-                    element.x = element.x + (x - self.view.lastX);
-                    element.y = element.y + (y - self.view.lastY);
-                }
+            this.view.selection.forEach(function (element) {
+                element.x = element.x + (x - self.view.lastX);
+                element.y = element.y + (y - self.view.lastY);
             });
         }
         //Check if we have a drag element
@@ -351,7 +341,7 @@ export class Sketch extends React.Component {
             //Check if the elemement is a selection
             if (element.type === "selection") {
                 //Set selected elements and get the new number of selected elements
-                this.view.selectionCount = setSelection(element, this.data.elements);
+                setSelection(element, this.data.elements);
             }
         }
         //Update the current x and y positions
@@ -367,7 +357,7 @@ export class Sketch extends React.Component {
         //    delete this.view.currentElement.resizing; //Remove resizing attribute
         //}
         //Check for clicked element
-        if (this.view.dragged === false && this.view.selectionCount > 0) {
+        if (this.view.dragged === false && this.view.selection.length > 0) {
             if (this.view.currentElementPrevSelected === true && event.shiftKey) {
                 //clearSelection(this.data.elements);
                 this.view.currentElement.selected = false;
@@ -392,8 +382,7 @@ export class Sketch extends React.Component {
         });
         //Reset the current drag element
         this.view.currentElement = null;
-        //Update the number of selected elements
-        this.view.selectionCount = countSelection(this.data.elements);
+        this.view.selection = getSelection(this.data.elements); //Update the selection
         this.forceUpdate(); //Force update to display/hide the stylebar
         //Draw
         return this.draw();
@@ -408,7 +397,7 @@ export class Sketch extends React.Component {
     //Handle type change 
     handleTypeChange(type) {
         clearSelection(this.data.elements); //Remove selection
-        this.view.selectionCount = 0; //Reset selection count
+        this.view.selection = []; //Reset selection 
         return this.setState({
             "currentType": type
         });
@@ -426,18 +415,19 @@ export class Sketch extends React.Component {
         //Redraw the sketch
         return this.draw();
     }
-    //Render a toolbar item
-    renderToolbarItem(props) {
-        let classList = classNames({
-            [style.toolsItem]: true,
-            [style.toolsItemActive]: props.active
+    //Clone the current selection
+    cloneSelection() {
+        //TODO
+    }
+    //Remove current selection
+    removeSelection() {
+        //Remove current selection
+        this.data.elements = this.data.elements.filter(function (element) {
+            return !element.selected;
         });
-        //Return the toolbar item
-        return (
-            <div className={classList} onClick={props.onClick} key={props.key}>
-                <Icon className={style.toolsIcon} icon={props.icon} />
-            </div>
-        );
+        this.view.selection = []; //Remove selection
+        this.forceUpdate(); //Hide stylebar
+        return this.draw();
     }
     //Render the sketch component
     render() {
@@ -456,12 +446,12 @@ export class Sketch extends React.Component {
                     });
                 }} />
                 {/* Stylebar */}
-                <If condition={this.view.selectionCount === 1} render={function () {
-                    let element = getSelection(self.data.elements)[0];
+                <Renderer render={function () {
                     return React.createElement(Stylebar, {
-                        "key": element.id,
-                        "element": element, //getSelection(self.data.elements)[0],
-                        "onUpdate": self.handleElementUpdate
+                        //"key": self.view.selection.length,
+                        "selection": self.view.selection, 
+                        "onUpdate": self.handleElementUpdate,
+                        "onRemove": self.removeSelection
                     });
                 }} />
             </div>
