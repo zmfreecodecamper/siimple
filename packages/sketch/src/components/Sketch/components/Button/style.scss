@@ -1,0 +1,29 @@
+@import "@siimple/css/scss/variables.scss";
+
+//Button style
+.root {
+    display: block;
+    padding: 5px;
+    width: 24px;
+    height: 24px;
+    transition: background-color 0.3s;
+    background-color: transparent;
+    border-radius: 5px;
+    color: rgba(siimple-default-color("dark", "light"), 0.6);
+    cursor: pointer;
+    //Button hover
+    &:hover {
+        background-color: rgba(siimple-default-color("primary"), 0.2);
+    }
+}
+//Button active
+.active {
+    background-color: rgba(siimple-default-color("primary"), 0.2);
+    color: siimple-default-color("primary");
+}
+//Button icon
+.icon {
+    font-size: 24px;
+}
+
+
