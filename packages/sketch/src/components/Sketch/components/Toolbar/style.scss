@@ -1,0 +1,30 @@
+@import "@siimple/css/scss/variables.scss";
+
+//Toolbar wrapper
+.root {
+    display: flex;
+    padding: 8px;
+    background-color: siimple-default-color("light");
+    border-radius: 5px;
+    position: absolute;
+    height: 34px;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+//Toolbar item
+.item:not(:last-child) {
+    margin-right: 5px;
+}
+//Toolbar separator
+.divider {
+    display: block;
+    width: 2px;
+    height: 30px;
+    background-color: rgba(siimple-default-color("dark", "light"), 0.2);
+    margin-right: 10px;
+    margin-left: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
