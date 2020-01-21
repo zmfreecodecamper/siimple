@@ -9,7 +9,7 @@ export function Dialog (props) {
     //Return the dialog wrapper
     return (
         <div className={style.root}>
-            {props.render()}
+            {props.children}
         </div>
     );
 }
