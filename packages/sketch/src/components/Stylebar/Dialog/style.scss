@@ -1,0 +1,27 @@
+@import "@siimple/css/scss/variables.scss";
+
+//Dialog wrapper styles
+.root {
+    display: block;
+    position: absolute;
+    border-radius: 5px;
+    background-color: siimple-default-color("light");
+    padding: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 150px;
+    right: 50px;
+    //Dialog arrow
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -16px;
+        transform: translateY(-8px);
+        //width: 5px;
+        //height: 5px;
+        border: 8px solid transparent;
+        border-left: 8px solid siimple-default-color("light");
+    }
+}
+
