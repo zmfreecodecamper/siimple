@@ -5,7 +5,6 @@ let path = require("path");
 let MiniCssExtract = require("mini-css-extract-plugin");
 //let HtmlWebpackPlugin = require("html-webpack-plugin");
 let modulesPath = path.resolve(__dirname, "../../node_modules");
-let packagesPath = path.resolve(__dirname, "../");
 
 //Common loaders configuration
 let loaders = {
@@ -20,7 +19,7 @@ let loaders = {
     "sass": {
         "loader": "sass-loader",
         "options": {
-            "includePaths": [modulesPath, packagesPath],
+            "includePaths": [modulesPath],
             "implementation": require("sass")
         }
     },
@@ -34,7 +33,7 @@ let loaders = {
 module.exports = function (env) {
     //Export webpack configuration
     return {
-        "entry": path.join(process.cwd(), "src", "index.js"),
+        "entry": path.join(process.cwd(), "src", "app.js"),
         "mode": "development",
         "target": "web",
         "output": {
@@ -42,7 +41,7 @@ module.exports = function (env) {
             "filename": "app.js"
         },
         "resolve": {
-            "modules": [modulesPath, packagesPath],
+            "modules": [modulesPath],
         },
         "module": {
             "rules": Object.values({
@@ -50,10 +49,7 @@ module.exports = function (env) {
                 // other modules
                 "localScssLoader": {
                     "test": /\.scss$/,
-                    "include": [
-                        path.resolve(__dirname, "./src"),
-                        path.resolve(__dirname, "../sketch/src")
-                    ],
+                    "include": path.resolve(__dirname, "./src"),
                     "use": Object.values({
                         "cssExtractLoader": loaders.cssExtract,
                         "cssLoader": {
@@ -71,10 +67,7 @@ module.exports = function (env) {
                 // Parse .scss files of the other modules
                 "modulesScss": {
                     "test": /\.scss$/,
-                    "exclude": [
-                        path.resolve(__dirname, "./src"),
-                        path.resolve(__dirname, "../sketch/src")
-                    ],
+                    "exclude": path.resolve(__dirname, "./src"),
                     "use": Object.values({
                         "cssExtractLoader": loaders.cssExtract,
                         "cssLoader": loaders.css,
@@ -118,7 +111,6 @@ module.exports = function (env) {
                     "test": /\.js$/,
                     "include": [
                         path.join(process.cwd(), "src"),
-                        path.resolve(process.cwd(), "../sketch/src")
                     ],
                     "exclude": /(node_modules|bower_components)/,
                     "loader": "babel-loader"
