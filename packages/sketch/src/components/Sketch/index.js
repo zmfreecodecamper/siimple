@@ -3,7 +3,8 @@ import {If, Renderer} from "@siimple/neutrine";
 
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
-import {color} from "../../utils/colors.js";
+//import {colors} from "../../utils/style.js";
+import {gridColor, handlersColor} from "../../utils/style.js";
 import {createElement, drawElement} from "../../utils/elements.js";
 import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
 import {getStartPosition, getEndPosition} from "../../utils/math.js";
@@ -59,11 +60,11 @@ export class Sketch extends React.Component {
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
         this.handleTypeChange = this.handleTypeChange.bind(this);
-        this.handleElementUpdate = this.handleElementUpdate.bind(this);
         this.handleGridToggle = this.handleGridToggle.bind(this);
         //Selection handlers
         this.removeSelection = this.removeSelection.bind(this);
         this.cloneSelection = this.cloneSelection.bind(this);
+        this.updateSelection = this.updateSelection.bind(this);
     }
     //Component did mount --> register event listeners
     componentDidMount() {
@@ -112,7 +113,7 @@ export class Sketch extends React.Component {
     //Draw the sketch
     draw() {
         let self = this;
-        let selectionColor = color("darkBlue", "1.0");
+        //let selectionColor = handlersColor;//color("darkBlue", "1.0");
         //Clear canvas
         this.context.clearRect(0, 0, this.state.width, this.state.height);
         //Render the grid if available
@@ -120,7 +121,7 @@ export class Sketch extends React.Component {
             let gridSize = this.view.gridSize;
             this.context.beginPath();
             this.context.setLineDash([]);
-            this.context.strokeStyle = color("light", 1);
+            this.context.strokeStyle = gridColor;
             this.context.strokeWidth = "1px";
             //Horizontal rules
             for (let i = 0; i * gridSize < this.state.height; i++) {
@@ -144,14 +145,14 @@ export class Sketch extends React.Component {
                 let yEnd = getEndPosition(element.y, element.height); // - yStart;
                 self.context.beginPath();
                 self.context.setLineDash([8, 4]);
-                self.context.strokeStyle = selectionColor;
+                self.context.strokeStyle = handlersColor; //selectionColor;
                 self.context.rect(xStart, yStart, xEnd - xStart, yEnd - yStart);
                 self.context.stroke();
                 //Check if is the unique selected elements
                 if (self.view.selection.length === 1) {
                     return getResizePoints(element).forEach(function (point) {
                         self.context.beginPath();
-                        self.context.fillStyle = selectionColor;
+                        self.context.fillStyle = handlersColor; //selectionColor;
                         self.context.arc(point.x, point.y, resizeRadius, 0, 2*Math.PI);
                         self.context.fill();
                     });
@@ -407,13 +408,14 @@ export class Sketch extends React.Component {
         this.view.grid = !this.view.grid;
         return this.forceUpdate();
     }
-    //Handle element update
-    handleElementUpdate() {
-        //let element = getSelection(this.data.elements); //Get selected element
-        //Update the element value
-        //element[key] = value;
+    //Handle selection update
+    updateSelection(key, value) {
+        this.view.selection.forEach(function (element) {
+            element[key] = value; //Update element value
+        });
         //Redraw the sketch
-        return this.draw();
+        //return this.draw();
+        this.forceUpdate(); //Update + redraw
     }
     //Clone the current selection
     cloneSelection() {
@@ -450,7 +452,7 @@ export class Sketch extends React.Component {
                     return React.createElement(Stylebar, {
                         //"key": self.view.selection.length,
                         "selection": self.view.selection, 
-                        "onUpdate": self.handleElementUpdate,
+                        "onUpdate": self.updateSelection,
                         "onRemove": self.removeSelection
                     });
                 }} />
