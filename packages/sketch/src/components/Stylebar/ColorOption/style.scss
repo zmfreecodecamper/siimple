@@ -1,0 +1,36 @@
+@import "@siimple/css/scss/variables.scss";
+
+//Color picker element
+.root {
+    //padding: 5px;
+    //border-radius: 5px;
+    //background-color: #ffffff;
+    //margin-bottom: 15px;
+}
+
+//Color item
+.item {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    //opacity: 0.4;
+    //transition: opacity 0.3s;
+    border: 2px solid #ffffff;
+    margin: 3px;
+    //position: relative;
+    vertical-align: top;
+    text-align: center;
+}
+//Item icon
+.icon {
+    font-size: 20px;
+}
+//Transparent background
+.transparent {
+    color: siimple-default-color("dark");
+    @include siimple-utils-stripedbg (siimple-default-color("light"), #ffffff);
+}
+
