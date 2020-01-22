@@ -1,13 +1,13 @@
 import React from "react";
 import {If, Renderer} from "@siimple/neutrine";
 
-import {Toolbar} from "./components/Toolbar/index.js";
-import {Stylebar} from "./components/Stylebar/index.js";
-import {color} from "./utils/colors.js";
-import {createElement, drawElement} from "./utils/elements.js";
-import {getResizePoints, resizeRadius, inResizePoint} from "./utils/resize.js";
-import {getStartPosition, getEndPosition} from "./utils/math.js";
-import {setSelection, clearSelection, countSelection, getSelection} from "./utils/selection.js";
+import {Toolbar} from "../Toolbar/index.js";
+import {Stylebar} from "../Stylebar/index.js";
+import {color} from "../../utils/colors.js";
+import {createElement, drawElement} from "../../utils/elements.js";
+import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
+import {getStartPosition, getEndPosition} from "../../utils/math.js";
+import {setSelection, clearSelection, countSelection, getSelection} from "../../utils/selection.js";
 import style from "./style.scss";
 
 //Check for arrow keys
