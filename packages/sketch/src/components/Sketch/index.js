@@ -122,7 +122,7 @@ export class Sketch extends React.Component {
             this.context.beginPath();
             this.context.setLineDash([]);
             this.context.strokeStyle = gridColor;
-            this.context.strokeWidth = "1px";
+            this.context.lineWidth = 1; //Force line width to 1px
             //Horizontal rules
             for (let i = 0; i * gridSize < this.state.height; i++) {
                 this.context.moveTo(0, i * gridSize);
@@ -146,6 +146,7 @@ export class Sketch extends React.Component {
                 self.context.beginPath();
                 self.context.setLineDash([8, 4]);
                 self.context.strokeStyle = handlersColor; //selectionColor;
+                self.context.lineWidth = 2; //Force line width to 2px
                 self.context.rect(xStart, yStart, xEnd - xStart, yEnd - yStart);
                 self.context.stroke();
                 //Check if is the unique selected elements
