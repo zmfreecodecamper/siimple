@@ -3,12 +3,12 @@ import {If, Renderer} from "@siimple/neutrine";
 
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
-//import {colors} from "../../utils/style.js";
 import {gridColor, handlersColor} from "../../utils/style.js";
-import {createElement, drawElement} from "../../utils/elements.js";
+import {createElement, drawElement} from "../../elements/index.js";
 import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
 import {getStartPosition, getEndPosition} from "../../utils/math.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../utils/selection.js";
+import {snapshotSelection} from "../../utils/selection.js";
 import style from "./style.scss";
 
 //Check for arrow keys
@@ -42,6 +42,7 @@ export class Sketch extends React.Component {
             "currentElementDragging": false,
             "currentElementResizing": false,
             "selection": [],
+            "snapshot": [],
             "dragged": false,
             "grid": false,
             "gridSize": 10,
@@ -51,9 +52,10 @@ export class Sketch extends React.Component {
         this.data = Object.assign({}, defaultConfig, {
             "elements": []
         });
-        //Bind methods
-        this.export = this.export.bind(this);
+        //Bind internal methods
+        this.gridRound = this.gridRound.bind(this);
         this.draw = this.draw.bind(this);
+        //Bind handlers
         this.handleResize = this.handleResize.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -65,6 +67,8 @@ export class Sketch extends React.Component {
         this.removeSelection = this.removeSelection.bind(this);
         this.cloneSelection = this.cloneSelection.bind(this);
         this.updateSelection = this.updateSelection.bind(this);
+        //Bind API methods
+        this.export = this.export.bind(this);
     }
     //Component did mount --> register event listeners
     componentDidMount() {
@@ -109,6 +113,10 @@ export class Sketch extends React.Component {
     //Export the current sketch object
     export() {
         return this.data;
+    }
+    //Grid round
+    gridRound(value) {
+        return (this.view.grid) ? Math.round(value / this.view.gridSize) * this.view.gridSize : value;
     }
     //Draw the sketch
     draw() {
@@ -172,6 +180,7 @@ export class Sketch extends React.Component {
     }
     //Handle key down
     handleKeyDown(event) {
+        let self = this;
         //Check for backspace key --> remove elements
         if (event.key === "Backspace") {
             event.preventDefault();
@@ -189,16 +198,16 @@ export class Sketch extends React.Component {
             this.data.elements.forEach(function (element) {
                 if (element.selected === true) {
                     if (event.key === "ArrowUp") {
-                        element.y = element.y - step;
+                        element.y = self.gridRound(element.y - step);
                     }
                     else if (event.key === "ArrowDown") {
-                        element.y = element.y + step;
+                        element.y = self.gridRound(element.y + step);
                     }
                     else if (event.key === "ArrowLeft") {
-                        element.x = element.x - step;
+                        element.x = self.gridRound(element.x - step);
                     }
                     else if (event.key === "ArrowRight") {
-                        element.x = element.x + step;
+                        element.x = self.gridRound(element.x + step);
                     }
                 }
             });
@@ -226,6 +235,7 @@ export class Sketch extends React.Component {
                 this.view.currentElement = this.view.selection[0]; //Save current element
                 this.view.resizeOrientation = point.orientation; //Save resize orientation
                 this.view.currentElementResizing = true; //Resizing element
+                this.view.snapshot = snapshotSelection(this.view.selection); //Create a snapshot of the selection
                 return; //Stop event
             }
         }
@@ -254,6 +264,7 @@ export class Sketch extends React.Component {
                 el.selected = true;
                 //this.state.hasSelection = true; //At least has one selected element
                 this.view.selection = getSelection(this.data.elements);
+                this.view.snapshot = snapshotSelection(this.view.selection); //Create a snapshot of the selection
                 return; //Stop event
             }
             //If there is no elements --> clear selection
@@ -264,8 +275,8 @@ export class Sketch extends React.Component {
         //Create a new element
         let element = createElement({
             "type": this.state.currentType,
-            "x": this.view.lastX, 
-            "y": this.view.lastY
+            "x": this.gridRound(this.view.lastX), 
+            "y": this.gridRound(this.view.lastY)
         });
         this.data.elements.push(element);
         this.view.currentElement = element; //Save dragging element
@@ -285,60 +296,63 @@ export class Sketch extends React.Component {
         //Check if we are resizing the element
         if (this.view.currentElementResizing === true) {
             let element = this.view.currentElement;
+            let snapshot = this.view.snapshot[0]; //Get snapshot of the current element
             let orientation = this.view.resizeOrientation;
             let deltaX = x - this.view.lastX;
             let deltaY = y - this.view.lastY;
             //Check the orientation
             if (orientation === "rh") {
-                element.width = element.width + deltaX;
+                element.width = this.gridRound(snapshot.width + deltaX);
             }
             else if (orientation === "lh") {
-                element.x = element.x + deltaX;
-                element.width = element.width - deltaX;
+                element.x = this.gridRound(snapshot.x + deltaX);
+                element.width = this.gridRound(snapshot.width - deltaX);
             }
             else if (orientation === "bv") {
-                element.height = element.height + deltaY;
+                element.height = this.gridRound(snapshot.height + deltaY);
             }
             else if (orientation === "tv") {
-                element.y = element.y + deltaY;
-                element.height = element.height - deltaY;
+                element.y = this.gridRound(snapshot.y + deltaY);
+                element.height = this.gridRound(snapshot.height - deltaY);
             }
             else if (orientation === "ltd") {
-                element.x = element.x + deltaX;
-                element.y = element.y + deltaY;
-                element.width = element.width - deltaX;
-                element.height = element.height - deltaY;
+                element.x = this.gridRound(snapshot.x + deltaX);
+                element.y = this.gridRound(snapshot.y + deltaY);
+                element.width = this.gridRound(snapshot.width - deltaX);
+                element.height = this.gridRound(snapshot.height - deltaY);
             }
             else if (orientation === "rtd") {
-                element.y = element.y + deltaY;
-                element.width = element.width + deltaX;
-                element.height = element.height - deltaY;
+                element.y = this.gridRound(snapshot.y + deltaY);
+                element.width = this.gridRound(snapshot.width + deltaX);
+                element.height = this.gridRound(snapshot.height - deltaY);
             }
             else if (orientation === "lbd") {
-                element.x = element.x + deltaX;
-                element.width = element.width - deltaX;
-                element.height = element.height + deltaY;
+                element.x = this.gridRound(snapshot.x + deltaX);
+                element.width = this.gridRound(snapshot.width - deltaX);
+                element.height = this.gridRound(snapshot.height + deltaY);
             }
             else if (orientation === "rbd") {
-                element.width = element.width + deltaX;
-                element.height = element.height + deltaY;
+                element.width = this.gridRound(snapshot.width + deltaX);
+                element.height = this.gridRound(snapshot.height + deltaY);
             }
         }
         //Check if we have selected elements
         else if (this.view.currentElementDragging === true && this.view.selection.length > 0) {
             //Move all elements
-            this.view.selection.forEach(function (element) {
-                element.x = element.x + (x - self.view.lastX);
-                element.y = element.y + (y - self.view.lastY);
+            this.view.selection.forEach(function (element, index) {
+                element.x = self.gridRound(self.view.snapshot[index].x + (x - self.view.lastX));
+                element.y = self.gridRound(self.view.snapshot[index].y + (y - self.view.lastY));
             });
         }
         //Check if we have a drag element
         else if (this.view.currentElement !== null) {
             let element = this.view.currentElement;
             //Update the element size
+            let deltaX = this.gridRound(x - element.x);
+            //let deltaY = this.gridRound(y - element.y);
             Object.assign(element, {
-                "width": x - element.x,
-                "height": (event.shiftKey) ? x - element.x : y - element.y
+                "width": deltaX,
+                "height": (event.shiftKey) ? deltaX : this.gridRound(y - element.y)
             });
             //Check if the elemement is a selection
             if (element.type === "selection") {
@@ -347,8 +361,8 @@ export class Sketch extends React.Component {
             }
         }
         //Update the current x and y positions
-        this.view.lastX = x;
-        this.view.lastY = y;
+        //this.view.lastX = x;
+        //this.view.lastY = y;
         //Update
         return this.draw();
     }
