@@ -22,6 +22,18 @@ let defaultConfig = {
     "gridSize": 5
 };
 
+//Check if the provided event.target is related to an input element
+let isInputTarget = function (event) {
+    let target = event.target; //Get target element
+    return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
+    //|| target instanceof HTMLSelectElement;
+};
+
+//Default keys
+let keys = {
+    "backspace": 
+};
+
 //Export sketch class
 export class Sketch extends React.Component {
     constructor(props) {
@@ -64,6 +76,7 @@ export class Sketch extends React.Component {
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleGridToggle = this.handleGridToggle.bind(this);
         //Selection handlers
+        this.resetSelection = this.resetSelection.bind(this);
         this.removeSelection = this.removeSelection.bind(this);
         this.cloneSelection = this.cloneSelection.bind(this);
         this.updateSelection = this.updateSelection.bind(this);
@@ -181,6 +194,15 @@ export class Sketch extends React.Component {
     //Handle key down
     handleKeyDown(event) {
         let self = this;
+        //Check for inpuyt target
+        if (isInputTarget(event) === true) {
+            return; //stop event processing
+        }
+        //Check ESCAPE key --> reset selection
+        if (event.key === "Escape") {
+            event.preventDefault();
+            return this.resetSelection(); //Reset selection
+        }
         //Check for backspace key --> remove elements
         if (event.key === "Backspace") {
             event.preventDefault();
@@ -444,7 +466,17 @@ export class Sketch extends React.Component {
         });
         this.view.selection = []; //Remove selection
         this.forceUpdate(); //Hide stylebar
-        return this.draw();
+        //return this.draw();
+    }
+    //Reset the selection
+    resetSelection() {
+        this.data.elements.forEach(function (element) {
+            Object.assign(element, {
+                "selected": false
+            });
+        });
+        this.view.selection = []; //Clear selection list
+        this.forceUpdate(); //Hide stylebar
     }
     //Render the sketch component
     render() {
