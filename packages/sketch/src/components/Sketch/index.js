@@ -29,11 +29,6 @@ let isInputTarget = function (event) {
     //|| target instanceof HTMLSelectElement;
 };
 
-//Default keys
-let keys = {
-    "backspace": 
-};
-
 //Export sketch class
 export class Sketch extends React.Component {
     constructor(props) {
