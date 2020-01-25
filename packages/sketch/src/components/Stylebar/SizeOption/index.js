@@ -7,13 +7,14 @@ import {Option} from "../Option/index.js";
 import style from "./style.scss";
 
 //List with all availbale sizes
-let sizes = ["small", "medium", "large"];
+let sizes = ["small", "medium", "large", "extra-large"];
 
 //Icon sizes
 let iconSizes = {
-    "small": "16px",
-    "medium": "20px",
-    "large": "24px"
+    "small": "15px",
+    "medium": "18px",
+    "large": "21px",
+    "extra-large": "24px"
 };
 
 //Export Size picker option
