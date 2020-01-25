@@ -4,7 +4,7 @@ import {If, Renderer} from "@siimple/neutrine";
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
 import {gridColor, handlersColor} from "../../utils/style.js";
-import {createElement, drawElement} from "../../elements/index.js";
+import {createElement, drawElement, updateElement} from "../../elements/index.js";
 import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
 import {getStartPosition, getEndPosition} from "../../utils/math.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../utils/selection.js";
@@ -364,17 +364,22 @@ export class Sketch extends React.Component {
         //Check if we have a drag element
         else if (this.view.currentElement !== null) {
             let element = this.view.currentElement;
-            //Update the element size
-            let deltaX = this.gridRound(x - element.x);
-            //let deltaY = this.gridRound(y - element.y);
-            Object.assign(element, {
-                "width": deltaX,
-                "height": (event.shiftKey) ? deltaX : this.gridRound(y - element.y)
-            });
-            //Check if the elemement is a selection
-            if (element.type === "selection") {
-                //Set selected elements and get the new number of selected elements
-                setSelection(element, this.data.elements);
+            //Check for text element
+            if (element.type === "text") {
+                Object.assign(element, {"x": x, "y": y}); //Update only text position
+            }
+            else {
+                let deltaX = this.gridRound(x - element.x);
+                //let deltaY = this.gridRound(y - element.y);
+                Object.assign(element, {
+                    "width": deltaX,
+                    "height": (event.shiftKey) ? deltaX : this.gridRound(y - element.y)
+                });
+                //Check if the elemement is a selection
+                if (element.type === "selection") {
+                    //Set selected elements and get the new number of selected elements
+                    setSelection(element, this.data.elements);
+                }
             }
         }
         //Update the current x and y positions
@@ -385,6 +390,10 @@ export class Sketch extends React.Component {
     }
     //Handle mouse up
     handleMouseUp(event) {
+        //Check for no current element active
+        if (this.view.currentElement === null) {
+            return; //Do not process mouse-up event
+        }
         //Check for resizing
         //if (this.view.currentElementResizing === true) {
         //    delete this.view.currentElement.resizing; //Remove resizing attribute
@@ -404,6 +413,7 @@ export class Sketch extends React.Component {
         //Check for adding a new element
         if (this.state.currentType !== "selection") {
             this.view.currentElement.selected = true; //Set the new element as selected
+            updateElement(this.view.currentElement); //Update the current element
             //Change the current type to selection
             this.setState({
                 "currentType": "selection"
@@ -443,7 +453,8 @@ export class Sketch extends React.Component {
     //Handle selection update
     updateSelection(key, value) {
         this.view.selection.forEach(function (element) {
-            element[key] = value; //Update element value
+            element[key] = value; //Update the element key
+            updateElement(element); //Update the element
         });
         //Redraw the sketch
         //return this.draw();
@@ -466,9 +477,7 @@ export class Sketch extends React.Component {
     //Reset the selection
     resetSelection() {
         this.data.elements.forEach(function (element) {
-            Object.assign(element, {
-                "selected": false
-            });
+            element.selected = false; //Set selected as false
         });
         this.view.selection = []; //Clear selection list
         this.forceUpdate(); //Hide stylebar
