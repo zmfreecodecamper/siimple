@@ -3,7 +3,7 @@ import {If, Renderer} from "@siimple/neutrine";
 
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
-import {gridColor, handlersColor} from "../../utils/style.js";
+import {gridColor, handlersColor} from "../../defaults.js";
 import {createElement, drawElement, updateElement} from "../../elements/index.js";
 import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
 import {getStartPosition, getEndPosition} from "../../utils/math.js";
