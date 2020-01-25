@@ -16,7 +16,7 @@ export function TextOption (props) {
                         "siimple--py-1": true
                     }),
                     "onChange": function (event) {
-                        console.log(event);
+                        return props.onChange(event.target.value);
                     },
                     "rows": 3,
                     "fluid": true,
