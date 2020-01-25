@@ -1,0 +1,30 @@
+@import "@siimple/css/scss/variables.scss";
+
+//Style picker wrapper
+.root {
+    margin-left: -3px;
+    margin-right: -3px;
+}
+
+//Size picker item
+.item {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    //opacity: 0.4;
+    //transition: opacity 0.3s;
+    border: 2px solid #ffffff;
+    margin: 3px;
+    background-color: #ffffff;
+    //position: relative;
+    vertical-align: top;
+    text-align: center;
+    //Active
+    &Active {
+        border-color: siimple-default-color("primary");
+    }
+}
+
