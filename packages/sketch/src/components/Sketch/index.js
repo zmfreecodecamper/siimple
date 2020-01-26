@@ -1,6 +1,5 @@
 import React from "react";
 import {If, Renderer} from "@siimple/neutrine";
-
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
 import {gridColor, handlersColor} from "../../defaults.js";
@@ -165,6 +164,7 @@ export class Sketch extends React.Component {
                 self.context.lineWidth = 2; //Force line width to 2px
                 self.context.rect(xStart, yStart, xEnd - xStart, yEnd - yStart);
                 self.context.stroke();
+                self.context.setLineDash([]); //Reset line-dash
                 //Check if is the unique selected elements
                 if (self.view.selection.length === 1) {
                     return getResizePoints(element).forEach(function (point) {
