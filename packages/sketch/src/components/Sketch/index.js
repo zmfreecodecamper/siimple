@@ -295,7 +295,8 @@ export class Sketch extends React.Component {
             "x": this.gridRound(this.view.lastX), 
             "y": this.gridRound(this.view.lastY)
         });
-        this.data.elements.push(element);
+        //this.data.elements.push(element);
+        this.data.elements.unshift(element);
         this.view.currentElement = element; //Save dragging element
         this.view.selection = []; //Clear the current selection
         clearSelection(this.data.elements);
@@ -469,7 +470,8 @@ export class Sketch extends React.Component {
                 "x": element.x + 5,
                 "y": element.y + 5
             });
-            self.data.elements.push(clonedElement); //Save to the elements list
+            //self.data.elements.push(clonedElement); //Save to the elements list
+            self.data.elements.unshift(clonedElement); //Save to the elements list
             element.selected = false; //Remove this element from selection
             return clonedElement; //Add to selection
         });
