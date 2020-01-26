@@ -10,7 +10,7 @@ export function RangeOption (props) {
             <Renderer render={function () {
                 return React.createElement(Range, {
                     "onChange": function (event) {
-                        return props.onChange(event.target.value);
+                        return props.onChange(Number(event.target.value));
                     },
                     "className": "siimple--mb-1 siimple--mt-1",
                     "fluid": true,
