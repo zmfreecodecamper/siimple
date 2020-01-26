@@ -7,6 +7,7 @@ export const arrowElement = {
     "initialConfig": {
         "strokeColor": "dark",
         "strokeWidth": "small",
+        "strokeDash": false,
         "opacity": 1.0
     },
     "draw": function (element, context) {
@@ -20,6 +21,9 @@ export const arrowElement = {
         context.lineWidth = strokes[element.strokeWidth];
         context.lineCap = "square"; //square linecap
         context.setLineDash([]); //Clear line-dash style
+        if (element.strokeDash === true) {
+            context.setLineDash([6, 6]); //Set default line-dash
+        }
         context.moveTo(element.x, element.y);
         context.lineTo(xEnd, yEnd);
         if (size >= 10) {
