@@ -472,6 +472,7 @@ export class Sketch extends React.Component {
     //Clone the current selection
     cloneSelection() {
         let self = this;
+        let newElements = [];
         //Update the selection with the cloned elements
         this.view.selection = this.view.selection.map(function (element) {
             let clonedElement = Object.assign({}, element, {
@@ -479,9 +480,13 @@ export class Sketch extends React.Component {
                 "y": element.y + 5
             });
             //self.data.elements.push(clonedElement); //Save to the elements list
-            self.data.elements.unshift(clonedElement); //Save to the elements list
+            newElements.push(clonedElement); //Save to the elements list
             element.selected = false; //Remove this element from selection
             return clonedElement; //Add to selection
+        });
+        //Add new elements
+        forEachRev(newElements, function (element) {
+            self.data.elements.unshift(element);
         });
         this.forceUpdate(); //Update
     }
