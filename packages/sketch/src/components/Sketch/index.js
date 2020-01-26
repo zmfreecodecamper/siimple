@@ -462,7 +462,18 @@ export class Sketch extends React.Component {
     }
     //Clone the current selection
     cloneSelection() {
-        //TODO
+        let self = this;
+        //Update the selection with the cloned elements
+        this.view.selection = this.view.selection.map(function (element) {
+            let clonedElement = Object.assign({}, element, {
+                "x": element.x + 5,
+                "y": element.y + 5
+            });
+            self.data.elements.push(clonedElement); //Save to the elements list
+            element.selected = false; //Remove this element from selection
+            return clonedElement; //Add to selection
+        });
+        this.forceUpdate(); //Update
     }
     //Remove current selection
     removeSelection() {
@@ -504,6 +515,7 @@ export class Sketch extends React.Component {
                         //"key": self.view.selection.length,
                         "selection": self.view.selection, 
                         "onUpdate": self.updateSelection,
+                        "onClone": self.cloneSelection,
                         "onRemove": self.removeSelection
                     });
                 }} />
