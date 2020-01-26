@@ -28,6 +28,13 @@ let isInputTarget = function (event) {
     //|| target instanceof HTMLSelectElement;
 };
 
+//For each reversed
+let forEachRev = function (list, callback) {
+    for (let i = list.length - 1; i >= 0; i--) {
+        callback(list[i], i); //Call this element
+    }
+};
+
 //Export sketch class
 export class Sketch extends React.Component {
     constructor(props) {
@@ -150,7 +157,8 @@ export class Sketch extends React.Component {
             }
             this.context.stroke();
         }
-        this.data.elements.forEach(function (element, index) {
+        //this.data.elements.forEach(function (element, index) {
+        forEachRev(this.data.elements, function (element, index) {
             drawElement(element, self.context);
             //Check if this element is selected --> draw selection area
             if (element.selected === true && element.type !== "selection") {
