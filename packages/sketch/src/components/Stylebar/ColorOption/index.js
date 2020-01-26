@@ -8,7 +8,7 @@ import style from "./style.scss";
 
 //Get text color
 let getTextColor = function (name) {
-    if (name === "transparent" || name === "light") {
+    if (name === "transparent" || name === "light" || name === "white") {
         return colors.dark; //Return dark text color
     }
     //Default: return white color
