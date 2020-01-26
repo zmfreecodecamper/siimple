@@ -9,7 +9,7 @@ export function SwitchOption (props) {
     return (
         <Option title={props.title}>
             <div className={style.root}>
-                <div className={style.text}>On</div>
+                <div className={style.text}>Off</div>
                 <div align="center">
                     <Renderer render={function () {
                         return React.createElement(Switch, {
@@ -21,7 +21,7 @@ export function SwitchOption (props) {
                         });
                     }} />
                 </div>
-                <div className={style.text}>Off</div>
+                <div className={style.text}>On</div>
             </div>
         </Option>
     );
