@@ -7,6 +7,7 @@ import {ColorOption} from "./ColorOption/index.js";
 import {SizeOption} from "./SizeOption/index.js";
 import {TextOption} from "./TextOption/index.js";
 import {RangeOption} from "./RangeOption/index.js";
+import {SwitchOption} from "./SwitchOption/index.js";
 import {Dialog} from "./Dialog/index.js";
 import style from "./style.scss";
 
@@ -179,6 +180,13 @@ export class Stylebar extends React.Component {
                                     "title": "Stroke color",
                                     "onChange": self.handleValueChange("strokeColor"),
                                     "value": self.props.selection[0].strokeColor
+                                });
+                            }} />
+                            <Renderer render={function () {
+                                return React.createElement(SwitchOption, {
+                                    "title": "Stroke dash",
+                                    "onChange": self.handleValueChange("strokeDash"),
+                                    "value": self.props.selection[0].strokeDash
                                 });
                             }} />
                         </Dialog>

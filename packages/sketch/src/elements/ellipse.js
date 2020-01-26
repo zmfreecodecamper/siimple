@@ -8,6 +8,7 @@ export const ellipseElement = {
         "fillColor": "transparent",
         "strokeColor": "dark",
         "strokeWidth": "small",
+        "strokeDash": false,
         "opacity": 1.0
     },
     "draw": function (element, context) {
@@ -22,7 +23,13 @@ export const ellipseElement = {
         if (element.strokeColor !== "transparent") {
             context.strokeStyle = colors[element.strokeColor];
             context.lineWidth = strokes[element.strokeWidth];
-            context.setLineDash([]); //Clear line-dash style
+            //Check for line dash
+            if (element.strokeDash === true) {
+                context.setLineDash([6, 6]); //Set default line-dash
+            }
+            else {
+                context.setLineDash([]); //Clear line-dash style
+            }
             context.stroke();
         }
         context.globalAlpha = 1; //Reset opacity

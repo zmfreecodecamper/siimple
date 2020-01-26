@@ -9,6 +9,7 @@ export const rectangleElement = {
         "fillColor": "transparent",
         "strokeColor": "dark",
         "strokeWidth": "small",
+        "strokeDash": false,
         "radius": 5,
         "opacity": 1.0
     },
@@ -38,7 +39,13 @@ export const rectangleElement = {
         if (element.strokeColor !== "transparent") {
             context.strokeStyle = colors[element.strokeColor];
             context.lineWidth = strokes[element.strokeWidth];
-            context.setLineDash([]); //Clear line-dash style
+            //Check for line dash
+            if (element.strokeDash === true) {
+                context.setLineDash([6, 6]); //Set default line-dash
+            }
+            else {
+                context.setLineDash([]); //Clear line-dash style
+            }
             context.stroke();
         }
         context.globalAlpha = 1; //Reset opacity
