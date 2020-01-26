@@ -118,6 +118,13 @@ export class Stylebar extends React.Component {
                                 });
                             }} />
                             <Renderer render={function () {
+                                return React.createElement(ColorOption, {
+                                    "title": "Text Color",
+                                    "onChange": self.handleValueChange("textColor"),
+                                    "value": self.props.selection[0].textColor
+                                });
+                            }} />
+                            <Renderer render={function () {
                                 return React.createElement(TextOption, {
                                     "title": "Text content",
                                     "onChange": self.handleValueChange("textContent"),
@@ -229,6 +236,10 @@ export class Stylebar extends React.Component {
                 <If condition={this.props.selection.length === 1}>
                     <div className={style.divider} />
                 </If>
+                {/* Clone current selection */}
+                <div className={style.item}>
+                    <Button icon="clone" onClick={this.props.onClone} />
+                </div>
                 {/* Remove current selection */}
                 <div className={style.item}>
                     <Button icon="trash" onClick={this.props.onRemove} />
