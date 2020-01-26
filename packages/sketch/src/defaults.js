@@ -1,12 +1,12 @@
 //Export color list
 export const colors = {
     "blue": "#4e91e4",
-    "mint": "#4ccdac",
     "green": "#4acf7f",
     "yellow": "#fbc850",
     "red": "#ee675d",
     "dark": "#34495e",
     "light": "#eef2f7",
+    "white": "#ffffff",
     "transparent": "transparent"
 };
 
