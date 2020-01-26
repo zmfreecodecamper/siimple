@@ -1,0 +1,18 @@
+//Range wrapper
+.root {
+    display: flex;
+}
+//Slider
+.range {
+    display: block;
+}
+//Current value 
+.value {
+    width: 40px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.6;
+}
+
