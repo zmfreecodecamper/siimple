@@ -22,7 +22,7 @@ export const textElement = {
         //let lineHeight = element.height / lines.length;
         //let offset = element.height - element.baseline;
         for (let i = 0; i < lines.length; i++) {
-            context.fillText(lines[i], element.x, element.y + (i + 1) * element.height / lines.length); 
+            context.fillText(lines[i], element.x, element.y + (i + 1) * fontSizes[element.textSize]); //element.height / lines.length); 
         }
         //context.fill();
         context.globalAlpha = 1; //Reset opacity
