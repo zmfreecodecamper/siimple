@@ -18,19 +18,21 @@ let notUndef = function (value) {
 //Reload state
 let reloadState = function (props, state) {
     let newState = {
-        "showColorOption": false,
+        "showFillOption": false,
         "showStrokeOption": false,
         "showTextOption": false,
-        "showOpacityOption": false
+        "showOpacityOption": false,
+        "showRadiusOption": false
     };
     //Check the number of selected elements
     if (props.selection.length === 1) {
         let element = props.selection[0];
         Object.assign(newState, {
-            "showTextOption": notUndef(element["text"]),
-            "showColorOption": notUndef(element["color"]),
+            "showTextOption": notUndef(element["textContent"]),
+            "showFillOption": notUndef(element["fillColor"]),
             "showStrokeOption": notUndef(element["strokeColor"]),
-            "showOpacityOption": notUndef(element["opacity"])
+            "showOpacityOption": notUndef(element["opacity"]),
+            "showRadiusOption": notUndef(element["radius"])
         });
     }
     //Check to update the current option
@@ -101,7 +103,7 @@ export class Stylebar extends React.Component {
                     <div className={style.item}>
                         <Renderer render={function () {
                             return React.createElement(Button, {
-                                "icon": "text",
+                                "icon": "font",
                                 "active": current === "text",
                                 "onClick": self.handleOptionChange("text")
                             });
@@ -109,38 +111,38 @@ export class Stylebar extends React.Component {
                         <Dialog active={current === "text"}>
                             <Renderer render={function () {
                                 return React.createElement(SizeOption, {
-                                    "icon": "text",
+                                    "icon": "font",
                                     "title": "Text size",
-                                    "onChange": self.handleValueChange("size"),
-                                    "value": self.props.selection[0].size
+                                    "onChange": self.handleValueChange("textSize"),
+                                    "value": self.props.selection[0].textSize
                                 });
                             }} />
                             <Renderer render={function () {
                                 return React.createElement(TextOption, {
                                     "title": "Text content",
-                                    "onChange": self.handleValueChange("text"),
-                                    "value": self.props.selection[0].text
+                                    "onChange": self.handleValueChange("textContent"),
+                                    "value": self.props.selection[0].textContent
                                 });
                             }} />
                         </Dialog>
                     </div>
                 </If>
-                {/* Render element color option */}
-                <If condition={this.state.showColorOption}>
+                {/* Render element fill option */}
+                <If condition={this.state.showFillOption}>
                     <div className={style.item}>
                         <Renderer render={function () {
                             return React.createElement(Button, {
-                                "icon": "palette",
-                                "active": current === "color",
-                                "onClick": self.handleOptionChange("color")
+                                "icon": "fill",
+                                "active": current === "fill",
+                                "onClick": self.handleOptionChange("fill")
                             });
                         }} />
-                        <Dialog active={current === "color"}>
+                        <Dialog active={current === "fill"}>
                             <Renderer render={function () {
                                 return React.createElement(ColorOption, {
-                                    "title": "Color",
-                                    "onChange": self.handleValueChange("color"),
-                                    "value": self.props.selection[0].color
+                                    "title": "Fill Color",
+                                    "onChange": self.handleValueChange("fillColor"),
+                                    "value": self.props.selection[0].fillColor
                                 });
                             }} />
                         </Dialog>
@@ -175,12 +177,36 @@ export class Stylebar extends React.Component {
                         </Dialog>
                     </div>
                 </If>
+                {/* Render element radius */}
+                <If condition={this.state.showRadiusOption}>
+                    <div className={style.item}>
+                        <Renderer render={function () {
+                            return React.createElement(Button, {
+                                "icon": "corner",
+                                "active": current === "radius",
+                                "onClick": self.handleOptionChange("radius")
+                            });
+                        }} />
+                        <Dialog active={current === "radius"}>
+                            <Renderer render={function () {
+                                return React.createElement(RangeOption, {
+                                    "title": "Radius",
+                                    "min": 0,
+                                    "max": 50,
+                                    "step": 1,
+                                    "onChange": self.handleValueChange("radius"),
+                                    "value": self.props.selection[0].radius
+                                });
+                            }} />
+                        </Dialog>
+                    </div>
+                </If>
                 {/* Render element opacity */}
                 <If condition={this.state.showOpacityOption}>
                     <div className={style.item}>
                         <Renderer render={function () {
                             return React.createElement(Button, {
-                                "icon": "visible",
+                                "icon": "opacity",
                                 "active": current === "opacity",
                                 "onClick": self.handleOptionChange("opacity")
                             });
