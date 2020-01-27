@@ -2,12 +2,13 @@ import React from "react";
 import {If, Renderer} from "@siimple/neutrine";
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
-import {gridColor, handlersColor} from "../../defaults.js";
+import {handlersColor} from "../../defaults.js";
 import {createElement, drawElement, updateElement} from "../../elements/index.js";
 import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
 import {getStartPosition, getEndPosition} from "../../utils/math.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../utils/selection.js";
 import {snapshotSelection} from "../../utils/selection.js";
+import {drawGrid} from "../../utils/grid.js";
 import style from "./style.scss";
 
 //Check for arrow keys
@@ -141,22 +142,7 @@ export class Sketch extends React.Component {
         this.context.clearRect(0, 0, this.state.width, this.state.height);
         //Render the grid if available
         if (this.view.grid === true) {
-            let gridSize = this.view.gridSize;
-            this.context.beginPath();
-            this.context.setLineDash([]);
-            this.context.strokeStyle = gridColor;
-            this.context.lineWidth = 1; //Force line width to 1px
-            //Horizontal rules
-            for (let i = 0; i * gridSize < this.state.height; i++) {
-                this.context.moveTo(0, i * gridSize);
-                this.context.lineTo(this.state.width, i * gridSize);
-            }
-            //Vertical rules
-            for (let i = 0; i * gridSize < this.state.width; i++) {
-                this.context.moveTo(i * gridSize, 0);
-                this.context.lineTo(i * gridSize, this.state.height);
-            }
-            this.context.stroke();
+            drawGrid(this.content, this.state.width, this.state.height, this.view.gridSize);
         }
         //this.data.elements.forEach(function (element, index) {
         forEachRev(this.data.elements, function (element, index) {
