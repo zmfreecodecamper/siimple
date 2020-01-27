@@ -81,6 +81,7 @@ export class Sketch extends React.Component {
         this.removeSelection = this.removeSelection.bind(this);
         this.cloneSelection = this.cloneSelection.bind(this);
         this.updateSelection = this.updateSelection.bind(this);
+        this.orderSelection = this.orderSelection.bind(this);
         //Bind API methods
         this.export = this.export.bind(this);
     }
@@ -500,6 +501,31 @@ export class Sketch extends React.Component {
         this.forceUpdate(); //Hide stylebar
         //return this.draw();
     }
+    //Reorder the selection
+    orderSelection(position) {
+        let self = this;
+        let elements = this.data.elements; //Reference to elements list
+        //this.view.selection.forEach(function (element) {
+        forEachRev(this.view.selection, function (element) {
+            let index = -1;
+            for (let i = 0; i < elements.length; i++) {
+                if (element.id === elements[i].id) {
+                    index = i; //Save the element index
+                    break;
+                }
+            }
+            //TODO: check for not found element????
+            //Move the elment to back
+            if (position === "back" && index + 1 < elements.length) {
+                elements.splice(index, 0, elements.splice(index + 1, 1)[0]);
+            }
+            //Move the element to front
+            else if (position === "front" && index - 1 >= 0) {
+                elements.splice(index, 0, elements.splice(index - 1, 1)[0]);
+            }
+        });
+        return this.draw(); //Only draw
+    }
     //Reset the selection
     resetSelection() {
         this.data.elements.forEach(function (element) {
@@ -531,7 +557,8 @@ export class Sketch extends React.Component {
                         "selection": self.view.selection, 
                         "onUpdate": self.updateSelection,
                         "onClone": self.cloneSelection,
-                        "onRemove": self.removeSelection
+                        "onRemove": self.removeSelection,
+                        "onOrder": self.orderSelection
                     });
                 }} />
             </div>

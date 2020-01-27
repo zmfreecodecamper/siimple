@@ -244,6 +244,28 @@ export class Stylebar extends React.Component {
                 <If condition={this.props.selection.length === 1}>
                     <div className={style.divider} />
                 </If>
+                {/* Bring to front button */}
+                <div className={style.item}>
+                    <Renderer render={function () {
+                        return React.createElement(Button, {
+                            "onClick": function () {
+                                return self.props.onOrder("front"); //Move to front
+                            },
+                            "icon": "bring-forward"
+                        });
+                    }} />
+                </div>
+                {/* Send to back button */}
+                <div className={style.item}>
+                    <Renderer render={function () {
+                        return React.createElement(Button, {
+                            "onClick": function () {
+                                return self.props.onOrder("back"); //Move to back
+                            },
+                            "icon": "send-backward"
+                        });
+                    }} />
+                </div>
                 {/* Clone current selection */}
                 <div className={style.item}>
                     <Button icon="clone" onClick={this.props.onClone} />
