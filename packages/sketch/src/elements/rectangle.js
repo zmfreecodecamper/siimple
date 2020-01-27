@@ -41,7 +41,8 @@ export const rectangleElement = {
             context.lineWidth = strokes[element.strokeWidth];
             //Check for line dash
             if (element.strokeDash === true) {
-                context.setLineDash([6, 6]); //Set default line-dash
+                let lineDash = strokes[element.strokeWidth] * 3;
+                context.setLineDash([lineDash, lineDash]); //Set default line-dash
             }
             else {
                 context.setLineDash([]); //Clear line-dash style

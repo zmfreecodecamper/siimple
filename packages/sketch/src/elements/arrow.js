@@ -22,7 +22,8 @@ export const arrowElement = {
         context.lineCap = "square"; //square linecap
         context.setLineDash([]); //Clear line-dash style
         if (element.strokeDash === true) {
-            context.setLineDash([6, 6]); //Set default line-dash
+            let lineDash = strokes[element.strokeWidth] * 3;
+            context.setLineDash([lineDash, lineDash]);
         }
         context.moveTo(element.x, element.y);
         context.lineTo(xEnd, yEnd);

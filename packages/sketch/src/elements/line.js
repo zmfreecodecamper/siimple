@@ -18,7 +18,8 @@ export const lineElement = {
         context.lineCap = "butt"; //Default linecap
         context.setLineDash([]); //Clear line-dash style
         if (element.strokeDash === true) {
-            context.setLineDash([6, 6]); //Set default line-dash
+            let lineDash = strokes[element.strokeWidth] * 3;
+            context.setLineDash([lineDash, lineDash]); //Set default line-dash
         }
         context.moveTo(element.x, element.y);
         context.lineTo(element.x + element.width, element.y + element.height);
