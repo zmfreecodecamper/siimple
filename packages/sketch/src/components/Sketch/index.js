@@ -142,7 +142,7 @@ export class Sketch extends React.Component {
         this.context.clearRect(0, 0, this.state.width, this.state.height);
         //Render the grid if available
         if (this.view.grid === true) {
-            drawGrid(this.content, this.state.width, this.state.height, this.view.gridSize);
+            drawGrid(this.context, this.state.width, this.state.height, this.view.gridSize);
         }
         //this.data.elements.forEach(function (element, index) {
         forEachRev(this.data.elements, function (element, index) {
