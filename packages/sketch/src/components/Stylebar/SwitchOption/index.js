@@ -17,7 +17,7 @@ export function SwitchOption (props) {
                                 return props.onChange(event.target.checked);
                             },
                             "className": style.switch,
-                            "defaultValue": props.value
+                            "defaultChecked": props.value
                         });
                     }} />
                 </div>
