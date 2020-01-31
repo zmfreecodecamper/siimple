@@ -1,9 +1,9 @@
-import {selectionElement} from "./selection.js";
-import {rectangleElement} from "./rectangle.js";
-import {ellipseElement} from "./ellipse.js";
-import {lineElement} from "./line.js";
-import {arrowElement} from"./arrow.js";
-import {textElement} from "./text.js";
+import {selectionElement} from "../elements/selection.js";
+import {rectangleElement} from "../elements/rectangle.js";
+import {ellipseElement} from "../elements/ellipse.js";
+import {lineElement} from "../elements/line.js";
+import {arrowElement} from"../elements/arrow.js";
+import {textElement} from "../elements/text.js";
 
 //Available elements
 let elements = {

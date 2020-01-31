@@ -1,4 +1,4 @@
-import {colors, strokes} from "../defaults.js";
+import {colors, strokes} from "../sketch/defaults.js";
 
 //Export ellipse element
 export const ellipseElement = {

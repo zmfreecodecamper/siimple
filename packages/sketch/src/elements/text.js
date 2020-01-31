@@ -1,7 +1,4 @@
-import {colors, fontSizes} from "../defaults.js";
-
-//Text global variables
-let fontFamily = "'Nanum Pen Script'";
+import {colors, fontSizes, fontFamily} from "../sketch/defaults.js";
 
 //Export text element
 export const textElement = {

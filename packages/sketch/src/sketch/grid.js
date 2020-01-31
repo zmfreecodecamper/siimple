@@ -1,11 +1,11 @@
-import {gridColor} from "../defaults.js";
+import {gridColor, gridWidth} from "./defaults.js";
 
 //Draw grid
 export function drawGrid (context, width, height, size) {
     context.beginPath();
     context.setLineDash([]);
     context.strokeStyle = gridColor;
-    context.lineWidth = 1; //Force line width to 1px
+    context.lineWidth = gridWidth; 
     //Horizontal rules
     for (let i = 0; i * size < height; i++) {
         context.moveTo(0, i * size);

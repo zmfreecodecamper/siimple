@@ -1,5 +1,5 @@
-import {colors, strokes} from "../defaults.js";
-import {getStartPosition, getEndPosition} from "../utils/math.js";
+import {colors, strokes} from "../sketch/defaults.js";
+import {getStartPosition, getEndPosition} from "../sketch/math.js";
 
 //Export rectangle element
 export const rectangleElement = {

@@ -3,13 +3,13 @@ import {If, Renderer} from "@siimple/neutrine";
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
 import {Menubar} from "../Menubar/index.js";
-import {handlersColor} from "../../defaults.js";
-import {createElement, drawElement, updateElement} from "../../elements/index.js";
-import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
-import {getStartPosition, getEndPosition} from "../../utils/math.js";
-import {setSelection, clearSelection, countSelection, getSelection} from "../../utils/selection.js";
-import {snapshotSelection} from "../../utils/selection.js";
-import {drawGrid} from "../../utils/grid.js";
+import {renderSketch} from "../../sketch/render.js";
+import {createElement, updateElement} from "../../sketch/elements.js";
+import {getResizePoints, resizeRadius, inResizePoint} from "../../sketch/resize.js";
+import {getStartPosition, getEndPosition} from "../../sketch/math.js";
+import {setSelection, clearSelection, countSelection, getSelection} from "../../sketch/selection.js";
+import {snapshotSelection} from "../../sketch/selection.js";
+import {forEachRev} from "../../utils.js";
 import style from "./style.scss";
 
 //Check for arrow keys
@@ -22,13 +22,6 @@ let isInputTarget = function (event) {
     let target = event.target; //Get target element
     return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
     //|| target instanceof HTMLSelectElement;
-};
-
-//For each reversed
-let forEachRev = function (list, callback) {
-    for (let i = list.length - 1; i >= 0; i--) {
-        callback(list[i], i); //Call this element
-    }
 };
 
 //Parse sketch elements
@@ -46,7 +39,7 @@ export class Sketch extends React.Component {
         super(props);
         this.parent = React.createRef(); //Editor wrapper
         this.canvas = React.createRef(); //Editor canvas
-        this.context = null; //this.canvas.getContext("2d"); //Context instance
+        //this.context = null; //this.canvas.getContext("2d"); //Context instance
         //Sketch state
         this.state = {
             "width": 200,
@@ -99,7 +92,7 @@ export class Sketch extends React.Component {
         document.addEventListener("keydown", this.handleKeyDown, false);
         window.addEventListener("resize", this.handleResize, false);
         //Initialize the canvas context
-        this.context = this.canvas.current.getContext("2d");
+        //this.context = this.canvas.current.getContext("2d");
         //Update the canvas with the correct size
         //this.draw();
         this.handleResize();
@@ -116,7 +109,7 @@ export class Sketch extends React.Component {
     }
     //Component did update --> reset the context
     componentDidUpdate() {
-        this.context = this.canvas.current.getContext("2d");
+        //this.context = this.canvas.current.getContext("2d");
         this.draw(); //Force canvas redraw
     }
     //Export the current sketch object
@@ -133,40 +126,12 @@ export class Sketch extends React.Component {
     }
     //Draw the sketch
     draw() {
-        let self = this;
-        //let selectionColor = handlersColor;//color("darkBlue", "1.0");
-        //Clear canvas
-        this.context.clearRect(0, 0, this.state.width, this.state.height);
-        //Render the grid if available
-        if (this.state.grid === true) {
-            drawGrid(this.context, this.state.width, this.state.height, this.props.gridSize);
-        }
-        //this.elements.forEach(function (element, index) {
-        forEachRev(this.elements, function (element, index) {
-            drawElement(element, self.context);
-            //Check if this element is selected --> draw selection area
-            if (element.selected === true && element.type !== "selection") {
-                let xStart = getStartPosition(element.x, element.width);
-                let yStart = getStartPosition(element.y, element.height);
-                let xEnd = getEndPosition(element.x, element.width); // - xStart;
-                let yEnd = getEndPosition(element.y, element.height); // - yStart;
-                self.context.beginPath();
-                self.context.setLineDash([8, 4]);
-                self.context.strokeStyle = handlersColor; //selectionColor;
-                self.context.lineWidth = 2; //Force line width to 2px
-                self.context.rect(xStart, yStart, xEnd - xStart, yEnd - yStart);
-                self.context.stroke();
-                self.context.setLineDash([]); //Reset line-dash
-                //Check if is the unique selected elements
-                if (self.view.selection.length === 1) {
-                    return getResizePoints(element).forEach(function (point) {
-                        self.context.beginPath();
-                        self.context.fillStyle = handlersColor; //selectionColor;
-                        self.context.arc(point.x, point.y, resizeRadius, 0, 2*Math.PI);
-                        self.context.fill();
-                    });
-                }
-            }
+        return renderSketch(this.canvas.current, this.elements, {
+            "width": this.state.width,
+            "height": this.state.height,
+            "selection": this.view.selection,
+            "grid": this.state.grid,
+            "gridSize": this.props.gridSize
         });
     }
     //Clear the sketch

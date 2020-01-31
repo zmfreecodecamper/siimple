@@ -2,7 +2,7 @@ import React from "react";
 import {classNames} from "@siimple/neutrine";
 import {Renderer, ForEach, If} from "@siimple/neutrine";
 import {Icon} from "@siimple/neutrine";
-import {colors} from "../../../defaults.js";
+import {colors} from "../../../sketch/defaults.js";
 import {Option} from "../Option/index.js";
 import style from "./style.scss";
 

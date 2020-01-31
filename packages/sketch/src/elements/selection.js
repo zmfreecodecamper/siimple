@@ -1,4 +1,4 @@
-import {selectionColor} from "../defaults.js";
+import {selectionColor} from "../sketch/defaults.js";
 
 //Export selection element
 export const selectionElement = {
