@@ -7,21 +7,36 @@
     border-radius: 5px;
     background-color: siimple-default-color("light");
     padding: 10px;
-    top: 50%;
-    transform: translateY(-50%);
     width: 136px; //150px;
-    right: 52px;
     //Dialog arrow
     &::after {
         content: "";
         position: absolute;
+        border: 8px solid transparent;
+    }
+}
+//Left orientation
+.left {
+    top: 50%;
+    left: -50%;
+    transform: translateX(-100%) translateY(-50%);
+    &::after {
         top: 50%;
         right: -16px;
         transform: translateY(-8px);
-        //width: 5px;
-        //height: 5px;
-        border: 8px solid transparent;
         border-left: 8px solid siimple-default-color("light");
+    }
+}
+//Right orientation
+.right {
+    top: 50%;
+    right: -50%;
+    transform: translateX(-100%) translateY(-50%);
+    &::after {
+        top: 50%;
+        left: -16px;
+        transform: translateY(-8px);
+        border-right: 8px solid siimple-default-color("light");
     }
 }
 
