@@ -1,0 +1,25 @@
+@import "@siimple/css/scss/variables.scss";
+
+//Menubar wrapper
+.root {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    //transform: translateY(-50%);
+    background-color: siimple-default-color("light");
+    border-radius: 5px;
+    padding: 5px;
+    width: 34px;
+    //transition: right 0.3s;
+    transition: all 0.3s;
+}
+//Menubar item
+.item {
+    position: relative;
+    //Not last item --> add margin-bottom
+    &:not(:last-child) {
+        margin-bottom: 5px;
+    }
+}
+
