@@ -3,12 +3,12 @@ import {classNames} from "@siimple/neutrine";
 import {If, Renderer} from "@siimple/neutrine";
 import {Range} from "@siimple/neutrine";
 import {Button} from "../Button/index.js";
+import {Dialog} from "../Dialog/index.js";
 import {ColorOption} from "./ColorOption/index.js";
 import {SizeOption} from "./SizeOption/index.js";
 import {TextOption} from "./TextOption/index.js";
 import {RangeOption} from "./RangeOption/index.js";
 import {SwitchOption} from "./SwitchOption/index.js";
-import {Dialog} from "./Dialog/index.js";
 import style from "./style.scss";
 
 //Check if the provided key exists
