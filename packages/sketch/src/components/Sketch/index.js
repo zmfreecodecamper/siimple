@@ -2,6 +2,7 @@ import React from "react";
 import {If, Renderer} from "@siimple/neutrine";
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
+import {Menubar} from "../Menubar/index.js";
 import {handlersColor} from "../../defaults.js";
 import {createElement, drawElement, updateElement} from "../../elements/index.js";
 import {getResizePoints, resizeRadius, inResizePoint} from "../../utils/resize.js";
@@ -14,12 +15,6 @@ import style from "./style.scss";
 //Check for arrow keys
 let isArrowKey = function (key) {
     return key === "ArrowUp" || key === "ArrowDown" || key === "ArrowLeft" || key === "ArrowRight";
-};
-
-//Default sketch config
-let defaultConfig = {
-    "grid": false,
-    "gridSize": 5
 };
 
 //Check if the provided event.target is related to an input element
@@ -36,6 +31,15 @@ let forEachRev = function (list, callback) {
     }
 };
 
+//Parse sketch elements
+let parseSketchElements = function (list) {
+    if (typeof list !== "object" || list === null || !Array.isArray(list)) {
+        return []; //Return an empty list
+    }
+    //TODO: parse elements
+    return list;
+};
+
 //Export sketch class
 export class Sketch extends React.Component {
     constructor(props) {
@@ -47,7 +51,8 @@ export class Sketch extends React.Component {
         this.state = {
             "width": 200,
             "height": 200,
-            "currentType": "selection"
+            "currentType": "selection",
+            "grid": this.props.gridDefault
         };
         //Initialize the view state
         this.view = {
@@ -58,14 +63,10 @@ export class Sketch extends React.Component {
             "selection": [],
             "snapshot": [],
             "dragged": false,
-            "grid": false,
-            "gridSize": 10,
             "resizeOrientation": null
         };
-        //Initialize sketch data
-        this.data = Object.assign({}, defaultConfig, {
-            "elements": []
-        });
+        //Initialize sketch elements
+        this.elements = parseSketchElements(this.props.sketch.elements);
         //Bind internal methods
         this.gridRound = this.gridRound.bind(this);
         this.draw = this.draw.bind(this);
@@ -85,6 +86,7 @@ export class Sketch extends React.Component {
         this.orderSelection = this.orderSelection.bind(this);
         //Bind API methods
         this.export = this.export.bind(this);
+        this.clear = this.clear.bind(this);
     }
     //Component did mount --> register event listeners
     componentDidMount() {
@@ -117,22 +119,17 @@ export class Sketch extends React.Component {
         this.context = this.canvas.current.getContext("2d");
         this.draw(); //Force canvas redraw
     }
-    //Load sketch data
-    load(data) {
-        this.data = Object.assign({}, defaultConfig, data);
-        if (typeof this.data.elements !== "object" || this.data.elements === null) {
-            this.data.elements = []; //Prevent no elements list
-        }
-        //Draw the new data
-        return this.draw();
-    }
     //Export the current sketch object
     export() {
-        return this.data;
+        return Object.assign({}, this.props.sketch, {
+            "elements": this.elements,
+            "width": this.state.width, //Save current width
+            "height": this.statue.height //Save current height
+        });
     }
     //Grid round
     gridRound(value) {
-        return (this.view.grid) ? Math.round(value / this.view.gridSize) * this.view.gridSize : value;
+        return (this.state.grid) ? Math.round(value / this.props.gridSize) * this.props.gridSize : value;
     }
     //Draw the sketch
     draw() {
@@ -141,11 +138,11 @@ export class Sketch extends React.Component {
         //Clear canvas
         this.context.clearRect(0, 0, this.state.width, this.state.height);
         //Render the grid if available
-        if (this.view.grid === true) {
-            drawGrid(this.context, this.state.width, this.state.height, this.view.gridSize);
+        if (this.state.grid === true) {
+            drawGrid(this.context, this.state.width, this.state.height, this.props.gridSize);
         }
-        //this.data.elements.forEach(function (element, index) {
-        forEachRev(this.data.elements, function (element, index) {
+        //this.elements.forEach(function (element, index) {
+        forEachRev(this.elements, function (element, index) {
             drawElement(element, self.context);
             //Check if this element is selected --> draw selection area
             if (element.selected === true && element.type !== "selection") {
@@ -174,11 +171,7 @@ export class Sketch extends React.Component {
     }
     //Clear the sketch
     clear() {
-        //Clear the sketch data
-        this.data = Object.assign(this.data, {
-            "elements": []
-        });
-        //Draw the sketch
+        this.elements = []; //Clear sketch elements
         return this.draw();
     }
     //Handle key down
@@ -203,11 +196,11 @@ export class Sketch extends React.Component {
             event.preventDefault();
             let step = (event.shiftKey) ? 5 : 1; //Step value
             //Check if the grid is active
-            if (this.view.grid === true) {
-                step = this.view.gridSize;
+            if (this.state.grid === true) {
+                step = this.props.gridSize;
             }
             //Move selected elements
-            this.data.elements.forEach(function (element) {
+            this.elements.forEach(function (element) {
                 if (element.selected === true) {
                     if (event.key === "ArrowUp") {
                         element.y = self.gridRound(element.y - step);
@@ -254,7 +247,7 @@ export class Sketch extends React.Component {
         //Check the selected type
         if (this.state.currentType === "selection") {
             //Check if the point is inside an element
-            let insideElements = this.data.elements.filter(function (element) {
+            let insideElements = this.elements.filter(function (element) {
                 let xStart = getStartPosition(element.x, element.width);
                 let yStart = getStartPosition(element.y, element.height);
                 let xEnd = getEndPosition(element.x, element.width);
@@ -270,18 +263,18 @@ export class Sketch extends React.Component {
                 this.view.currentElementDragging = true;
                 //Check if this element is not selected
                 if (el.selected === false && !event.shiftKey) {
-                    clearSelection(this.data.elements); //Remove other elements
+                    clearSelection(this.elements); //Remove other elements
                 }
                 //Toggle selection
                 el.selected = true;
                 //this.state.hasSelection = true; //At least has one selected element
-                this.view.selection = getSelection(this.data.elements);
+                this.view.selection = getSelection(this.elements);
                 this.view.snapshot = snapshotSelection(this.view.selection); //Create a snapshot of the selection
                 return; //Stop event
             }
             //If there is no elements --> clear selection
             //else {
-            //    clearSelection(this.data.elements);
+            //    clearSelection(this.elements);
             //}
         }
         //Create a new element
@@ -290,11 +283,11 @@ export class Sketch extends React.Component {
             "x": this.gridRound(this.view.lastX), 
             "y": this.gridRound(this.view.lastY)
         });
-        //this.data.elements.push(element);
-        this.data.elements.unshift(element);
+        //this.elements.push(element);
+        this.elements.unshift(element);
         this.view.currentElement = element; //Save dragging element
         this.view.selection = []; //Clear the current selection
-        clearSelection(this.data.elements);
+        clearSelection(this.elements);
         this.forceUpdate(); //Force update to hide stylebar
     }
    //Handle mouse move
@@ -374,7 +367,7 @@ export class Sketch extends React.Component {
                 //Check if the elemement is a selection
                 if (element.type === "selection") {
                     //Set selected elements and get the new number of selected elements
-                    setSelection(element, this.data.elements);
+                    setSelection(element, this.elements);
                 }
             }
         }
@@ -397,12 +390,12 @@ export class Sketch extends React.Component {
         //Check for clicked element
         if (this.view.dragged === false && this.view.selection.length > 0) {
             if (this.view.currentElementPrevSelected === true && event.shiftKey) {
-                //clearSelection(this.data.elements);
+                //clearSelection(this.elements);
                 this.view.currentElement.selected = false;
             }
             //Check if no shift key is pressed --> keep only this current element in selection
             else if (!event.shiftKey) {
-                clearSelection(this.data.elements); //Remove other elements from selection
+                clearSelection(this.elements); //Remove other elements from selection
                 this.view.currentElement.selected = true;
             }
         }
@@ -416,12 +409,12 @@ export class Sketch extends React.Component {
             });
         }
         //Remove selection elements
-        this.data.elements = this.data.elements.filter(function (element) {
+        this.elements = this.elements.filter(function (element) {
             return element.type !== "selection";
         });
         //Reset the current drag element
         this.view.currentElement = null;
-        this.view.selection = getSelection(this.data.elements); //Update the selection
+        this.view.selection = getSelection(this.elements); //Update the selection
         this.forceUpdate(); //Force update to display/hide the stylebar
         //Draw
         return this.draw();
@@ -435,7 +428,7 @@ export class Sketch extends React.Component {
     }
     //Handle type change 
     handleTypeChange(type) {
-        clearSelection(this.data.elements); //Remove selection
+        clearSelection(this.elements); //Remove selection
         this.view.selection = []; //Reset selection 
         return this.setState({
             "currentType": type
@@ -443,8 +436,9 @@ export class Sketch extends React.Component {
     }
     //Handle grid toggle --> Display or hide the grid
     handleGridToggle() {
-        this.view.grid = !this.view.grid;
-        return this.forceUpdate();
+        return this.setState({
+            "grid": !this.state.grid
+        });
     }
     //Handle selection update
     updateSelection(key, value) {
@@ -466,21 +460,21 @@ export class Sketch extends React.Component {
                 "x": element.x + 5,
                 "y": element.y + 5
             });
-            //self.data.elements.push(clonedElement); //Save to the elements list
+            //self.elements.push(clonedElement); //Save to the elements list
             newElements.push(clonedElement); //Save to the elements list
             element.selected = false; //Remove this element from selection
             return clonedElement; //Add to selection
         });
         //Add new elements
         forEachRev(newElements, function (element) {
-            self.data.elements.unshift(element);
+            self.elements.unshift(element);
         });
         this.forceUpdate(); //Update
     }
     //Remove current selection
     removeSelection() {
         //Remove current selection
-        this.data.elements = this.data.elements.filter(function (element) {
+        this.elements = this.elements.filter(function (element) {
             return !element.selected;
         });
         this.view.selection = []; //Remove selection
@@ -490,7 +484,7 @@ export class Sketch extends React.Component {
     //Reorder the selection
     orderSelection(position) {
         let self = this;
-        let elements = this.data.elements; //Reference to elements list
+        let elements = this.elements; //Reference to elements list
         //this.view.selection.forEach(function (element) {
         forEachRev(this.view.selection, function (element) {
             let index = -1;
@@ -514,7 +508,7 @@ export class Sketch extends React.Component {
     }
     //Reset the selection
     resetSelection() {
-        this.data.elements.forEach(function (element) {
+        this.elements.forEach(function (element) {
             element.selected = false; //Set selected as false
         });
         this.view.selection = []; //Clear selection list
@@ -527,11 +521,21 @@ export class Sketch extends React.Component {
             <div ref={this.parent} className={style.root}>
                 {/* Render canvas */}
                 <canvas width={this.state.width} height={this.state.height} ref={this.canvas} />
+                {/* Menubar */}
+                <Renderer render={function () {
+                    return React.createElement(Menubar, {
+                        "showSettingsBtn": self.props.showSettingsBtn,
+                        "showSaveBtn": self.props.showSaveBtn,
+                        "showExportBtn": self.props.showExportBtn,
+                        "onExportClick": self.props.onExport,
+                        "onSaveClick": self.props.onSave
+                    });
+                }} />
                 {/* Toolbar */}
                 <Renderer render={function () {
                     return React.createElement(Toolbar, {
                         "currentElement": self.state.currentType,
-                        "gridActive": self.view.grid,
+                        "gridActive": self.state.grid,
                         "onElementClick": self.handleTypeChange,
                         "onGridClick": self.handleGridToggle
                     });
@@ -551,4 +555,20 @@ export class Sketch extends React.Component {
         );
     }
 }
+
+//Sketch default props
+Sketch.defaultProps = {
+    "sketch": {}, //Initial sketch data
+    //Grid configuration
+    "gridSize": 10, //Grid size
+    "gridDefault": false, //By default grid is enabled
+    //Displaying sketch buttons
+    "showSettingsBtn": true,
+    "showSaveBtn": true,
+    "showExportBtn": true,
+    "showGridBtn": true,
+    //Handle sketch actions
+    "onExport": null, //Handle sketch export
+    "onSave": null //Handle sketch save
+};
 
