@@ -121,7 +121,7 @@ export class Sketch extends React.Component {
                 });
             }),
             "width": this.state.width, //Save current width
-            "height": this.statue.height //Save current height
+            "height": this.state.height //Save current height
         });
     }
     //Grid round
