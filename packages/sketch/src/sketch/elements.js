@@ -15,10 +15,15 @@ let elements = {
     "text": textElement
 };
 
+//Get an element
+export function getElement (name) {
+    return elements[name];
+}
+
 //Create a new element
 export function createElement (options) {
     return Object.assign(options, elements[options.type].initialConfig, {
-        "id": Date.now(), //TODO: replace thid
+        "id": Date.now(), //TODO: replace this
         "width": 0,
         "height": 0,
         "selected": false,
@@ -27,14 +32,12 @@ export function createElement (options) {
 }
 
 //Draw the provided element
-export function drawElement (element, context, rc) {
-    elements[element.type].draw(element, context, rc);
+export function drawElement (context, element) {
+    return elements[element.type].draw(context, element);
 }
 
 //Update the element
 export function updateElement (element) {
-    if (typeof elements[element.type].update === "function") {
-        return elements[element.type].update(element); //Call the update method
-    }
+    return elements[element.type].update(element); //Call the update method
 }
 

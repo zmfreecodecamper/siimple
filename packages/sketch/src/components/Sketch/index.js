@@ -5,11 +5,10 @@ import {Stylebar} from "../Stylebar/index.js";
 import {Menubar} from "../Menubar/index.js";
 import {renderSketch} from "../../sketch/render.js";
 import {createElement, updateElement} from "../../sketch/elements.js";
-import {getResizePoints, resizeRadius, inResizePoint} from "../../sketch/resize.js";
-import {getStartPosition, getEndPosition} from "../../sketch/math.js";
+import {getResizePoints, inResizePoint} from "../../sketch/resize.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../sketch/selection.js";
 import {snapshotSelection} from "../../sketch/selection.js";
-import {forEachRev} from "../../utils.js";
+import {forEachRev, getAbsolutePositions} from "../../utils.js";
 import style from "./style.scss";
 
 //Check for arrow keys
@@ -60,6 +59,7 @@ export class Sketch extends React.Component {
         };
         //Initialize sketch elements
         this.elements = parseSketchElements(this.props.sketch.elements);
+        //this.theme = getTheme(this.props.sketch.theme); //Get current theme
         //Bind internal methods
         this.gridRound = this.gridRound.bind(this);
         this.draw = this.draw.bind(this);
@@ -115,7 +115,11 @@ export class Sketch extends React.Component {
     //Export the current sketch object
     export() {
         return Object.assign({}, this.props.sketch, {
-            "elements": this.elements,
+            "elements": this.elements.map(function (element) {
+                return Object.assign({}, element, {
+                    "selected": false //Disable selection
+                });
+            }),
             "width": this.state.width, //Save current width
             "height": this.statue.height //Save current height
         });
@@ -126,12 +130,12 @@ export class Sketch extends React.Component {
     }
     //Draw the sketch
     draw() {
-        return renderSketch(this.canvas.current, this.elements, {
+        return renderSketch(this.canvas.current.getContext("2d"), this.elements, {
             "width": this.state.width,
             "height": this.state.height,
-            "selection": this.view.selection,
-            "grid": this.state.grid,
-            "gridSize": this.props.gridSize
+            "grid": this.state.grid, //Display grid
+            "gridSize": this.props.gridSize, //Set grid size
+            "selection": this.view.selection //Selected elements
         });
     }
     //Clear the sketch
@@ -213,10 +217,8 @@ export class Sketch extends React.Component {
         if (this.state.currentType === "selection") {
             //Check if the point is inside an element
             let insideElements = this.elements.filter(function (element) {
-                let xStart = getStartPosition(element.x, element.width);
-                let yStart = getStartPosition(element.y, element.height);
-                let xEnd = getEndPosition(element.x, element.width);
-                let yEnd = getEndPosition(element.y, element.height);
+                let [xStart, xEnd] = getAbsolutePositions(element.x, element.width);
+                let [yStart, yEnd] = getAbsolutePositions(element.y, element.height);
                 //Check if the position is inside the element
                 return (xStart <= self.view.lastX && self.view.lastX <= xEnd) 
                     && (yStart <= self.view.lastY && self.view.lastY <= yEnd);

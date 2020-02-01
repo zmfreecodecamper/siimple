@@ -1,5 +1,5 @@
-import {colors, strokes} from "../sketch/defaults.js";
-import {getStartPosition, getEndPosition} from "../sketch/math.js";
+import {theme} from "../theme.js";
+import {getAbsolutePositions} from "../utils.js";
 
 //Export rectangle element
 export const rectangleElement = {
@@ -13,12 +13,10 @@ export const rectangleElement = {
         "radius": 5,
         "opacity": 1.0
     },
-    "draw": function (element, context, rc) {
+    "draw": function (context, element) {
         //Get real positions
-        let xStart = getStartPosition(element.x, element.width); //Real x start position
-        let yStart = getStartPosition(element.y, element.height); //Real y start position
-        let xEnd = getEndPosition(element.x, element.width); //Real y end position
-        let yEnd = getEndPosition(element.y, element.height); //Real y end position
+        let [xStart, xEnd] = getAbsolutePositions(element.x, element.width); //Real x positions
+        let [yStart, yEnd] = getAbsolutePositions(element.y, element.height); //Real y positions
         let radius = Math.min(element.radius, Math.abs(element.width) / 2, Math.abs(element.height) / 2); //Get max radius
         context.beginPath();
         context.globalAlpha = element.opacity;
@@ -33,23 +31,27 @@ export const rectangleElement = {
         context.lineTo(xStart, yStart + radius);
         context.quadraticCurveTo(xStart, yStart, xStart + radius, yStart);
         context.closePath();
-        context.fillStyle = colors[element.fillColor];
+        context.fillStyle = theme.colors[element.fillColor];
         context.fill();
         //Check for no stroke color --> render rectangle stroke
         if (element.strokeColor !== "transparent") {
-            context.strokeStyle = colors[element.strokeColor];
-            context.lineWidth = strokes[element.strokeWidth];
+            context.strokeStyle = theme.colors[element.strokeColor];
+            context.lineWidth = theme.strokes[element.strokeWidth];
             //Check for line dash
             if (element.strokeDash === true) {
-                let lineDash = strokes[element.strokeWidth] * 3;
+                let lineDash = theme.strokes[element.strokeWidth] * 3;
                 context.setLineDash([lineDash, lineDash]); //Set default line-dash
             }
             else {
                 context.setLineDash([]); //Clear line-dash style
             }
+            //Apply stroke
             context.stroke();
         }
         context.globalAlpha = 1; //Reset opacity
+    },
+    "update": function () {
+        return null; //Nothing to do
     }
 };
 

@@ -5,4 +5,12 @@ export function forEachRev (list, callback) {
     }
 };
 
+//Get absolute positions
+export function getAbsolutePositions (position, size) {
+    return [
+        Math.min(position, position + size),
+        Math.max(position, position + size)
+    ];
+}
+
 

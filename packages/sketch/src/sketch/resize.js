@@ -1,4 +1,5 @@
-import {resizeRadius} from "./defaults.js";
+//Export default resize radius
+export const resizeRadius = 5;
 
 //Get resize points
 export function getResizePoints (element) {

@@ -2,14 +2,14 @@ import React from "react";
 import {classNames} from "@siimple/neutrine";
 import {Renderer, ForEach, If} from "@siimple/neutrine";
 import {Icon} from "@siimple/neutrine";
-import {colors} from "../../../sketch/defaults.js";
+import {theme} from "../../../theme.js";
 import {Option} from "../Option/index.js";
 import style from "./style.scss";
 
 //Get text color
 let getTextColor = function (name) {
     if (name === "transparent" || name === "light" || name === "white") {
-        return colors.dark; //Return dark text color
+        return theme.colors.dark; //Return dark text color
     }
     //Default: return white color
     return "#ffffff";
@@ -17,7 +17,7 @@ let getTextColor = function (name) {
 
 //Export color picker option
 export function ColorOption (props) {
-    let colorNames = Object.keys(colors);
+    let colorNames = Object.keys(theme.colors);
     return (
         <Option title={props.title}>
             <div className={style.root}>
@@ -33,7 +33,7 @@ export function ColorOption (props) {
                     };
                     //Build inline style
                     let inlineStyle = {
-                        "backgroundColor": colors[name],
+                        "backgroundColor": theme.colors[name],
                         "color": getTextColor(name)
                     };
                     return (

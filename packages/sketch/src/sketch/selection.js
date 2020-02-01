@@ -1,18 +1,16 @@
-import {getStartPosition, getEndPosition} from "./math.js";
+import {getAbsolutePositions} from "../utils.js";
 
 //Set selection
 export function setSelection (selection, elements) {
-    let sxStart = getStartPosition(selection.x, selection.width);
-    let syStart = getStartPosition(selection.y, selection.height);
-    let sxEnd = getEndPosition(selection.x, selection.width);
-    let syEnd = getEndPosition(selection.y, selection.height);
+    //Get selection absolute positions
+    let [sxStart, sxEnd] = getAbsolutePositions(selection.x, selection.width);
+    let [syStart, syEnd] = getAbsolutePositions(selection.y, selection.height);
     //Mark all selected elements
     elements.forEach(function (element) {
         if (element.type !== "selection") {
-            let xStart = getStartPosition(element.x, element.width);
-            let yStart = getStartPosition(element.y, element.height);
-            let xEnd = getEndPosition(element.x, element.width);
-            let yEnd = getEndPosition(element.y, element.height);
+            //Get element absolute positions
+            let [xStart, xEnd] = getAbsolutePositions(element.x, element.width);
+            let [yStart, yEnd] = getAbsolutePositions(element.y, element.height);
             //Set if this element is selected
             element.selected = sxStart <= xStart && syStart <= yStart && xEnd <= sxEnd && yEnd <= syEnd;
         }
