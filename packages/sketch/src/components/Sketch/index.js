@@ -69,6 +69,7 @@ export class Sketch extends React.Component {
             "resizeOrientation": null
         };
         //Initialize sketch elements
+        this.sketch = null;
         this.elements = parseSketchElements(this.props.sketch.elements);
         //this.theme = getTheme(this.props.sketch.theme); //Get current theme
         //Bind internal methods
@@ -132,9 +133,15 @@ export class Sketch extends React.Component {
     export() {
         return Object.assign({}, this.props.sketch, {
             "elements": this.elements.map(function (element) {
-                return Object.assign({}, element, {
+                let exportedElement = Object.assign({}, element, {
                     "selected": false //Disable selection
                 });
+                //Check for image element --> remove img field
+                if (element.type === "image") {
+                    delete exporteddElement.img;
+                }
+                //Return the exported element object
+                return exportedElement;
             }),
             "width": this.state.width, //Save current width
             "height": this.state.height //Save current height
@@ -191,6 +198,7 @@ export class Sketch extends React.Component {
                     return self.addElement(newElement);
                 }
                 //Create a new image
+                //https://stackoverflow.com/a/4776378
                 let img = new Image();
                 img.addEventListener("load", function () {
                     return self.addElement(Object.assign(newElement, {
