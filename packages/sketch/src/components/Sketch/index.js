@@ -9,7 +9,7 @@ import {getResizePoints, inResizePoint} from "../../sketch/resize.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../sketch/selection.js";
 import {snapshotSelection} from "../../sketch/selection.js";
 import {forEachRev, getAbsolutePositions} from "../../utils.js";
-import {getDataFromClipboard} from "../../utils.js";
+import {getDataFromClipboard, blobToDataUrl, calculateImageSize} from "../../utils.js";
 import style from "./style.scss";
 
 //Check for arrow keys
@@ -31,6 +31,16 @@ let parseSketchElements = function (list) {
     }
     //TODO: parse elements
     return list;
+};
+
+//Parse clipboard data
+let parseClipboardBlob = function (type, blob, callback) {
+    //Check for text blob
+    if (type === "text") {
+        return callback(blob.trim());
+    }
+    //Convert blob to dataURL
+    return blobToDataUrl(blob, callback);
 };
 
 //Export sketch class
@@ -73,6 +83,8 @@ export class Sketch extends React.Component {
         this.handleMouseUp = this.handleMouseUp.bind(this);
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleGridToggle = this.handleGridToggle.bind(this);
+        //Creating new elements
+        this.addElement = this.addElement.bind(this);
         //Selection handlers
         this.resetSelection = this.resetSelection.bind(this);
         this.removeSelection = this.removeSelection.bind(this);
@@ -147,6 +159,17 @@ export class Sketch extends React.Component {
         this.elements = []; //Clear sketch elements
         return this.draw();
     }
+    //Add a new element
+    addElement(element) {
+        Object.assign(element, {
+            "selected": true, //Set element as selected
+            "x": this.gridRound((this.state.width - element.width) / 2),
+            "y": this.gridRound((this.state.height - element.height) / 2) 
+        });
+        this.elements.unshift(element); //Save the new element
+        this.view.selection = getSelection(this.elements); //Update the selection
+        this.forceUpdate(); //Force update to display/hide the stylebar
+    }
     //Handle paste
     handlePaste(event) {
         let self = this;
@@ -154,24 +177,30 @@ export class Sketch extends React.Component {
         //console.log(event.clipboardData);
         //TODO: check if target is the canvas element
         //Parse clipboard data
-        return getDataFromClipboard(event, function (type, content) {
-            console.log("Copied --> " + type);
+        return getDataFromClipboard(event, function (type, blob) {
+            //console.log("Copied --> " + type);
             clearSelection(self.elements); //Clear the current selection
-            let newElement = null; //Create an empty element
-            //Create a text node
-            if (type === "text") {
-                newElement = createElement({
-                    "type": "text",
-                    "textContent": content.trim(),
-                    "x": self.gridRound(self.state.width / 2),
-                    "y": self.gridRound(self.state.height / 2)
+            return parseClipboardBlob(type, blob, function (content) {
+                let newElement = createElement({
+                    "type": type,
+                    "content": content
                 });
-                updateElement(newElement); //Update new text size
-            }
-            newElement.selected = true; //Set element as selected
-            self.elements.unshift(newElement); //Save the new element
-            self.view.selection = getSelection(self.elements); //Update the selection
-            return self.forceUpdate(); //Force update to display/hide the stylebar
+                //Check for not image type
+                if (type !== "image") {
+                    updateElement(newElement);
+                    return self.addElement(newElement);
+                }
+                //Create a new image
+                let img = new Image();
+                img.addEventListener("load", function () {
+                    return self.addElement(Object.assign(newElement, {
+                        "width": img.width,
+                        "height": img.height,
+                        "img": img
+                    }));
+                });
+                img.src = content; //Set image source
+            });
         });
     }
     //Handle key down

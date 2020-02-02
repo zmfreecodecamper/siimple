@@ -4,7 +4,7 @@ export const resizeRadius = 5;
 //Get resize points
 export function getResizePoints (element) {
     //Check for rectangle or ellipse
-    if (element.type === "rectangle" || element.type === "ellipse") {
+    if (element.type === "rectangle" || element.type === "ellipse" || element.type === "image") {
         return [
             {"orientation": "ltd", "x": element.x, "y": element.y},
             {"orientation": "tv", "x": element.x + element.width / 2, "y": element.y},

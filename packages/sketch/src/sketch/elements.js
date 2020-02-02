@@ -4,6 +4,7 @@ import {ellipseElement} from "../elements/ellipse.js";
 import {lineElement} from "../elements/line.js";
 import {arrowElement} from"../elements/arrow.js";
 import {textElement} from "../elements/text.js";
+import {imageElement} from "../elements/image.js";
 
 //Available elements
 let elements = {
@@ -12,7 +13,8 @@ let elements = {
     "ellipse": ellipseElement,
     "line": lineElement,
     "arrow": arrowElement,
-    "text": textElement
+    "text": textElement,
+    "image": imageElement
 };
 
 //Get an element
