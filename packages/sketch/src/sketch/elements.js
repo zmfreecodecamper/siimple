@@ -22,7 +22,7 @@ export function getElement (name) {
 
 //Create a new element
 export function createElement (options) {
-    return Object.assign(options, elements[options.type].initialConfig, {
+    return Object.assign({}, elements[options.type].initialConfig, options, {
         "id": Date.now(), //TODO: replace this
         "width": 0,
         "height": 0,

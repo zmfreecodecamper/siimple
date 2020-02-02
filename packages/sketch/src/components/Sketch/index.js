@@ -9,6 +9,7 @@ import {getResizePoints, inResizePoint} from "../../sketch/resize.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../sketch/selection.js";
 import {snapshotSelection} from "../../sketch/selection.js";
 import {forEachRev, getAbsolutePositions} from "../../utils.js";
+import {getDataFromClipboard} from "../../utils.js";
 import style from "./style.scss";
 
 //Check for arrow keys
@@ -65,6 +66,7 @@ export class Sketch extends React.Component {
         this.draw = this.draw.bind(this);
         //Bind handlers
         this.handleResize = this.handleResize.bind(this);
+        this.handlePaste = this.handlePaste.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -90,6 +92,7 @@ export class Sketch extends React.Component {
         this.canvas.current.addEventListener("mouseup", this.handleMouseUp);
         //Register window/document event listeners
         document.addEventListener("keydown", this.handleKeyDown, false);
+        document.addEventListener("paste", this.handlePaste, false);
         window.addEventListener("resize", this.handleResize, false);
         //Initialize the canvas context
         //this.context = this.canvas.current.getContext("2d");
@@ -105,6 +108,7 @@ export class Sketch extends React.Component {
         this.canvas.current.removeEventListener("mouseup", this.handleMouseUp);
         //Remove window/document listeners
         document.removeEventListener("keydown", this.handleKeyDown, false);
+        document.removeEventListener("paste", this.handlePaste, false);
         window.removeEventListener("resize", this.handleResize, false);
     }
     //Component did update --> reset the context
@@ -142,6 +146,33 @@ export class Sketch extends React.Component {
     clear() {
         this.elements = []; //Clear sketch elements
         return this.draw();
+    }
+    //Handle paste
+    handlePaste(event) {
+        let self = this;
+        console.log(event.target);
+        //console.log(event.clipboardData);
+        //TODO: check if target is the canvas element
+        //Parse clipboard data
+        return getDataFromClipboard(event, function (type, content) {
+            console.log("Copied --> " + type);
+            clearSelection(self.elements); //Clear the current selection
+            let newElement = null; //Create an empty element
+            //Create a text node
+            if (type === "text") {
+                newElement = createElement({
+                    "type": "text",
+                    "textContent": content.trim(),
+                    "x": self.gridRound(self.state.width / 2),
+                    "y": self.gridRound(self.state.height / 2)
+                });
+                updateElement(newElement); //Update new text size
+            }
+            newElement.selected = true; //Set element as selected
+            self.elements.unshift(newElement); //Save the new element
+            self.view.selection = getSelection(self.elements); //Update the selection
+            return self.forceUpdate(); //Force update to display/hide the stylebar
+        });
     }
     //Handle key down
     handleKeyDown(event) {
@@ -384,7 +415,7 @@ export class Sketch extends React.Component {
         this.view.selection = getSelection(this.elements); //Update the selection
         this.forceUpdate(); //Force update to display/hide the stylebar
         //Draw
-        return this.draw();
+        //return this.draw();
     }
     //Handle resize --> update the canvas width and height
     handleResize(event) {
