@@ -49,4 +49,27 @@ export function blobToClipboard (blob) {
     ]);
 }
 
+//Get pasted items
+export function getDataFromClipboard (event, callback) {
+    if (!event.clipboardData || typeof event.clipboardData.items === "undefined") {
+        return null; //No clipboard data
+    }
+    //Get items
+    let items = event.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+        let item = items[i]; //Get current item
+        if (item.type.indexOf("image") !== -1) {
+            return callback("image", item.getAsFile()); //Get as image
+        }
+        else if (item.type.indexOf("text") !== -1) {
+            //return callback("text", item.getData("text")); //Get as text
+            return item.getAsString(function (content) {
+                return callback("text", content); //Send text content
+            });
+        }
+    }
+    //No data copied
+    return null;
+}
+
 
