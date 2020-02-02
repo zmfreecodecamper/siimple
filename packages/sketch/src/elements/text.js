@@ -5,7 +5,7 @@ export const textElement = {
     "icon": "text",
     "visibleOnToolbar": true,
     "initialConfig": {
-        "textContent": "abcd",
+        "content": "abcd",
         "textColor": "dark",
         "textSize": "medium",
         "opacity": 1.0
@@ -15,7 +15,7 @@ export const textElement = {
         context.beginPath();
         context.font = `${theme.fontSizes[element.textSize]}px ${theme.fontFamily}`;
         context.fillStyle = theme.colors[element.textColor];
-        let lines = element.textContent.replace(/\r\n?/g, "\n").split("\n");
+        let lines = element.content.replace(/\r\n?/g, "\n").split("\n");
         //let lineHeight = element.height / lines.length;
         //let offset = element.height - element.baseline;
         for (let i = 0; i < lines.length; i++) {
@@ -28,7 +28,7 @@ export const textElement = {
         //Update the text width and height
         //https://stackoverflow.com/a/19547748
         let div = document.createElement("div");
-        div.innerHTML = element.textContent.replace(/\r\n?/g, "\n").split("\n").join("<br>");
+        div.innerHTML = element.content.replace(/\r\n?/g, "\n").split("\n").join("<br>");
         div.style.position = "absolute";
         div.style.top = "-9999px";
         div.style.left = "-9999px";
