@@ -128,8 +128,8 @@ export class Stylebar extends React.Component {
                             <Renderer render={function () {
                                 return React.createElement(TextOption, {
                                     "title": "Text content",
-                                    "onChange": self.handleValueChange("textContent"),
-                                    "value": self.props.selection[0].textContent
+                                    "onChange": self.handleValueChange("content"),
+                                    "value": self.props.selection[0].content
                                 });
                             }} />
                         </Dialog>
