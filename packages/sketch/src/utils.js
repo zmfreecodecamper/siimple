@@ -49,6 +49,21 @@ export function blobToClipboard (blob) {
     ]);
 }
 
+//Convert DataURL to blob
+//https://stackoverflow.com/a/30407959
+export function dataUrlToBlob (data, callback) {
+    return null;
+}
+
+//Convert Blob to DataURL
+export function blobToDataUrl (blob, callback) {
+    let file = new FileReader();
+    file.onload = function (event) {
+        return callback(event.target.result);
+    };
+    return file.readAsDataURL(blob);
+}
+
 //Get pasted items
 export function getDataFromClipboard (event, callback) {
     if (!event.clipboardData || typeof event.clipboardData.items === "undefined") {
