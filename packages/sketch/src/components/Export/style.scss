@@ -1,0 +1,61 @@
+@import "@siimple/css/scss/variables.scss";
+
+//Filename wrapper
+.file {
+    display: flex;
+    vertical-align: top;
+    //Filename
+    &Name {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    //Extname
+    &Ext {
+        display: block;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background-color: siimple-default-color("light");
+        width: 34px;
+        line-height: 34px;
+        padding-right: 10px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+}
+//Button item
+.item {
+    width: calc(100% - 34px);
+    transition: all 0.3s;
+    border: 2px dashed siimple-default-color("light");
+    padding: 15px;
+    font-size: 14px;
+    color: rgba(siimple-default-color("dark"), 0.6);
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    //Item hover 
+    &:hover {
+        //background-color: rgba(siimple-default-color("primary"), 0.1);
+        border-color: siimple-default-color("primary");
+    }
+    //Item active
+    &Active {
+        background-color: rgba(siimple-default-color("primary"), 0.1) !important;
+        border-color: siimple-default-color("primary") !important;
+        //border-style: solid !important;
+        color: siimple-default-color("primary");
+    }
+    //Item disabled
+    &Disabled {
+        cursor: not-allowed !important;
+        opacity: 0.5;
+    }
+    //Item wrapper
+    &Wrapper {
+        display: flex;
+        flex-direction: row;
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+}
+
