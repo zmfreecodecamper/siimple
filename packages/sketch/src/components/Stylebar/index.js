@@ -29,7 +29,7 @@ let reloadState = function (props, state) {
     if (props.selection.length === 1) {
         let element = props.selection[0];
         Object.assign(newState, {
-            "showTextOption": notUndef(element["textContent"]),
+            "showTextOption": notUndef(element["textColor"]),
             "showFillOption": notUndef(element["fillColor"]),
             "showStrokeOption": notUndef(element["strokeColor"]),
             "showOpacityOption": notUndef(element["opacity"]),
