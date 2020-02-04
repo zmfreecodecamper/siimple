@@ -52,7 +52,17 @@ export function blobToClipboard (blob) {
 //Convert DataURL to blob
 //https://stackoverflow.com/a/30407959
 export function dataUrlToBlob (data, callback) {
-    return null;
+    let list = data.split(",");
+    let bstr = atob(list[1]);
+    let size = bstr.length;
+    let u8list = new Uint8Array(size);
+    while (n > 0) {
+        u8list[n-1] = bstr.charCodeAt(n-1);
+        n = n - 1;
+    }
+    return new Blob([u8list], {
+        "type": list[0].match(/:(.*?);/)[1] //Extract mime type
+    });
 }
 
 //Convert Blob to DataURL
