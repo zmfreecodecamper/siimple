@@ -14,20 +14,11 @@ let simpleRenderer = function (tag) {
     };
 };
 
-//Tip blocks levels
-let tipLevels = {
-    "info": {"color": "primary", "icon": "info"},
-    "error": {"color": "error", "icon": "cross"},
-    "warning": {"color": "warning", "icon": "exclamation"},
-    "success": {"color": "success", "icon": "check"}
-};
-
 //Tip renderer
 let tipRenderer = function (props) {
-    let level = tipLevels[props.level];
     return (
-        <Tip color={level.color} icon={level.icon} key={props.key}>
-            <If condition={props.title.trim() !== ""}>
+        <Tip color={props.color} icon={props.icon} key={props.key}>
+            <If condition={typeof props.title === "string"}>
                 <Heading type="h6">{props.title}</Heading>
             </If>
             <div>{props.children}</div>
@@ -37,7 +28,31 @@ let tipRenderer = function (props) {
 
 //Export renderers
 export const renderers = {
-    "tip": tipRenderer,
+    //Tip renderers
+    "tip:info": function (props) {
+        return tipRenderer(Object.assign(props, {
+            "color": "primary",
+            "icon": "info",
+        }));
+    },
+    "tip:error": function (props) {
+        return tipRenderer(Object.assign(props, {
+            "color": "error",
+            "icon": "cross",
+        }));
+    },
+    "tip:warning": function (props) {
+        return tipRenderer(Object.assign(props, {
+            "color": "warning",
+            "icon": "exclamation",
+        }));
+    },
+    "tip:success": function (props) {
+        return tipRenderer(Object.assign(props, {
+            "color": "success",
+            "icon": "check",
+        }));
+    },
     "heading": function (props) {
         return React.createElement(Heading, {
             "type": "h" + props.level,
