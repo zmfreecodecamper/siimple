@@ -1,10 +1,10 @@
-@import "@siimple/css/scss/variables.scss";
+@use "@siimple/lib" as siimple;
 
 //Snippet container
 .root {
     display: block;
     border-radius: 5px;
-    background-color: siimple-default-color("light");
+    background-color: siimple.color("light");
     padding: 15px;
     margin-bottom: 20px;
 }
@@ -12,7 +12,7 @@
 .example {
     display: block;
     overflow-x: auto;
-    background-color: #ffffff;
+    background-color: siimple.color("white");
     border-radius: 5px;
     padding: 10px;
     width: calc(100% - 20px);
@@ -29,6 +29,6 @@
     padding: 10px;
     line-height: 18px;
     font-size: 12px;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(siimple.color("white"), 0.5);
 }
 
