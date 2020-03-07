@@ -1,4 +1,5 @@
 import React from "react";
+import {classNames} from "@siimple/neutrine";
 import {If, Renderer} from "@siimple/neutrine";
 import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
@@ -156,8 +157,8 @@ export class Sketch extends React.Component {
         return renderSketch(this.canvas.current.getContext("2d"), this.elements, {
             "width": this.state.width,
             "height": this.state.height,
-            "grid": this.state.grid, //Display grid
-            "gridSize": this.props.gridSize, //Set grid size
+            //"grid": this.state.grid, //Display grid
+            //"gridSize": this.props.gridSize, //Set grid size
             "selection": this.view.selection //Selected elements
         });
     }
@@ -552,8 +553,23 @@ export class Sketch extends React.Component {
     //Render the sketch component
     render() {
         let self = this;
+        let props = this.props;
+        //Build root component class list
+        let classList = classNames({
+            [style.root]: true,
+            [style.gridLined]: this.state.grid && props.gridStyle === "lined",
+            [style.gridDotted]: this.state.grid && props.gridStyle === "dotted"
+        });
+        //Build style list
+        let styleList = {
+            "backgroundSize": `${props.gridSize}px ${props.gridSize}px`
+        };
+        if (props.gridStyle === "dotted") {
+            styleList["backgroundPositionX"] = `-${props.gridSize / 2}px`;
+            styleList["backgroundPositionY"] = `-${props.gridSize / 2}px`;
+        }
         return (
-            <div ref={this.parent} className={style.root}>
+            <div ref={this.parent} className={classList} style={styleList}>
                 {/* Render canvas */}
                 <canvas width={this.state.width} height={this.state.height} ref={this.canvas} />
                 {/* Menubar */}
@@ -595,6 +611,7 @@ export class Sketch extends React.Component {
 Sketch.defaultProps = {
     "sketch": {}, //Initial sketch data
     //Grid configuration
+    "gridStyle": "lined", //Grid style: lined or dotted
     "gridSize": 10, //Grid size
     "gridDefault": false, //By default grid is enabled
     //Displaying sketch buttons
@@ -602,6 +619,7 @@ Sketch.defaultProps = {
     "showSaveBtn": true,
     "showExportBtn": true,
     "showGridBtn": true,
+    "showScreenshotBtn": true,
     //Handle sketch actions
     "onExport": null, //Handle sketch export
     "onSave": null //Handle sketch save

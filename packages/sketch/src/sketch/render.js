@@ -8,24 +8,24 @@ import {getAbsolutePositions} from "../utils.js";
 export function renderSketch (context, elements, state) {
     context.clearRect(0, 0, state.width, state.height); //Clear canvas
     //Check for drawing the grid
-    if (state.grid === true) {
-        context.beginPath();
-        context.setLineDash([]);
-        context.strokeStyle = theme.gridColor;
-        context.lineWidth = theme.gridWidth; 
-        //Horizontal rules
-        for (let i = 0; i * state.gridSize < state.height; i++) {
-            context.moveTo(0, i * state.gridSize);
-            context.lineTo(state.width, i * state.gridSize);
-        }
-        //Vertical rules
-        for (let i = 0; i * state.gridSize < state.width; i++) {
-            context.moveTo(i * state.gridSize, 0);
-            context.lineTo(i * state.gridSize, state.height);
-        }
-        //Draw the grid
-        context.stroke();
-    }
+    //if (state.grid === true) {
+    //    context.beginPath();
+    //    context.setLineDash([]);
+    //    context.strokeStyle = theme.gridColor;
+    //    context.lineWidth = theme.gridWidth; 
+    //    //Horizontal rules
+    //    for (let i = 0; i * state.gridSize < state.height; i++) {
+    //        context.moveTo(0, i * state.gridSize);
+    //        context.lineTo(state.width, i * state.gridSize);
+    //    }
+    //    //Vertical rules
+    //    for (let i = 0; i * state.gridSize < state.width; i++) {
+    //        context.moveTo(i * state.gridSize, 0);
+    //        context.lineTo(i * state.gridSize, state.height);
+    //    }
+    //    //Draw the grid
+    //    context.stroke();
+    //}
     //this.elements.forEach(function (element, index) {
     forEachRev(elements, function (element, index) {
         drawElement(context, element);
