@@ -1,8 +1,29 @@
+@use "@siimple/lib" as siimple;
+
+//Sketch wrapper
 .root {
     display: block;
     width: 100%;
     height: 100%;
     overflow: hidden;
     position: relative;
+}
+//Grid enabled
+.grid {
+    //background-size: 10px 10px; //Default grid size
+    //Lined grid
+    &Lined {
+        background-image:
+            linear-gradient(to right, siimple.color("light") 2px, transparent 1px),
+            linear-gradient(to bottom, siimple.color("light") 2px, transparent 1px);
+        background-position-x: -2px;
+        background-position-y: -2px;
+    }
+    //Dotted grid
+    &Dotted {
+       background-image: radial-gradient(circle, siimple.color("light") 2px, transparent 1px); 
+       //background-position-x: -5px;
+       //background-position-y: -5px;
+    }
 }
 
