@@ -19,7 +19,9 @@ let loaders = {
     "sass": {
         "loader": "sass-loader",
         "options": {
-            "includePaths": [modulesPath],
+            "sassOptions": {
+                "includePaths": [modulesPath],
+            },
             "implementation": require("sass")
         }
     },
