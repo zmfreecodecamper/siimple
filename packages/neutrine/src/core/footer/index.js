@@ -1,9 +1,6 @@
 import React from "react";
 import * as helpers from "../../helpers.js";
 
-//Import footer styles
-import "@siimple/css/scss/layout/footer.scss";
-
 //Footer layout component
 export const Footer = function (props) {
     //Clone the footer props 
@@ -48,13 +45,6 @@ export const FooterSubtitle = function (props) {
 export const FooterGroup = function (props) {
     return helpers.createMergedElement("div", props, {
         "className": "siimple-footer-group"
-    });
-};
-
-//Footer paragraph
-export const FooterParagraph = function (props) {
-    return helpers.createMergedElement("div", props, {
-        "className": "siimple-footer-paragraph"
     });
 };
 

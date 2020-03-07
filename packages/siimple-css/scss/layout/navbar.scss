@@ -5,32 +5,40 @@
 // Repository: https://github.com/siimple
 // Website:    https://www.siimple.xyz
 //
-@import "../variables.scss";
-@import "../functions.scss";
-@import "../mixins.scss";
+
+@use "@siimple/lib" as siimple;
+
+//Navbar variables
+$navbar-height: 30px;
+$navbar-padding: 10px;
+$navbar-breakpoint-desktop: 1024px;
+$navbar-breakpoint-mobile: 1023px;
 
 //Navbar class
-.#{$siimple-prefix}-navbar {
-    //display: block;
+.#{siimple.$name}-navbar {
+    display: flex; 
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
     //position: absolute; top: 0px; left: 0px;
     z-index: 3;
-    width: 100%;
+    //width: 100%;
     //max-width: calc(100% - 2 * #{$siimple-navbar-padding});
-    min-height: 54px; 
+    min-height: $navbar-height; 
     //font-family: $siimple-default-text-font;
     //margin: $siimple-navbar-margin;
-    //padding-top: 15px;
-    //padding-bottom: 15px;
+    padding-top: $navbar-padding;
+    padding-bottom: $navbar-padding;
     vertical-align: top;
-    @include siimple-sizing();
+    @include siimple.fluid(); //Default navbar size
     position: relative;
     //Common navbar brand and navbar link styles
     &-brand,
     &-link {
         display: block;
         //height: 34px;
-        height: 34px;
-        line-height: 34px;
+        height: 30px;
+        line-height: 30px;
         //padding: 10px;
         //vertical-align: top;
         text-decoration: none;
@@ -39,54 +47,26 @@
     //Navbar brand (previous navbar-title)
     &-brand {
         //font-weight: bold;
-        font-size: 20px;
+        font-size: 18px;
+        margin-right: 10px;
         //transition: all 0.3s;
-        padding-top: 10px;
-        padding-bottom: 10px;
     }
     //Navbar link
     &-link {
         display: block;
         //text-align: center;
         font-weight: bold;
-        font-size: $siimple-default-font-size;
-        transition: color 0.3s;
+        font-size: 14px; //siimple.$text-size;
+        transition: opacity 0.3s;
+        opacity: 0.6;
         //cursor: pointer;
         //vertical-align: middle;
-    }
-    //Light navbar
-    &--light {
-        color: siimple-default-color("dark");
-        background-color: siimple-default-color("light");
-        //border-bottom: 2px solid siimple-default-color("light", "dark");
-    }
-    &--light &-brand,
-    &--light &-link {
-        color: siimple-default-color("dark");
-    }
-    &--light &-link:hover {
-        color: siimple-default-color("primary");
-    }
-    //Dark navbar
-    &--dark {
-        color: siimple-default-color("white");
-        background-color: siimple-default-color("dark");
-        //border-bottom: 2px solid rgba(siimple-default-color("dark", "dark"), 0.5);
-    }
-    &--dark &-brand,
-    &--dark &-link {
-        color: siimple-default-color("white");
-    }
-    &--dark &-link:hover {
-        color: siimple-default-color("secondary");
+        &:hover {
+            opacity: 1.0;
+        }
     }
     //Styles for desktop
-    @media screen and (min-width: 1024px) {
-        //Navbar
-        & {
-            display: flex;
-            align-items: stretch;
-        }
+    @media screen and (min-width: $navbar-breakpoint-desktop) {
         //Menu navbar
         &-menu {
             display: flex;
@@ -95,7 +75,8 @@
         }
         //Menu item
         &-item {
-            padding: 10px;
+            padding-left: 8px;
+            padding-right: 8px;
         }
         //Navbar toggle
         &-toggle {
@@ -103,31 +84,24 @@
         }
     }
     //Styles for mobile devices
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: $navbar-breakpoint-mobile) {
         //Menu navbar for mobile devices
         &-menu {
-            //padding-top: 10px;
-            //padding-bottom: 10px;
             display: block;
+            width: 100%;
             max-height: 0px;
             overflow: hidden;
             transition: max-height 0.3s;
         }
         //Menu items
         &-item {
-            //min-height: 34px;
-            padding-bottom: 10px;
-            //border-radius: 5px;
+            padding-top: 10px;
         }
         //Navbar toggle
         &-toggle {
             display: block;
-            position: absolute;
             width: 24px;
-            height: 24px;
-            padding: 15px;
-            top: 0px;
-            right: 0px;
+            height: 30px;
             //outline: 0;
             cursor: pointer;
         }
@@ -137,39 +111,29 @@
             max-height: 100vh;
         }
     }
-    //Navicon
-    &-navicon,
-    &-navicon::before,
-    &-navicon::after {
+    //Navigation hamburger icon
+    &-icon,
+    &-icon::before,
+    &-icon::after {
         content: "";
         display: block;
         width: 100%;
         height: 4px;
         border-radius: 10px;
-        //background-color: #ffffff;
+        background-color: siimple.color("dark"); //Default color
     }
-    &-navicon {
+    &-icon {
         position: relative;
-        margin-top: 10px;
-        margin-bottom: 10px;
+        margin-top: 13px;
+        margin-bottom: 13px;
     }
-    &-navicon::before {
+    &-icon::before {
         position: absolute;
         top: -8px;
     }
-    &-navicon::after {
+    &-icon::after {
         position: absolute;
         bottom: -8px;
-    }
-    &--light &-navicon,
-    &--light &-navicon::before,
-    &--light &-navicon::after {
-        background-color: siimple-default-color("dark");
-    }
-    &--dark &-navicon,
-    &--dark &-navicon::before,
-    &--dark &-navicon::after {
-        background-color: siimple-default-color("white");
     }
     //Fixed navbar
     &--fixed-top,
@@ -186,6 +150,25 @@
     //Fixed navbar to bottom
     &--fixed-bottom {
         bottom: 0;
+    }
+    //Colored navbar
+    @each $color in siimple.utils-keys(siimple.$colors) {
+        &--#{$color} {
+            background-color: siimple.color($color);
+            color: siimple.color-invert($color);
+        }
+        //Navicon color
+        &--#{$color} &-icon,
+        &--#{$color} &-icon::before,
+        &--#{$color} &-icon::after {
+            background-color: siimple.color-invert($color);
+        }
+    }
+    //Navbar sizes
+    @each $size in siimple.utils-keys(siimple.$breakpoints) {
+        &--#{$size} {
+            @include siimple.sizing($size);
+        }
     }
 }
 

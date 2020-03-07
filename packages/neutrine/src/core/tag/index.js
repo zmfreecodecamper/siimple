@@ -1,9 +1,6 @@
 import React from "react";
 import * as helpers from "../../helpers.js";
 
-//Import tabg styles
-import "@siimple/css/scss/elements/tag.scss";
-
 //Export tag component 
 export const Tag = function (props) {
     //Clone the tag component props
@@ -28,5 +25,12 @@ export const Tag = function (props) {
 Tag.defaultProps = {
     "color": null,
     "rounded": false
+};
+
+//Grouped tag
+export const TagGroup = function (props) {
+    return helpers.createMergedElement("span", props, {
+        "className": "siimple-tag-group"
+    });
 };
 

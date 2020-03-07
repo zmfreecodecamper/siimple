@@ -5,13 +5,15 @@
 // Repository: https://github.com/siimple
 // Website:    https://www.siimple.xyz
 //
-@import "../variables.scss";
-@import "../functions.scss";
+
+@use "@siimple/lib" as siimple;
+
+//Small text variables
+$small-text-size: siimple.$text-size-small !default;
 
 //Small class
-.#{$siimple-prefix}-small {
-    //font-family: $siimple-default-text-font;
-    font-size: 14px;
-    color: siimple-default-color("dark", "light");
+.#{siimple.$name}-small {
+    font-size: $small-text-size;
+    color: siimple.color-lighter("dark");
 }
 

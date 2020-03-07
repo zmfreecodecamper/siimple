@@ -6,65 +6,15 @@
 // Website:    https://www.siimple.xyz
 //
 
-//Import default variables and utilities
-@import "./scss/variables.scss";
-@import "./scss/mixins.scss";
+@forward "@siimple/lib"; //Forward lib variables
 
-//Import base style
-@import "./scss/base.scss";
-
-//Import typography
-@import "./scss/typography/blockquote.scss";
-@import "./scss/typography/code.scss";
-@import "./scss/typography/heading.scss";
-@import "./scss/typography/link.scss";
-@import "./scss/typography/paragraph.scss";
-@import "./scss/typography/pre.scss";
-@import "./scss/typography/small.scss";
-
-//Import elements
-@import "./scss/elements/btn.scss";
-@import "./scss/elements/rule.scss";
-@import "./scss/elements/spinner.scss";
-@import "./scss/elements/tag.scss";
-@import "./scss/elements/tip.scss";
-
-//Import components
-@import "./scss/components/alert.scss";
-@import "./scss/components/breadcrumb.scss";
-@import "./scss/components/card.scss";
-@import "./scss/components/list.scss";
-@import "./scss/components/menu.scss";
-@import "./scss/components/table.scss";
-@import "./scss/components/tabs.scss";
-
-//Import layout
-@import "./scss/layout/content.scss";
-@import "./scss/layout/footer.scss";
-@import "./scss/layout/jumbotron.scss";
-@import "./scss/layout/navbar.scss";
-
-//Import form elements
-@import "./scss/form/checkbox.scss";
-@import "./scss/form/field.scss";
-@import "./scss/form/form.scss";
-@import "./scss/form/input.scss";
-@import "./scss/form/label.scss";
-@import "./scss/form/radio.scss";
-@import "./scss/form/select.scss";
-@import "./scss/form/switch.scss";
-@import "./scss/form/textarea.scss";
-
-//Import grid
-@import "./scss/grid/grid.scss";
-
-//Import helpers
-@import "./scss/helpers/colors.scss";
-@import "./scss/helpers/display.scss";
-@import "./scss/helpers/float.scss";
-@import "./scss/helpers/line-height.scss";
-@import "./scss/helpers/sizing.scss";
-@import "./scss/helpers/spacing.scss";
-@import "./scss/helpers/text.scss";
-@import "./scss/helpers/miscellanea.scss";
+@use "./scss/base.scss";
+@use "./scss/reset.scss";
+@use "./scss/typography/index.scss" as typography;
+@use "./scss/elements/index.scss" as elements;
+@use "./scss/components/index.scss" as components;
+@use "./scss/layout/index.scss" as layout;
+@use "./scss/form/index.scss" as form;
+@use "./scss/helpers/index.scss" as helpers;
+@use "./scss/grid/index.scss" as grid;
 

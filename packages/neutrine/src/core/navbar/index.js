@@ -1,6 +1,5 @@
 import React from "react";
 import * as helpers from "../../helpers.js";
-import "@siimple/css/scss/layout/navbar.scss";
 
 //Navbar default class
 export const Navbar = function (props) {
@@ -64,7 +63,7 @@ export const NavbarToggle = function (props) {
         "tabIndex": "0"
     });
     let icon = React.createElement("div", {
-        "className": "siimple-navbar-navicon"
+        "className": "siimple-navbar-icon"
     });
     //Return the navbar toggle element
     return React.createElement("div", newProps, icon);

@@ -1,9 +1,10 @@
 //Export general modules
-export {version} from "./src/version.js";
 export * from "./src/global.js";
 
 //Import global styles
-import "./src/style.scss";
+import "@siimple/css/index.scss";
+import "@siimple/experiments/index.scss";
+import "@siimple/icons/dist/siimple-icons.css";
 
 //Export helpers
 export * from "./src/global.js";
@@ -17,10 +18,6 @@ export * from "./src/future/index.js";
 export * from "./src/icon/index.js";
 export * from "./src/layout/index.js";
 export * from "./src/widgets/index.js";
-
-//Loaders
-export * from "./src/loaders/basic-loader/index.js";
-export * from "./src/loaders/dna-loader/index.js";
 
 //Big components
 export * from "./src/datatable/index.js";
