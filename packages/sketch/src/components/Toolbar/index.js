@@ -40,8 +40,22 @@ export function Toolbar (props) {
                     "onClick": props.onGridClick
                 });
             }} />
+            {/* Render screenshot option */}
+            <Renderer render={function () {
+                return React.createElement(Button, {
+                    "className": style.item,
+                    "active": props.screenshotActive,
+                    "icon": "camera",
+                    "onClick": props.onScreenshotClick
+                });
+            }} />
         </div>
     );
 }
 
+//Toolbar options
+Toolbar.defaultProps = {
+    "gridActive": false,
+    "screenshotActive": false
+};
 
