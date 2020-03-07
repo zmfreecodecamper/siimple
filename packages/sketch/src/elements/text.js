@@ -34,6 +34,7 @@ export const textElement = {
         div.style.left = "-9999px";
         div.style.fontFamily = theme.fontFamily;
         div.style.fontSize = theme.fontSizes[element.textSize] + "px";
+        div.style.lineHeight = "normal"; //Set line-height as normal
         document.body.appendChild(div); //Append the div element
         element.width = div.offsetWidth; //Set computed width
         element.height = div.offsetHeight; //Set computed height
