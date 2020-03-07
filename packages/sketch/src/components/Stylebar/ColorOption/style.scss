@@ -1,4 +1,4 @@
-@import "@siimple/css/scss/variables.scss";
+@use "@siimple/lib" as siimple;
 
 //Color picker element
 .root {
@@ -28,7 +28,7 @@
 }
 //Transparent background
 .transparent {
-    color: siimple-default-color("dark");
-    @include siimple-utils-stripedbg (siimple-default-color("light"), #ffffff);
+    color: siimple.color("dark");
+    @include siimple.striped-bg (siimple.color("light"), #ffffff);
 }
 

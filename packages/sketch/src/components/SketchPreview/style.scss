@@ -1,6 +1,6 @@
-@import "@siimple/css/scss/variables.scss";
+@use "@siimple/lib" as siimple;
 
-$bgcolor: rgba(siimple-default-color("dark"), 0.1);
+$bgcolor: rgba(siimple.color("dark"), 0.1);
 
 //Preview wrapper
 //https://stackoverflow.com/a/35362074
@@ -8,7 +8,7 @@ $bgcolor: rgba(siimple-default-color("dark"), 0.1);
     display: block;
     //width: 100%;
     width: calc(100% - 4px);
-    border: 2px solid siimple-default-color("dark", "light");
+    border: 2px solid siimple.color-lighter("dark");
     background-image: 
         linear-gradient(45deg, $bgcolor 25%, transparent 25%), 
         linear-gradient(-45deg, $bgcolor 25%, transparent 25%), 

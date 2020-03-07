@@ -1,4 +1,4 @@
-@import "@siimple/css/scss/variables.scss";
+@use "@siimple/lib" as siimple;
 
 //Filename wrapper
 .file {
@@ -14,7 +14,7 @@
         display: block;
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
-        background-color: siimple-default-color("light");
+        background-color: siimple.color("light");
         width: 34px;
         line-height: 34px;
         padding-right: 10px;
@@ -26,24 +26,24 @@
 .item {
     width: calc(100% - 34px);
     transition: all 0.3s;
-    border: 2px dashed siimple-default-color("light");
+    border: 2px dashed siimple.color("light");
     padding: 15px;
     font-size: 14px;
-    color: rgba(siimple-default-color("dark"), 0.6);
+    color: rgba(siimple.color("dark"), 0.6);
     margin: 5px;
     border-radius: 5px;
     cursor: pointer;
     //Item hover 
     &:hover {
-        //background-color: rgba(siimple-default-color("primary"), 0.1);
-        border-color: siimple-default-color("primary");
+        //background-color: rgba(siimple.color("primary"), 0.1);
+        border-color: siimple.color("primary");
     }
     //Item active
     &Active {
-        background-color: rgba(siimple-default-color("primary"), 0.1) !important;
-        border-color: siimple-default-color("primary") !important;
+        background-color: rgba(siimple.color("primary"), 0.1) !important;
+        border-color: siimple.color("primary") !important;
         //border-style: solid !important;
-        color: siimple-default-color("primary");
+        color: siimple.color("primary");
     }
     //Item disabled
     &Disabled {

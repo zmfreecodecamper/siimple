@@ -1,4 +1,4 @@
-@import "@siimple/css/scss/variables.scss";
+@use "@siimple/lib" as siimple;
 
 //Button style
 .root {
@@ -9,17 +9,17 @@
     transition: background-color 0.3s;
     background-color: transparent;
     border-radius: 5px;
-    color: rgba(siimple-default-color("dark", "light"), 0.6);
+    color: rgba(siimple.color-lighter("dark"), 0.6);
     cursor: pointer;
     //Button hover
     &:hover {
-        background-color: rgba(siimple-default-color("primary"), 0.2);
+        background-color: rgba(siimple.color("primary"), 0.2);
     }
 }
 //Button active
 .active {
-    background-color: rgba(siimple-default-color("primary"), 0.2);
-    color: siimple-default-color("primary");
+    background-color: rgba(siimple.color("primary"), 0.2);
+    color: siimple.color("primary");
 }
 //Button icon
 .icon {

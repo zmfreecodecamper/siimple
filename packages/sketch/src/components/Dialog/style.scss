@@ -1,11 +1,11 @@
-@import "@siimple/css/scss/variables.scss";
+@use "@siimple/lib" as siimple;
 
 //Dialog wrapper styles
 .root {
     display: block;
     position: absolute;
     border-radius: 5px;
-    background-color: siimple-default-color("light");
+    background-color: siimple.color("light");
     padding: 10px;
     width: 136px; //150px;
     //Dialog arrow
@@ -24,7 +24,7 @@
         top: 50%;
         right: -16px;
         transform: translateY(-8px);
-        border-left: 8px solid siimple-default-color("light");
+        border-left: 8px solid siimple.color("light");
     }
 }
 //Right orientation
@@ -36,7 +36,7 @@
         top: 50%;
         left: -16px;
         transform: translateY(-8px);
-        border-right: 8px solid siimple-default-color("light");
+        border-right: 8px solid siimple.color("light");
     }
 }
 

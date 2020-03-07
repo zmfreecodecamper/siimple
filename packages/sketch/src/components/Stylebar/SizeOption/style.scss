@@ -1,4 +1,4 @@
-@import "@siimple/css/scss/variables.scss";
+@use "@siimple/lib" as siimple;
 
 //Style picker wrapper
 .root {
@@ -24,7 +24,7 @@
     text-align: center;
     //Active
     &Active {
-        border-color: siimple-default-color("primary");
+        border-color: siimple.color("primary");
     }
 }
 
