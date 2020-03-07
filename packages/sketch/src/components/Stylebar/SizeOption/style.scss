@@ -11,7 +11,7 @@
     display: inline-block;
     width: 24px;
     height: 24px;
-    line-height: 24px;
+    line-height: 24px !important;
     border-radius: 5px;
     cursor: pointer;
     //opacity: 0.4;
@@ -22,6 +22,10 @@
     //position: relative;
     vertical-align: top;
     text-align: center;
+    //Size icon
+    &Icon {
+        line-height: 24px !important;
+    }
     //Active
     &Active {
         border-color: siimple.color("primary");

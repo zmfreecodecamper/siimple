@@ -34,7 +34,7 @@ export function SizeOption (props) {
                     };
                     return (
                         <div key={index} className={itemClass} onClick={handleClick}>
-                            <Icon icon={props.icon} style={{"fontSize": iconSizes[name]}} />
+                            <Icon icon={props.icon} size={iconSizes[name]} className={style.itemIcon} />
                         </div>
                     );
                 }} />
