@@ -67,7 +67,8 @@ export class Sketch extends React.Component {
             "selection": [],
             "snapshot": [],
             "dragged": false,
-            "resizeOrientation": null
+            "resizeOrientation": null,
+            "cursor": null
         };
         //Initialize sketch elements
         this.sketch = null;
@@ -85,6 +86,7 @@ export class Sketch extends React.Component {
         this.handleMouseUp = this.handleMouseUp.bind(this);
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleGridToggle = this.handleGridToggle.bind(this);
+        this.handleScreenshot = this.handleScreenshot.bind(this);
         //Creating new elements
         this.addElement = this.addElement.bind(this);
         //Selection handlers
@@ -159,7 +161,8 @@ export class Sketch extends React.Component {
             "height": this.state.height,
             //"grid": this.state.grid, //Display grid
             //"gridSize": this.props.gridSize, //Set grid size
-            "selection": this.view.selection //Selected elements
+            "selection": this.view.selection, //Selected elements
+            "cursor": this.view.cursor //Current cursor
         });
     }
     //Clear the sketch
@@ -270,6 +273,7 @@ export class Sketch extends React.Component {
         this.view.currentElementDragging = false;
         this.view.currentElementResizing = false;
         this.view.dragged = false;
+        //this.view.cursor = null; //Reset cursor
         //this.view.selectionCount = 0; //Clear number of selected elements
         //Check if we are in a resize point
         if (this.view.selection.length === 1) {
@@ -324,6 +328,14 @@ export class Sketch extends React.Component {
         this.view.currentElement = element; //Save dragging element
         this.view.selection = []; //Clear the current selection
         clearSelection(this.elements);
+        //if (this.state.currentType === "screenshot") {
+        //    Object.assign(this.view.cursor, {
+        //        "x": element["x"],
+        //        "y": element["y"],
+        //        "width": 0,
+        //        "height": 0
+        //    });
+        //}
         this.forceUpdate(); //Force update to hide stylebar
     }
    //Handle mouse move
@@ -436,18 +448,24 @@ export class Sketch extends React.Component {
             }
         }
         //Check for adding a new element
-        if (this.state.currentType !== "selection") {
+        if (this.state.currentType !== "selection" && this.state.currentType !== "screenshot") {
             this.view.currentElement.selected = true; //Set the new element as selected
             updateElement(this.view.currentElement); //Update the current element
-            //Change the current type to selection
+        }
+        //Remove selection elements
+        this.elements = this.elements.filter(function (element) {
+            return element.type !== "selection" && element.type !== "screenshot";
+        });
+        //Check for screenshot element
+        if (this.state.currentType === "screenshot") {
+            this.handleScreenshot(Object.assign({}, this.view.currentElement));
+        }
+        //Change the current type to selection
+        if (this.state.currentType !== "selection") {
             this.setState({
                 "currentType": "selection"
             });
         }
-        //Remove selection elements
-        this.elements = this.elements.filter(function (element) {
-            return element.type !== "selection";
-        });
         //Reset the current drag element
         this.view.currentElement = null;
         this.view.selection = getSelection(this.elements); //Update the selection
@@ -474,6 +492,22 @@ export class Sketch extends React.Component {
     handleGridToggle() {
         return this.setState({
             "grid": !this.state.grid
+        });
+    }
+    //Handle screenshot
+    handleScreenshot(element) {
+        if (typeof this.props.onScreenshot !== "function") {
+            return null; //Nothing to do
+        }
+        //Calculate absolute positions
+        let [xStart, xEnd] = getAbsolutePositions(element.x, element.width);
+        let [yStart, yEnd] = getAbsolutePositions(element.y, element.height);
+        //Process the screenshot
+        return this.props.onScreenshot({
+            "x": xStart,
+            "width": xEnd - xStart,
+            "y": yStart,
+            "height": yEnd - yStart
         });
     }
     //Handle selection update
@@ -556,9 +590,9 @@ export class Sketch extends React.Component {
         let props = this.props;
         //Build root component class list
         let classList = classNames({
-            [style.root]: true,
-            [style.gridLined]: this.state.grid && props.gridStyle === "lined",
-            [style.gridDotted]: this.state.grid && props.gridStyle === "dotted"
+            [style.canvas]: true,
+            [style.canvasLined]: this.state.grid && props.gridStyle === "lined",
+            [style.canvasDotted]: this.state.grid && props.gridStyle === "dotted"
         });
         //Build style list
         let styleList = {
@@ -569,9 +603,17 @@ export class Sketch extends React.Component {
             styleList["backgroundPositionY"] = `-${props.gridSize / 2}px`;
         }
         return (
-            <div ref={this.parent} className={classList} style={styleList}>
+            <div ref={this.parent} className={style.root}>
                 {/* Render canvas */}
-                <canvas width={this.state.width} height={this.state.height} ref={this.canvas} />
+                <div className={classList} style={styleList}>
+                    <Renderer render={function () {
+                        return React.createElement("canvas", {
+                            "width": self.state.width,
+                            "height": self.state.height,
+                            "ref": self.canvas
+                        });
+                    }} />
+                </div>
                 {/* Menubar */}
                 <Renderer render={function () {
                     return React.createElement(Menubar, {
@@ -622,6 +664,7 @@ Sketch.defaultProps = {
     "showScreenshotBtn": true,
     //Handle sketch actions
     "onExport": null, //Handle sketch export
+    "onScreenshot": null, //Handle screenshot
     "onSave": null //Handle sketch save
 };
 
