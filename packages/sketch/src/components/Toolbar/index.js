@@ -44,9 +44,11 @@ export function Toolbar (props) {
             <Renderer render={function () {
                 return React.createElement(Button, {
                     "className": style.item,
-                    "active": props.screenshotActive,
-                    "icon": "camera",
-                    "onClick": props.onScreenshotClick
+                    "active": props.currentElement === "screenshot",
+                    "onClick": function () {
+                        return props.onElementClick("screenshot");
+                    },
+                    "icon": "camera"
                 });
             }} />
         </div>
@@ -55,7 +57,6 @@ export function Toolbar (props) {
 
 //Toolbar options
 Toolbar.defaultProps = {
-    "gridActive": false,
-    "screenshotActive": false
+    "gridActive": false
 };
 
