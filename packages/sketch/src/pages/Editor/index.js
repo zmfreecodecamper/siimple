@@ -1,4 +1,5 @@
 import React from "react";
+import kofi from "kofi";
 import {global} from "@siimple/neutrine";
 import {If, Renderer} from "@siimple/neutrine";
 import {Side, SideBackground, SideContent} from "@siimple/neutrine";
@@ -21,6 +22,7 @@ export class Editor extends React.Component {
         //Bind mehtods
         this.handleExportToggle = this.handleExportToggle.bind(this);
         this.handleExportSubmit = this.handleExportSubmit.bind(this);
+        this.handleScreenshot = this.handleScreenshot.bind(this);
     }
     //Component did mount --> add listeners and import sketch data
     componentDidMount() {
@@ -47,12 +49,23 @@ export class Editor extends React.Component {
         //console.log(sketch);
         //Prepare the export options
         let exportOptions = {
-            "width": sketch.width,
-            "height": sketch.height
+            "crop": null //Disable crop
         };
         //Export sketch as PNG image
         return exportAsPNG(sketch, exportOptions, function (blob) {
             return blobToFile(blob, options.filename);
+        });
+    }
+    //Handle screenshot
+    handleScreenshot(region) {
+        let sketch = this.sketch.current.export(); //Get current sketch object
+        //Initialize export options
+        let options = {
+            "crop": region //Add region to crop the original sketch
+        };
+        //Generate the screenshot and export as png image
+        return exportAsPNG(sketch, options, function (blob) {
+            return blobToFile(blob, "screenshot.png");
         });
     }
     //Render the editor
@@ -65,7 +78,8 @@ export class Editor extends React.Component {
                     return React.createElement(Sketch, {
                         "ref": self.sketch,
                         "sketch": self.state.sketch,
-                        "onExport": self.handleExportToggle
+                        "onExport": self.handleExportToggle,
+                        "onScreenshot": self.handleScreenshot
                     });
                 }} />
                 {/* Export window */}
