@@ -141,7 +141,7 @@ export class Sketch extends React.Component {
                 });
                 //Check for image element --> remove img field
                 if (element.type === "image") {
-                    delete exporteddElement.img;
+                    delete exportedElement.img;
                 }
                 //Return the exported element object
                 return exportedElement;
