@@ -14,7 +14,10 @@ export const theme = {
     //Selection values
     "selectionColor": "rgb(78, 145, 228)",
     "selectionOpacity": 0.1,
-    //Defualt grid values
+    //Screenshot value
+    "screenshotColor": "rgb(76, 205, 172)",
+    "screenshotOpacity": 0.2,
+    //Default grid values
     "gridColor": "rgb(238, 242, 247)", 
     "gridWidth": 1, //Grid lines width
     "gridOpacity": 1.0,
