@@ -19,7 +19,7 @@ export const arrowElement = {
         context.globalAlpha = element.opacity;
         context.strokeStyle = theme.colors[element.strokeColor];
         context.lineWidth = theme.strokes[element.strokeWidth];
-        context.lineCap = "square"; //square linecap
+        context.lineCap = "round"; //round linecap
         context.setLineDash([]); //Clear line-dash style
         if (element.strokeDash === true) {
             let lineDash = theme.strokes[element.strokeWidth] * 3;
@@ -27,6 +27,10 @@ export const arrowElement = {
         }
         context.moveTo(element.x, element.y);
         context.lineTo(xEnd, yEnd);
+        context.stroke();
+        context.beginPath();
+        context.setLineDash([]); //Clear line-dash style
+        //Draw the arrow
         if (size >= 10) {
             let dx = element.width; // - element.x;
             let dy = element.height; // - element.y;
