@@ -2,7 +2,7 @@ import React from "react";
 import {classNames} from "@siimple/neutrine";
 import {Renderer} from "@siimple/neutrine";
 import {Textarea} from "@siimple/neutrine";
-import {Option} from "../Option/index.js";
+import {Option} from "../index.js";
 
 //Export option component wrapper
 export function TextOption (props) {

@@ -1,7 +1,7 @@
 import React from "react";
 import {Renderer} from "@siimple/neutrine";
 import {Range} from "@siimple/neutrine";
-import {Option} from "../Option/index.js";
+import {Option} from "../index.js";
 import style from "./style.scss";
 
 //Export range option wrapper

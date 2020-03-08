@@ -3,7 +3,7 @@ import {classNames} from "@siimple/neutrine";
 import {Renderer, ForEach, If} from "@siimple/neutrine";
 import {Heading} from "@siimple/neutrine";
 import {Icon} from "@siimple/neutrine";
-import {Option} from "../Option/index.js";
+import {Option} from "../index.js";
 import style from "./style.scss";
 
 //List with all availbale sizes
