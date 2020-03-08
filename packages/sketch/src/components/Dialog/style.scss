@@ -4,12 +4,14 @@
 .root {
     display: block;
     position: absolute;
+    top: -8px;
     border-radius: 5px;
     background-color: siimple.color("light");
     padding: 10px;
     width: 136px; //150px;
     //Dialog arrow
     &::after {
+        top: 26px;
         content: "";
         position: absolute;
         border: 8px solid transparent;
@@ -17,11 +19,11 @@
 }
 //Left orientation
 .left {
-    top: 50%;
+    //top: 50%;
     left: -50%;
-    transform: translateX(-100%) translateY(-50%);
+    transform: translateX(-100%); //translateY(-50%);
     &::after {
-        top: 50%;
+        //top: 50%;
         right: -16px;
         transform: translateY(-8px);
         border-left: 8px solid siimple.color("light");
@@ -29,11 +31,11 @@
 }
 //Right orientation
 .right {
-    top: 50%;
+    //top: 50%;
     right: -50%;
-    transform: translateX(-100%) translateY(-50%);
+    transform: translateX(-100%); //translateY(-50%);
     &::after {
-        top: 50%;
+        //top: 50%;
         left: -16px;
         transform: translateY(-8px);
         border-right: 8px solid siimple.color("light");
