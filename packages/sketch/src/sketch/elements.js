@@ -5,6 +5,7 @@ import {lineElement} from "../elements/line.js";
 import {arrowElement} from"../elements/arrow.js";
 import {textElement} from "../elements/text.js";
 import {imageElement} from "../elements/image.js";
+import {screenshotElement} from "../elements/screenshot.js";
 
 //Available elements
 let elements = {
@@ -14,7 +15,8 @@ let elements = {
     "line": lineElement,
     "arrow": arrowElement,
     "text": textElement,
-    "image": imageElement
+    "image": imageElement,
+    "screenshot": screenshotElement
 };
 
 //Get an element
