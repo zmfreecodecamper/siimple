@@ -140,9 +140,9 @@ export class Sketch extends React.Component {
                     "selected": false //Disable selection
                 });
                 //Check for image element --> remove img field
-                if (element.type === "image") {
-                    delete exportedElement.img;
-                }
+                //if (element.type === "image") {
+                //    delete exportedElement.img;
+                //}
                 //Return the exported element object
                 return exportedElement;
             }),
