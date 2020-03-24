@@ -33,7 +33,7 @@
 .right {
     //top: 50%;
     right: -50%;
-    transform: translateX(-100%); //translateY(-50%);
+    transform: translateX(100%); //translateY(-50%);
     &::after {
         //top: 50%;
         left: -16px;
