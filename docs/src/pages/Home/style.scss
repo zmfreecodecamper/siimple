@@ -1,0 +1,25 @@
+@use "@siimple/lib" as siimple;
+
+.root {
+    width: 100%;
+    min-height: calc(100% - 120px);
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background-color: siimple.color("primary");
+    //color: siimple.color("primary");
+}
+.heading1 {
+    font-size: 65px;
+    line-height: 70px;
+}
+.heading2 {
+    opacity: 0.6;
+    font-size: 35px;
+    line-height: 45px;
+}
+.card {
+    background-color: rgba(#ffffff, 0.1) !important;
+    color: #ffffff !important;
+    cursor: pointer;
+}
+
