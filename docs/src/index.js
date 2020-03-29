@@ -4,11 +4,18 @@ import kofi from "kofi";
 import {HashbangRouter as Router} from "rouct";
 import {Switch, Route} from "rouct";
 import {If} from "@siimple/neutrine";
-import {Appbar, AppbarWrapper} from "@siimple/neutrine";
+import {Appbar, AppbarWrapper, AppbarItem} from "@siimple/neutrine";
 
 import {Home} from "./pages/Home/index.js";
 import {Page} from "./pages/Page/index.js";
 import {client} from "./client.js";
+import {redirect} from "./utils.js";
+
+//Appbar items
+let appbarItems = kofi.values({
+    "home": {"icon": "book", "path": "/"},
+    "repo": {"icon": "archive", "path": "https://github.com/siimple/siimple"}
+});
 
 //App component
 class App extends React.Component {
@@ -27,6 +34,18 @@ class App extends React.Component {
             return self.setState({
                 "loading": false,
                 "config": response.body
+            });
+        });
+    }
+    //Render appbar items
+    renderAppbarItems() {
+        return appbarItems.map(function (item, index) {
+            return React.createElement(AppbarItem, {
+                "icon": item.icon,
+                "onClick": function () {
+                    return redirect(item.path);
+                },
+                "key": index
             });
         });
     }
@@ -49,6 +68,7 @@ class App extends React.Component {
                         <AppbarWrapper>
                             {/* Documentation appbar */}
                             <Appbar className="siimple--bg-primary">
+                                {self.renderAppbarItems()}
                             </Appbar>
                             {/* Documentation routes */}
                             <Switch>
