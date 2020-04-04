@@ -1,8 +1,7 @@
-import {forEachRev} from "../utils.js";
-import {drawElement} from "./elements.js";
+import {drawElement} from "./elements/index.js";
 import {resizeRadius, getResizePoints} from "./resize.js";
-import {theme} from "../theme.js";
-import {getAbsolutePositions} from "../utils.js";
+import {theme} from "./theme.js";
+import {getAbsolutePositions, forEachRev} from "./util.js";
 
 //Render sketch
 export function renderSketch (context, elements, state) {

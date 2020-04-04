@@ -1,4 +1,4 @@
-import {getAbsolutePositions} from "../utils.js";
+import {getAbsolutePositions} from "./util.js";
 
 //Set selection
 export function setSelection (selection, elements) {

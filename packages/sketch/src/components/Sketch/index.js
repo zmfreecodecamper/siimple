@@ -5,11 +5,11 @@ import {Toolbar} from "../Toolbar/index.js";
 import {Stylebar} from "../Stylebar/index.js";
 import {Menubar} from "../Menubar/index.js";
 import {renderSketch} from "../../sketch/render.js";
-import {createElement, updateElement} from "../../sketch/elements.js";
+import {createElement, updateElement} from "../../sketch/elements/index.js";
 import {getResizePoints, inResizePoint} from "../../sketch/resize.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../sketch/selection.js";
 import {snapshotSelection} from "../../sketch/selection.js";
-import {forEachRev, getAbsolutePositions} from "../../utils.js";
+import {forEachRev, getAbsolutePositions} from "../../sketch/util.js";
 import {getDataFromClipboard, blobToDataUrl, calculateImageSize} from "../../utils.js";
 import style from "./style.scss";
 
