@@ -7,6 +7,7 @@ import {Dialog} from "../Dialog/index.js";
 import {ColorOption} from "../Option/ColorOption/index.js";
 import {SizeOption} from "../Option/SizeOption/index.js";
 import {TextOption} from "../Option/TextOption/index.js";
+import {FontOption} from "../Option/FontOption/index.js";
 import {RangeOption} from "../Option/RangeOption/index.js";
 import {SwitchOption} from "../Option/SwitchOption/index.js";
 import style from "./style.scss";
@@ -110,6 +111,13 @@ export class Stylebar extends React.Component {
                             });
                         }} />
                         <Dialog active={current === "text"}>
+                            <Renderer render={function () {
+                                return React.createElement(FontOption, {
+                                    "title": "Text font",
+                                    "onChange": self.handleValueChange("textFont"),
+                                    "value": self.props.selection[0].textFont
+                                });
+                            }} />
                             <Renderer render={function () {
                                 return React.createElement(SizeOption, {
                                     "icon": "font",

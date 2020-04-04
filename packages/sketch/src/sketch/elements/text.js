@@ -8,12 +8,13 @@ export const textElement = {
         "content": "abcd",
         "textColor": "dark",
         "textSize": "medium",
+        "textFont": "default",
         "opacity": 1.0
     },
     "draw": function (context, element) {
         context.globalAlpha = element.opacity;
         context.beginPath();
-        context.font = `${theme.fontSizes[element.textSize]}px ${theme.fontFamily}`;
+        context.font = `${theme.fontSizes[element.textSize]}px ${theme.fontFamilies[element.textFont]}`;
         context.fillStyle = theme.colors[element.textColor];
         let lines = element.content.replace(/\r\n?/g, "\n").split("\n");
         //let lineHeight = element.height / lines.length;
@@ -32,7 +33,7 @@ export const textElement = {
         div.style.position = "absolute";
         div.style.top = "-9999px";
         div.style.left = "-9999px";
-        div.style.fontFamily = theme.fontFamily;
+        div.style.fontFamily = theme.fontFamilies[element.textFont];
         div.style.fontSize = theme.fontSizes[element.textSize] + "px";
         div.style.lineHeight = "normal"; //Set line-height as normal
         document.body.appendChild(div); //Append the div element

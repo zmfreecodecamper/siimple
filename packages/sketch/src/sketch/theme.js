@@ -32,7 +32,11 @@ export const theme = {
         "large": 30,
         "extra-large": 40
     },
-    "fontFamily": "'Nanum Pen Script'", 
+    "fontFamilies": {
+        "default": "'Roboto'",
+        "monospace": "'Source Code Pro'",
+        "handwriting": "'Nanum Pen Script'"
+    },
     //Stroke widths
     "strokes": {
         "small": 2,
