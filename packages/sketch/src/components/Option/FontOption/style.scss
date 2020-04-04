@@ -1,0 +1,32 @@
+@use "@siimple/lib" as siimple;
+
+//Font picker wrapper
+.root {
+    margin-left: -3px;
+    margin-right: -3px;
+}
+
+//Font picker item
+.item {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 22px !important;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    //opacity: 0.4;
+    //transition: opacity 0.3s;
+    border: 2px solid #ffffff;
+    margin: 3px;
+    background-color: #ffffff;
+    //position: relative;
+    vertical-align: top;
+    text-align: center;
+    //Active
+    &Active {
+        border-color: siimple.color("primary");
+    }
+}
+
