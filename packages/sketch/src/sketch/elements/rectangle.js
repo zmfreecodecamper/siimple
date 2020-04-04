@@ -1,5 +1,5 @@
 import {theme} from "../theme.js";
-import {getAbsolutePositions} from "../utils.js";
+import {getAbsolutePositions} from "../util.js";
 
 //Export rectangle element
 export const rectangleElement = {
