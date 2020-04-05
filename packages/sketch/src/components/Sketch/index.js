@@ -44,6 +44,21 @@ let parseClipboardBlob = function (type, blob, callback) {
     return blobToDataUrl(blob, callback);
 };
 
+//Build derived state from props
+let buildDerivedStateFromProps = function (props) {
+    let newState = {
+        "gridVisible": props.gridVisible === true
+    };
+    //Return derived state
+    return newState;
+};
+
+//Default sketch options
+export const defaultSketchOptions = {
+    "gridStyle": "lined", //Grid style: lined or dotted
+    "gridSize": 10 //Grid size
+};
+
 //Export sketch class
 export class Sketch extends React.Component {
     constructor(props) {
@@ -52,12 +67,11 @@ export class Sketch extends React.Component {
         this.canvas = React.createRef(); //Editor canvas
         //this.context = null; //this.canvas.getContext("2d"); //Context instance
         //Sketch state
-        this.state = {
+        this.state = Object.assign(buildDerivedStateFromProps(props), {
             "width": 200,
             "height": 200,
-            "currentType": "selection",
-            "grid": this.props.gridDefault
-        };
+            "currentType": "selection"
+        });
         //Initialize the view state
         this.view = {
             "currentElement": null,
@@ -96,6 +110,7 @@ export class Sketch extends React.Component {
         this.updateSelection = this.updateSelection.bind(this);
         this.orderSelection = this.orderSelection.bind(this);
         //Bind API methods
+        this.load = this.load.bind(this); //Load new sketch data
         this.export = this.export.bind(this);
         this.clear = this.clear.bind(this);
     }
@@ -131,6 +146,10 @@ export class Sketch extends React.Component {
     componentDidUpdate() {
         //this.context = this.canvas.current.getContext("2d");
         this.draw(); //Force canvas redraw
+    }
+    //Load a new sketch data
+    load(data) {
+        return null; //TODO
     }
     //Export the current sketch object
     export() {
@@ -615,13 +634,10 @@ export class Sketch extends React.Component {
                     }} />
                 </div>
                 {/* Menubar */}
-                <Renderer render={function () {
+                <If condition={props.showMenu === true} render={function () {
                     return React.createElement(Menubar, {
-                        "showSettingsBtn": self.props.showSettingsBtn,
-                        "showSaveBtn": self.props.showSaveBtn,
-                        "showExportBtn": self.props.showExportBtn,
-                        "onExportClick": self.props.onExport,
-                        "onSaveClick": self.props.onSave
+                        "items": props.menuItems,
+                        "onClick": props.onMenuClick
                     });
                 }} />
                 {/* Toolbar */}
@@ -653,18 +669,20 @@ export class Sketch extends React.Component {
 Sketch.defaultProps = {
     "sketch": {}, //Initial sketch data
     //Grid configuration
-    "gridStyle": "lined", //Grid style: lined or dotted
-    "gridSize": 10, //Grid size
-    "gridDefault": false, //By default grid is enabled
+    "gridStyle": defaultSketchOptions.gridStyle,
+    "gridSize": defaultSketchOptions.gridSize,
+    "gridVisible": false, //By default grid is enabled
+    //Menu configuration
+    "showMenu": true,
+    "menuItems": {},
+    "onMenuClick": null,
     //Displaying sketch buttons
-    "showSettingsBtn": true,
-    "showSaveBtn": true,
-    "showExportBtn": true,
     "showGridBtn": true,
     "showScreenshotBtn": true,
+    "showElementCloneBtn": true, //Display element clone button
+    "showElementOrderBtn": true, //Display element order button
     //Handle sketch actions
-    "onExport": null, //Handle sketch export
-    "onScreenshot": null, //Handle screenshot
-    "onSave": null //Handle sketch save
+    "onChange": null, //Handle sketch change
+    "onScreenshot": null //Handle screenshot
 };
 
