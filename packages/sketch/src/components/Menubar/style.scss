@@ -16,7 +16,7 @@
 }
 //Menubar item
 .item {
-    position: relative;
+    //position: relative;
     //Not last item --> add margin-bottom
     &:not(:last-child) {
         margin-bottom: 5px;
