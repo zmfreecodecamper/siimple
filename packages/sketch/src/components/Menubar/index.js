@@ -12,7 +12,6 @@ export class Menubar extends React.Component {
         };
         //Bind methods
         this.handleToggle = this.handleToggle.bind(this);
-        this.handleClick = this.handleClick.bind(this);
     }
     //Handle menubar toggle
     handleToggle() {
@@ -20,22 +19,9 @@ export class Menubar extends React.Component {
             "active": !this.state.active
         });
     }
-    //Handle menu item click
-    handleClick(name) {
-        if (typeof this.props.onClick !== "function") {
-            return null; //Nothing to do
-        }
-        let self = this;
-        //Return a method that calls the onClick method with the item name
-        return function () {
-            return self.props.onClick(name);
-        };
-    }
     //Render the menubar component
     render() {
         let self = this;
-        let current = this.state.current; //Current option
-        let items = Object.keys(this.props.items); //Get menu items keys
         return (
             <div className={style.root}>
                 <div className={style.item}>
@@ -49,27 +35,42 @@ export class Menubar extends React.Component {
                     }} />
                 </div>
                 {/* Render menu items */}
-                <If condition={this.state.active} render={function () {
-                    return items.map(function (name, index) {
+                <If condition={this.state.active}>
+                    {/* Settings item */}
+                    <If condition={this.props.showSettingsBtn} render={function () {
                         return React.createElement(Button, {
-                            //"active": current === "settings",
-                            "active": false,
-                            "key": index,
                             "className": style.item,
-                            "onClick": self.handleClick(name),
-                            "icon": self.props.items[name]
+                            "onClick": self.props.onSettingsClick,
+                            "icon": "gear"
                         });
-                    });
-                }} />
+                    }} />
+                    {/* Save item */}
+                    <If condition={this.props.showSaveBtn} render={function () {
+                        return React.createElement(Button, {
+                            "className": style.item,
+                            "onClick": self.props.onSaveClick,
+                            "icon": "save"
+                        });
+                    }} />
+                    {/* Export item */}
+                    <If condition={this.props.showExportBtn} render={function () {
+                        return React.createElement(Button, {
+                            "className": style.item,
+                            "onClick": self.props.onExportClick,
+                            "icon": "download"
+                        });
+                    }} />
+                    {/* Exit item */}
+                    <If condition={this.props.showExitBtn} render={function () {
+                        return React.createElement(Button, {
+                            "className": style.item,
+                            "onClick": self.props.onExitClick,
+                            "icon": "arrow-left"
+                        });
+                    }} />
+                </If>
             </div>
         );
     }
 }
-
-//Default props
-Menubar.defaultProps = {
-    "items": {},
-    "onClick": null
-};
-
 
