@@ -28,7 +28,7 @@ export class Menubar extends React.Component {
                     <Renderer render={function () {
                         return React.createElement(Button, {
                             "className": style.item,
-                            "icon": (self.state.active) ? "cross" : "menu",
+                            "icon": "menu", //(self.state.active) ? "cross" : "menu",
                             "active": self.state.active,
                             "onClick": self.handleToggle
                         });
@@ -36,36 +36,20 @@ export class Menubar extends React.Component {
                 </div>
                 {/* Render menu items */}
                 <If condition={this.state.active}>
-                    {/* Settings item */}
-                    <If condition={this.props.showSettingsBtn} render={function () {
-                        return React.createElement(Button, {
-                            "className": style.item,
-                            "onClick": self.props.onSettingsClick,
-                            "icon": "gear"
-                        });
-                    }} />
                     {/* Save item */}
-                    <If condition={this.props.showSaveBtn} render={function () {
+                    <If condition={this.props.showSaveBtn === true} render={function () {
                         return React.createElement(Button, {
                             "className": style.item,
-                            "onClick": self.props.onSaveClick,
+                            "onClick": self.props.onSave,
                             "icon": "save"
                         });
                     }} />
                     {/* Export item */}
-                    <If condition={this.props.showExportBtn} render={function () {
+                    <If condition={this.props.showExportBtn === true} render={function () {
                         return React.createElement(Button, {
                             "className": style.item,
-                            "onClick": self.props.onExportClick,
+                            "onClick": self.props.onExport,
                             "icon": "download"
-                        });
-                    }} />
-                    {/* Exit item */}
-                    <If condition={this.props.showExitBtn} render={function () {
-                        return React.createElement(Button, {
-                            "className": style.item,
-                            "onClick": self.props.onExitClick,
-                            "icon": "arrow-left"
                         });
                     }} />
                 </If>
