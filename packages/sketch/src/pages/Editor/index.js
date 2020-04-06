@@ -2,9 +2,10 @@ import React from "react";
 import kofi from "kofi";
 import {global} from "@siimple/neutrine";
 import {If, Renderer} from "@siimple/neutrine";
-import {Side, SideBackground, SideContent} from "@siimple/neutrine";
-import {Sketch} from "../../components/Sketch/index.js";
-import {ExportWindow} from "../../components/Export/index.js";
+//import {Side, SideBackground, SideContent} from "@siimple/neutrine";
+import {Content} from "@siimple/neutrine";
+
+import {Sketch, defaultSketchOptions} from "../../components/Sketch/index.js";
 import {exportAsPNG} from "../../sketch/export.js";
 import {blobToFile, blobToClipboard} from "../../utils.js";
 
@@ -15,18 +16,24 @@ export class Editor extends React.Component {
         //Initial state
         this.state = {
             "sketch": {},
-            "showExportWindow": false
+            "gridStyle": defaultSketchOptions.gridStyle,
+            "gridSize": defaultSketchOptions.gridSize
         };
         //Referenced elements
         this.sketch = React.createRef();
         //Bind mehtods
-        this.handleExportToggle = this.handleExportToggle.bind(this);
-        this.handleExportSubmit = this.handleExportSubmit.bind(this);
+        this.handleExport = this.handleExport.bind(this);
         this.handleScreenshot = this.handleScreenshot.bind(this);
     }
     //Component did mount --> add listeners and import sketch data
     componentDidMount() {
         //TODO: import sketch data
+    }
+    //Handle action change
+    handleActionChange(name) {
+        return this.setState({
+            "action": name
+        });
     }
     //Handle export toggle
     handleExportToggle() {
@@ -43,9 +50,9 @@ export class Editor extends React.Component {
         });
     }
     //Handle sketch export
-    handleExportSubmit(options) {
+    handleExport(options) {
         let self = this;
-        let sketch = this.state.sketch; //this.sketch.current.export(); //Get current sketch object
+        let sketch = this.sketch.current.export(); //Get current sketch object
         //console.log(sketch);
         //Prepare the export options
         let exportOptions = {
@@ -53,7 +60,7 @@ export class Editor extends React.Component {
         };
         //Export sketch as PNG image
         return exportAsPNG(sketch, exportOptions, function (blob) {
-            return blobToFile(blob, options.filename);
+            return blobToFile(blob, `export-${kofi.timestamp("YYYY-MM-DD")}.png`);
         });
     }
     //Handle screenshot
@@ -77,24 +84,15 @@ export class Editor extends React.Component {
                 <Renderer render={function () {
                     return React.createElement(Sketch, {
                         "ref": self.sketch,
+                        "gridSize": self.state.gridSize,
+                        "gridStyle": self.state.gridStyle,
+                        "showMenu": true,
+                        "showSaveBtn": false,
                         "sketch": self.state.sketch,
-                        "onExport": self.handleExportToggle,
-                        "onScreenshot": self.handleScreenshot
+                        "onScreenshot": self.handleScreenshot,
+                        "onExport": self.handleExport
                     });
                 }} />
-                {/* Export window */}
-                <Side visible={this.state.showExportWindow}>
-                    <SideBackground onClick={this.handleExportToggle} />
-                    <SideContent posiiton="right" size="500px">
-                        <If condition={this.state.showExportWindow} render={function () {
-                            return React.createElement(ExportWindow, {
-                                "sketch": self.state.sketch,
-                                "onCancel": self.handleExportToggle,
-                                "onSubmit": self.handleExportSubmit
-                            });
-                        }} />
-                    </SideContent>
-                </Side>
             </React.Fragment>
         );
     }
