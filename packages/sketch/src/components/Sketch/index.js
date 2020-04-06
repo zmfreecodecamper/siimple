@@ -636,8 +636,10 @@ export class Sketch extends React.Component {
                 {/* Menubar */}
                 <If condition={props.showMenu === true} render={function () {
                     return React.createElement(Menubar, {
-                        "items": props.menuItems,
-                        "onClick": props.onMenuClick
+                        "showSaveBtn": props.showSaveBtn,
+                        "showExportBtn": props.showExportBtn,
+                        "onExport": props.onExport,
+                        "onSave": props.onSave
                     });
                 }} />
                 {/* Toolbar */}
@@ -674,14 +676,19 @@ Sketch.defaultProps = {
     "gridVisible": false, //By default grid is enabled
     //Menu configuration
     "showMenu": true,
-    "menuItems": {},
-    "onMenuClick": null,
+    "showSaveBtn": true,
+    "showExportBtn": true,
+    //"showExitBtn": false,
+    "showClearBtn": false, //TODO
     //Displaying sketch buttons
     "showGridBtn": true,
     "showScreenshotBtn": true,
     "showElementCloneBtn": true, //Display element clone button
     "showElementOrderBtn": true, //Display element order button
     //Handle sketch actions
+    "onSave": null, //Handle save
+    //"onExit": null, //Handle sketch exit
+    "onExport": null, //Handle export
     "onChange": null, //Handle sketch change
     "onScreenshot": null //Handle screenshot
 };
