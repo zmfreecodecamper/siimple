@@ -371,42 +371,42 @@ export class Sketch extends React.Component {
             let element = this.view.currentElement;
             let snapshot = this.view.snapshot[0]; //Get snapshot of the current element
             let orientation = this.view.resizeOrientation;
-            let deltaX = x - this.view.lastX;
-            let deltaY = y - this.view.lastY;
+            let deltaX = this.gridRound(x - this.view.lastX);
+            let deltaY = this.gridRound(y - this.view.lastY);
             //Check the orientation
             if (orientation === "rh") {
-                element.width = this.gridRound(snapshot.width + deltaX);
+                element.width = snapshot.width + deltaX;
             }
             else if (orientation === "lh") {
-                element.x = this.gridRound(snapshot.x + deltaX);
-                element.width = this.gridRound(snapshot.width - deltaX);
+                element.x = snapshot.x + deltaX;
+                element.width = snapshot.width - deltaX;
             }
             else if (orientation === "bv") {
-                element.height = this.gridRound(snapshot.height + deltaY);
+                element.height = snapshot.height + deltaY;
             }
             else if (orientation === "tv") {
-                element.y = this.gridRound(snapshot.y + deltaY);
-                element.height = this.gridRound(snapshot.height - deltaY);
+                element.y = snapshot.y + deltaY;
+                element.height = snapshot.height - deltaY;
             }
             else if (orientation === "ltd") {
-                element.x = this.gridRound(snapshot.x + deltaX);
-                element.y = this.gridRound(snapshot.y + deltaY);
-                element.width = this.gridRound(snapshot.width - deltaX);
-                element.height = this.gridRound(snapshot.height - deltaY);
+                element.x = snapshot.x + deltaX;
+                element.y = snapshot.y + deltaY;
+                element.width = snapshot.width - deltaX;
+                element.height = snapshot.height - deltaY;
             }
             else if (orientation === "rtd") {
-                element.y = this.gridRound(snapshot.y + deltaY);
-                element.width = this.gridRound(snapshot.width + deltaX);
-                element.height = this.gridRound(snapshot.height - deltaY);
+                element.y = snapshot.y + deltaY;
+                element.width = snapshot.width + deltaX;
+                element.height = snapshot.height - deltaY;
             }
             else if (orientation === "lbd") {
-                element.x = this.gridRound(snapshot.x + deltaX);
-                element.width = this.gridRound(snapshot.width - deltaX);
-                element.height = this.gridRound(snapshot.height + deltaY);
+                element.x = snapshot.x + deltaX;
+                element.width = snapshot.width - deltaX;
+                element.height = snapshot.height + deltaY;
             }
             else if (orientation === "rbd") {
-                element.width = this.gridRound(snapshot.width + deltaX);
-                element.height = this.gridRound(snapshot.height + deltaY);
+                element.width = snapshot.width + deltaX;
+                element.height = snapshot.height + deltaY;
             }
         }
         //Check if we have selected elements
