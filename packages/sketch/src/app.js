@@ -25,23 +25,24 @@ class App extends React.Component {
     }
     //Render the app component
     render() {
-        return (
-            <Router.HashbangRouter>
-                <AppbarWrapper>
-                    <Appbar className="siimple--bg-primary">
-                        <AppbarBrand />
-                        <AppbarItem icon="gear" />
-                        <AppbarAvatar />
-                    </Appbar>
-                    {/*
-                    <Router.Switch>
-                        <Router.Route exact path="/editor" component={Editor} />
-                    </Router.Switch>
-                    */}
-                    <Editor />
-                </AppbarWrapper>
-            </Router.HashbangRouter>
-        );
+        return React.createElement(Editor, {});
+        //return (
+        //    <Router.HashbangRouter>
+        //        <AppbarWrapper>
+        //            <Appbar className="siimple--bg-primary">
+        //                <AppbarBrand />
+        //                <AppbarItem icon="gear" />
+        //                <AppbarAvatar />
+        //            </Appbar>
+        //            {/*
+        //            <Router.Switch>
+        //                <Router.Route exact path="/editor" component={Editor} />
+        //            </Router.Switch>
+        //            */}
+        //            <Editor />
+        //        </AppbarWrapper>
+        //    </Router.HashbangRouter>
+        //);
     }
 }
 
