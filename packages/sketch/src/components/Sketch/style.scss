@@ -10,6 +10,8 @@ $status-height: 24px;
     //height: calc(100% - 24px);
     overflow: hidden;
     position: relative;
+    padding-bottom: 0px;
+    //transition: all 0.3s;
     //padding-bottom: 24px;
     background-color: siimple.color("white");
 }
