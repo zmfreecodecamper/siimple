@@ -630,7 +630,7 @@ export class Sketch extends React.Component {
         //Build root class
         let rootClass = classNames({
             [style.root]: true,
-            [style.statusVisible]: true //TODO: get value from props
+            [style.statusVisible]: this.props.statusVisible
         });
         //Build canvas class
         let canvasClass = classNames({
@@ -710,6 +710,8 @@ Sketch.defaultProps = {
     "gridStyle": defaultSketchOptions.gridStyle,
     "gridSize": defaultSketchOptions.gridSize,
     "gridVisible": false, //By default grid is enabled
+    //Status
+    "statusVisible": true, //By default display status bar
     //Menu configuration
     "showMenu": true,
     "showSaveBtn": true,
