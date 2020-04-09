@@ -72,6 +72,12 @@ export class Sketch extends React.Component {
             "height": 200,
             "currentType": "selection"
         });
+        //Referenced elements
+        this.ref = {
+            //"status": React.createRef() //Status bar
+            "statusPosition": React.createRef(),
+            "statusAction": React.createRef()
+        };
         //Initialize the view state
         this.view = {
             "currentElement": null,
@@ -359,12 +365,15 @@ export class Sketch extends React.Component {
     }
    //Handle mouse move
     handleMouseMove(event) {
+        let x = event.offsetX; //event.clientX - event.target.offsetLeft;
+        let y = event.offsetY; //event.clientY - event.target.offsetTop;
+        //Set mouse position
+        this.renderStatusPosition(x, y);
+        //Check for no selected elements
         if (this.view.currentElement === null) {
             return;
         }
         let self = this;
-        let x = event.offsetX; //event.clientX - event.target.offsetLeft;
-        let y = event.offsetY; //event.clientY - event.target.offsetTop;
         this.view.dragged = true;
         //Check if we are resizing the element
         if (this.view.currentElementResizing === true) {
@@ -436,6 +445,8 @@ export class Sketch extends React.Component {
                     //Set selected elements and get the new number of selected elements
                     setSelection(element, this.elements);
                 }
+                //Display in status bar
+                this.renderStatusAction(element.type + ": " + Math.abs(element.width) + "x" + Math.abs(element.height));
             }
         }
         //Update the current x and y positions
@@ -488,6 +499,7 @@ export class Sketch extends React.Component {
         //Reset the current drag element
         this.view.currentElement = null;
         this.view.selection = getSelection(this.elements); //Update the selection
+        this.renderStatusAction(""); //Reset status action
         this.forceUpdate(); //Force update to display/hide the stylebar
         //Draw
         //return this.draw();
@@ -603,65 +615,89 @@ export class Sketch extends React.Component {
         this.view.selection = []; //Clear selection list
         this.forceUpdate(); //Hide stylebar
     }
+    //Render current mouse position
+    renderStatusPosition(x, y) {
+        this.ref.statusPosition.current.textContent = "mouse: " + x + "," + y;
+    }
+    //Render current status action
+    renderStatusAction(value) {
+        this.ref.statusAction.current.textContent = value;
+    }
     //Render the sketch component
     render() {
         let self = this;
         let props = this.props;
-        //Build root component class list
-        let classList = classNames({
+        //Build root class
+        let rootClass = classNames({
+            [style.root]: true,
+            [style.statusVisible]: true //TODO: get value from props
+        });
+        //Build canvas class
+        let canvasClass = classNames({
             [style.canvas]: true,
             [style.canvasLined]: this.state.grid && props.gridStyle === "lined",
             [style.canvasDotted]: this.state.grid && props.gridStyle === "dotted"
         });
-        //Build style list
-        let styleList = {
+        //Build canvas style
+        let canvasStyle = {
             "backgroundSize": `${props.gridSize}px ${props.gridSize}px`
         };
         if (props.gridStyle === "dotted") {
-            styleList["backgroundPositionX"] = `-${props.gridSize / 2}px`;
-            styleList["backgroundPositionY"] = `-${props.gridSize / 2}px`;
+            canvasStyle["backgroundPositionX"] = `-${props.gridSize / 2}px`;
+            canvasStyle["backgroundPositionY"] = `-${props.gridSize / 2}px`;
         }
         return (
-            <div ref={this.parent} className={style.root}>
-                {/* Render canvas */}
-                <div className={classList} style={styleList}>
+            <div ref={this.parent} className={rootClass}>
+                {/* Sketch content */}
+                <div className={style.content}>
+                    {/* Render canvas */}
+                    <div className={canvasClass} style={canvasStyle}>
+                        <Renderer render={function () {
+                            return React.createElement("canvas", {
+                                "width": self.state.width,
+                                "height": self.state.height,
+                                "ref": self.canvas
+                            });
+                        }} />
+                    </div>
+                    {/* Menubar */}
+                    <If condition={props.showMenu === true} render={function () {
+                        return React.createElement(Menubar, {
+                            "showSaveBtn": props.showSaveBtn,
+                            "showExportBtn": props.showExportBtn,
+                            "onExport": props.onExport,
+                            "onSave": props.onSave
+                        });
+                    }} />
+                    {/* Toolbar */}
                     <Renderer render={function () {
-                        return React.createElement("canvas", {
-                            "width": self.state.width,
-                            "height": self.state.height,
-                            "ref": self.canvas
+                        return React.createElement(Toolbar, {
+                            "currentElement": self.state.currentType,
+                            "gridActive": self.state.grid,
+                            "onElementClick": self.handleTypeChange,
+                            "onGridClick": self.handleGridToggle
+                        });
+                    }} />
+                    {/* Stylebar */}
+                    <Renderer render={function () {
+                        return React.createElement(Stylebar, {
+                            //"key": self.view.selection.length,
+                            "selection": self.view.selection, 
+                            "onUpdate": self.updateSelection,
+                            "onClone": self.cloneSelection,
+                            "onRemove": self.removeSelection,
+                            "onOrder": self.orderSelection
                         });
                     }} />
                 </div>
-                {/* Menubar */}
-                <If condition={props.showMenu === true} render={function () {
-                    return React.createElement(Menubar, {
-                        "showSaveBtn": props.showSaveBtn,
-                        "showExportBtn": props.showExportBtn,
-                        "onExport": props.onExport,
-                        "onSave": props.onSave
-                    });
-                }} />
-                {/* Toolbar */}
-                <Renderer render={function () {
-                    return React.createElement(Toolbar, {
-                        "currentElement": self.state.currentType,
-                        "gridActive": self.state.grid,
-                        "onElementClick": self.handleTypeChange,
-                        "onGridClick": self.handleGridToggle
-                    });
-                }} />
-                {/* Stylebar */}
-                <Renderer render={function () {
-                    return React.createElement(Stylebar, {
-                        //"key": self.view.selection.length,
-                        "selection": self.view.selection, 
-                        "onUpdate": self.updateSelection,
-                        "onClone": self.cloneSelection,
-                        "onRemove": self.removeSelection,
-                        "onOrder": self.orderSelection
-                    });
-                }} />
+                {/* Status */}
+                <pre className={style.status}>
+                    <span className={style.statusItem} ref={this.ref.statusPosition} />
+                    <span className={style.statusItem} ref={this.ref.statusAction} />
+                    <span className={style.statusItem} style={{"float":"right"}}>
+                        canvas: {this.state.width}x{this.state.height}
+                    </span>
+                </pre>
             </div>
         );
     }

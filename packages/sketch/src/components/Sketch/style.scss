@@ -1,5 +1,7 @@
 @use "@siimple/lib" as siimple;
 
+$status-height: 24px;
+
 //Sketch wrapper
 .root {
     display: block;
@@ -11,7 +13,16 @@
     //padding-bottom: 24px;
     background-color: siimple.color("white");
 }
+//Content wrapper
+.content {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: siimple.color("white");
+}
 //Canvas wrapper
+//https://stackoverflow.com/a/35362074
 .canvas {
     display: block;
     width: 100%;
@@ -31,5 +42,37 @@
        //background-position-x: -5px;
        //background-position-y: -5px;
     }
+}
+//Status bar
+.status {
+    display: none;
+    position: absolute;
+    width: calc(100% - 10px);
+    //min-width: 50px;
+    left: 0px;
+    bottom: 0px;
+    height: $status-height;
+    //background-color: siimple.color("light");
+    background-color: siimple.color("primary");
+    color: siimple.color("white");
+    font-size: 12px;
+    line-height: $status-height;
+    padding-left: 5px;
+    padding-right: 5px;
+    //border-radius: 5px;
+    margin: 0px !important;
+    //Statusbar item
+    &Item:not(:first-child) {
+        padding-left: 10px;
+    }
+}
+//Statusbar visible
+//.statusVisible .root {
+.statusVisible {
+    height: calc(100% - #{$status-height}) !important;
+    padding-bottom: $status-height !important;
+}
+.statusVisible .status {
+    display: block;
 }
 
