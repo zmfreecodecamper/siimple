@@ -424,21 +424,27 @@ export class Sketch extends React.Component {
                 element.width = snapshot.width + deltaX;
                 element.height = snapshot.height + deltaY;
             }
+            //Display in status bar
+            this.renderStatusAction(`resize::${element.type}: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
         }
         //Check if we have selected elements
         else if (this.view.currentElementDragging === true && this.view.selection.length > 0) {
             if (this.view.selectionLocked === true) {
                 return null; //Move is not allowed --> selection is locked
             }
+            let incrementX = x - self.view.lastX;
+            let incrementY = y - self.view.lastY;
             //Move all elements
             this.view.selection.forEach(function (element, index) {
                 if (element.locked === true) {
                     return null; //This element is locked
                 }
                 //Update element position
-                element.x = self.gridRound(self.view.snapshot[index].x + (x - self.view.lastX));
-                element.y = self.gridRound(self.view.snapshot[index].y + (y - self.view.lastY));
+                element.x = self.gridRound(self.view.snapshot[index].x + incrementX);
+                element.y = self.gridRound(self.view.snapshot[index].y + incrementY);
             });
+            //Render in status bar
+            //this.renderStatusAction(`move::selection: ${Math.abs(incrementX)},${Math.abs(incrementY)}`);
         }
         //Check if we have a drag element
         else if (this.view.currentElement !== null) {
@@ -458,9 +464,14 @@ export class Sketch extends React.Component {
                 if (element.type === "selection") {
                     //Set selected elements and get the new number of selected elements
                     setSelection(element, this.elements);
+                    this.renderStatusAction(`selection: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
                 }
-                //Display in status bar
-                this.renderStatusAction(element.type + ": " + Math.abs(element.width) + "x" + Math.abs(element.height));
+                else if (element.type === "screenshot") {
+                    this.renderStatusAction(`screenshot: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
+                }
+                else {
+                    this.renderStatusAction(`draw::${element.type}: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
+                }
             }
         }
         //Update the current x and y positions
