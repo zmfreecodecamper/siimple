@@ -9,6 +9,7 @@ import {createElement, updateElement} from "../../sketch/elements/index.js";
 import {getResizePoints, inResizePoint} from "../../sketch/resize.js";
 import {setSelection, clearSelection, countSelection, getSelection} from "../../sketch/selection.js";
 import {snapshotSelection} from "../../sketch/selection.js";
+import {isSelectionLocked, lockSelection, unlockSelection} from "../../sketch/selection.js";
 import {forEachRev, getAbsolutePositions} from "../../sketch/util.js";
 import {getDataFromClipboard, blobToDataUrl, calculateImageSize} from "../../utils.js";
 import style from "./style.scss";
@@ -85,6 +86,7 @@ export class Sketch extends React.Component {
             "currentElementDragging": false,
             "currentElementResizing": false,
             "selection": [],
+            "selectionLocked": false, //To store if all selected elements are locked
             "snapshot": [],
             "dragged": false,
             "resizeOrientation": null,
@@ -115,6 +117,7 @@ export class Sketch extends React.Component {
         this.cloneSelection = this.cloneSelection.bind(this);
         this.updateSelection = this.updateSelection.bind(this);
         this.orderSelection = this.orderSelection.bind(this);
+        this.lockSelection = this.lockSelection.bind(this);
         //Bind API methods
         this.load = this.load.bind(this); //Load new sketch data
         this.export = this.export.bind(this);
@@ -335,6 +338,7 @@ export class Sketch extends React.Component {
                 //this.state.hasSelection = true; //At least has one selected element
                 this.view.selection = getSelection(this.elements);
                 this.view.snapshot = snapshotSelection(this.view.selection); //Create a snapshot of the selection
+                this.view.selectionLocked = isSelectionLocked(this.view.selection); //Save is selection is locked
                 return; //Stop event
             }
             //If there is no elements --> clear selection
@@ -377,6 +381,9 @@ export class Sketch extends React.Component {
         this.view.dragged = true;
         //Check if we are resizing the element
         if (this.view.currentElementResizing === true) {
+            if (this.view.currentElement.locked === true) {
+                return null; //Element is locked
+            }
             let element = this.view.currentElement;
             let snapshot = this.view.snapshot[0]; //Get snapshot of the current element
             let orientation = this.view.resizeOrientation;
@@ -420,8 +427,15 @@ export class Sketch extends React.Component {
         }
         //Check if we have selected elements
         else if (this.view.currentElementDragging === true && this.view.selection.length > 0) {
+            if (this.view.selectionLocked === true) {
+                return null; //Move is not allowed --> selection is locked
+            }
             //Move all elements
             this.view.selection.forEach(function (element, index) {
+                if (element.locked === true) {
+                    return null; //This element is locked
+                }
+                //Update element position
                 element.x = self.gridRound(self.view.snapshot[index].x + (x - self.view.lastX));
                 element.y = self.gridRound(self.view.snapshot[index].y + (y - self.view.lastY));
             });
@@ -499,6 +513,7 @@ export class Sketch extends React.Component {
         //Reset the current drag element
         this.view.currentElement = null;
         this.view.selection = getSelection(this.elements); //Update the selection
+        this.view.selectionLocked = isSelectionLocked(this.view.selection); //Update is selection is locked
         this.renderStatusAction(""); //Reset status action
         this.forceUpdate(); //Force update to display/hide the stylebar
         //Draw
@@ -558,8 +573,9 @@ export class Sketch extends React.Component {
         //Update the selection with the cloned elements
         this.view.selection = this.view.selection.map(function (element) {
             let clonedElement = Object.assign({}, element, {
-                "x": element.x + 5,
-                "y": element.y + 5
+                "x": element.x + 10,
+                "y": element.y + 10,
+                "locked": false //Reset locked attribute
             });
             //self.elements.push(clonedElement); //Save to the elements list
             newElements.push(clonedElement); //Save to the elements list
@@ -570,6 +586,7 @@ export class Sketch extends React.Component {
         forEachRev(newElements, function (element) {
             self.elements.unshift(element);
         });
+        this.view.selectionLocked = false; //Reset selection locked flag
         this.forceUpdate(); //Update
     }
     //Remove current selection
@@ -606,6 +623,19 @@ export class Sketch extends React.Component {
             }
         });
         return this.draw(); //Only draw
+    }
+    //Lock selection
+    lockSelection() {
+        let self = this;
+        if (this.view.selectionLocked === true) {
+            unlockSelection(this.view.selection);
+        }
+        else {
+            lockSelection(this.view.selection);
+        }
+        //Toggle selection locked
+        this.view.selectionLocked = !this.view.selectionLocked;
+        this.forceUpdate(); //Update
     }
     //Reset the selection
     resetSelection() {
@@ -683,10 +713,12 @@ export class Sketch extends React.Component {
                         return React.createElement(Stylebar, {
                             //"key": self.view.selection.length,
                             "selection": self.view.selection, 
+                            "selectionLocked": self.view.selectionLocked,
                             "onUpdate": self.updateSelection,
                             "onClone": self.cloneSelection,
                             "onRemove": self.removeSelection,
-                            "onOrder": self.orderSelection
+                            "onOrder": self.orderSelection,
+                            "onLock": self.lockSelection
                         });
                     }} />
                 </div>
