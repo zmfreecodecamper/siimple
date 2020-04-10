@@ -40,7 +40,7 @@ export function renderSketch (context, elements, state) {
             context.stroke();
             context.setLineDash([]); //Reset line-dash
             //Check if is the unique selected elements
-            if (state.selection.length === 1) {
+            if (state.selection.length === 1 && element.locked === false) {
                 return getResizePoints(element).forEach(function (point) {
                     context.beginPath();
                     context.fillStyle = theme.resizeColor; //selectionColor;
