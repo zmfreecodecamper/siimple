@@ -54,3 +54,31 @@ export function snapshotSelection (elements) {
     });
 }
 
+//Check if all elements of the selection are locked
+export function isSelectionLocked (elements) {
+    let locked = true;
+    elements.forEach(function (element) {
+        if (element.locked === false) {
+            locked = false; //At least one element is not locked
+        }
+    });
+    return locked;
+}
+
+//Set lock value
+export function setLockSelection (elements, value) {
+    return elements.forEach(function (element) {
+        element["locked"] = value; //Set locked attribute
+    });
+}
+
+//Lock selection
+export function lockSelection (elements) {
+    return setLockSelection(elements, true);
+}
+
+//Unlock selection
+export function unlockSelection (elements) {
+    return setLockSelection(elements, false);
+}
+
