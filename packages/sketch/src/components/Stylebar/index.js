@@ -92,6 +92,7 @@ export class Stylebar extends React.Component {
     //Render the stylebar
     render() {
         let self = this;
+        let locked = this.props.selectionLocked;
         let current = this.state.current;
         //Stylebar wrapper classnames
         let classList = classNames({
@@ -100,6 +101,16 @@ export class Stylebar extends React.Component {
         });
         return (
             <div className={classList}>
+                {/* Selection locked */}
+                <div className={style.item}>
+                    <Renderer render={function () {
+                        return React.createElement(Button, {
+                            "icon": (locked === true) ? "lock" : "unlock",
+                            "active": locked === true,
+                            "onClick": self.props.onLock
+                        });
+                    }} />
+                </div>
                 {/* Render element text option */}
                 <If condition={this.state.showTextOption}>
                     <div className={style.item}>
