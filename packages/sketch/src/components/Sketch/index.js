@@ -77,7 +77,8 @@ export class Sketch extends React.Component {
         this.ref = {
             //"status": React.createRef() //Status bar
             "statusPosition": React.createRef(),
-            "statusAction": React.createRef()
+            "statusAction": React.createRef(),
+            "statusSelection": React.createRef()
         };
         //Initialize the view state
         this.view = {
@@ -339,6 +340,7 @@ export class Sketch extends React.Component {
                 this.view.selection = getSelection(this.elements);
                 this.view.snapshot = snapshotSelection(this.view.selection); //Create a snapshot of the selection
                 this.view.selectionLocked = isSelectionLocked(this.view.selection); //Save is selection is locked
+                //this.renderStatusSelection();
                 return; //Stop event
             }
             //If there is no elements --> clear selection
@@ -357,14 +359,6 @@ export class Sketch extends React.Component {
         this.view.currentElement = element; //Save dragging element
         this.view.selection = []; //Clear the current selection
         clearSelection(this.elements);
-        //if (this.state.currentType === "screenshot") {
-        //    Object.assign(this.view.cursor, {
-        //        "x": element["x"],
-        //        "y": element["y"],
-        //        "width": 0,
-        //        "height": 0
-        //    });
-        //}
         this.forceUpdate(); //Force update to hide stylebar
     }
    //Handle mouse move
@@ -425,7 +419,7 @@ export class Sketch extends React.Component {
                 element.height = snapshot.height + deltaY;
             }
             //Display in status bar
-            this.renderStatusAction(`resize::${element.type}: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
+            this.renderStatusAction(`resize:${element.type}:${Math.abs(element.width)}x${Math.abs(element.height)}`);
         }
         //Check if we have selected elements
         else if (this.view.currentElementDragging === true && this.view.selection.length > 0) {
@@ -464,13 +458,13 @@ export class Sketch extends React.Component {
                 if (element.type === "selection") {
                     //Set selected elements and get the new number of selected elements
                     setSelection(element, this.elements);
-                    this.renderStatusAction(`selection: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
+                    this.renderStatusAction(`selection:${Math.abs(element.width)}x${Math.abs(element.height)}`);
                 }
                 else if (element.type === "screenshot") {
-                    this.renderStatusAction(`screenshot: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
+                    this.renderStatusAction(`screenshot:${Math.abs(element.width)}x${Math.abs(element.height)}`);
                 }
                 else {
-                    this.renderStatusAction(`draw::${element.type}: ${Math.abs(element.width)}x${Math.abs(element.height)}`);
+                    this.renderStatusAction(`draw:${element.type}:${Math.abs(element.width)}x${Math.abs(element.height)}`);
                 }
             }
         }
@@ -525,6 +519,7 @@ export class Sketch extends React.Component {
         this.view.currentElement = null;
         this.view.selection = getSelection(this.elements); //Update the selection
         this.view.selectionLocked = isSelectionLocked(this.view.selection); //Update is selection is locked
+        //this.renderStatusSelection();
         this.renderStatusAction(""); //Reset status action
         this.forceUpdate(); //Force update to display/hide the stylebar
         //Draw
@@ -541,6 +536,7 @@ export class Sketch extends React.Component {
     handleTypeChange(type) {
         clearSelection(this.elements); //Remove selection
         this.view.selection = []; //Reset selection 
+        //this.renderStatusSelection(); //Update status selection
         return this.setState({
             "currentType": type
         });
@@ -598,6 +594,7 @@ export class Sketch extends React.Component {
             self.elements.unshift(element);
         });
         this.view.selectionLocked = false; //Reset selection locked flag
+        //this.renderStatusSelection(); //Update status selection
         this.forceUpdate(); //Update
     }
     //Remove current selection
@@ -607,6 +604,7 @@ export class Sketch extends React.Component {
             return !element.selected;
         });
         this.view.selection = []; //Remove selection
+        //this.renderStatusSelection(); //Update status selection
         this.forceUpdate(); //Hide stylebar
         //return this.draw();
     }
@@ -646,6 +644,7 @@ export class Sketch extends React.Component {
         }
         //Toggle selection locked
         this.view.selectionLocked = !this.view.selectionLocked;
+        //this.renderStatusSelection();
         this.forceUpdate(); //Update
     }
     //Reset the selection
@@ -658,12 +657,25 @@ export class Sketch extends React.Component {
     }
     //Render current mouse position
     renderStatusPosition(x, y) {
-        this.ref.statusPosition.current.textContent = "mouse: " + x + "," + y;
+        this.ref.statusPosition.current.textContent = "mouse:" + x + "," + y;
     }
     //Render current status action
     renderStatusAction(value) {
         this.ref.statusAction.current.textContent = value;
     }
+    //Render status selection
+    //renderStatusSelection() {
+    //    let el = this.ref.statusSelection.current; //Get status selection element
+    //    if (this.view.selection.length === 0) {
+    //        el.textContent = ""; //Clear selection
+    //    }
+    //    else {
+    //        let length = this.view.selection.length; //Get number of selected elements
+    //        let locked = this.view.selectionLocked;
+    //        el.textContent = `selection:${length}${(locked) ? ":locked" : ""}`;
+    //    }
+    //    //this.ref.statusSelection.current.textContent = value;
+    //}
     //Render the sketch component
     render() {
         let self = this;
@@ -738,8 +750,11 @@ export class Sketch extends React.Component {
                     <span className={style.statusItem} ref={this.ref.statusPosition} />
                     <span className={style.statusItem} ref={this.ref.statusAction} />
                     <span className={style.statusItem} style={{"float":"right"}}>
-                        canvas: {this.state.width}x{this.state.height}
+                        canvas:{this.state.width}x{this.state.height}
                     </span>
+                    {/*
+                    <span className={style.statusItem} ref={this.ref.statusSelection} style={{"float":"right"}} />
+                    */}
                 </pre>
             </div>
         );
