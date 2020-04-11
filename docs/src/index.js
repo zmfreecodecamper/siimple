@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import kofi from "kofi";
 import {HashbangRouter as Router} from "rouct";
-import {Switch, Route} from "rouct";
+import Rouct from "rouct";
 import {If} from "@siimple/neutrine";
 import {Appbar, AppbarWrapper, AppbarItem} from "@siimple/neutrine";
 
@@ -53,7 +53,7 @@ class App extends React.Component {
     render() {
         let self = this;
         return (
-            <Router>
+            <Rouct.BrowserRouter>
                 {/* Display loading */}
                 <If condition={this.state.loading === true}>
                     Loading...
@@ -71,14 +71,14 @@ class App extends React.Component {
                                 {self.renderAppbarItems()}
                             </Appbar>
                             {/* Documentation routes */}
-                            <Switch>
-                                <Route path="/" exact component={Home} props={props} />
-                                <Route path="*" component={Page} props={props} />
-                            </Switch>
+                            <Rouct.Switch>
+                                <Rouct.Route path="/" exact component={Home} props={props} />
+                                <Rouct.Route path="*" component={Page} props={props} />
+                            </Rouct.Switch>
                         </AppbarWrapper>
                     );
                 }} />
-            </Router>
+            </Rouct.BrowserRouter>
         );
     }
 }
