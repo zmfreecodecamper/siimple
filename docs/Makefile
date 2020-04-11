@@ -12,7 +12,8 @@ build:
 # Serve the documentation site
 .PHONY: test
 test:
-	${NODE_BIN}/stattic --port 5000 --folder ./www --cors
+	#${NODE_BIN}/stattic --port 5000 --folder ./www --cors
+	node ../scripts/serve.js --port 5000
 
 # Publish the documentation website
 .PHONY: publish
