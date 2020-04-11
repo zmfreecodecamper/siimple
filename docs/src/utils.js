@@ -1,4 +1,4 @@
-import {redirectHashbang} from "rouct";
+import Rouct from "rouct";
 
 //Export redirect wrapper
 export function redirect (href) {
@@ -9,7 +9,8 @@ export function redirect (href) {
         }).click();
     }
     //Default --> redirect to an internal url
-    return redirectHashbang(href);
+    //return Rouct.redirectHashbang(href);
+    return Rouct.redirectBrowser(href);
 }
 
 //Secure base64 encoding
