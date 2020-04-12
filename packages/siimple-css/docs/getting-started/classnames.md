@@ -7,13 +7,17 @@ description: "How @siimple/css is structured"
 Each class has the prefix `siimple` and is followed by one dash and the block name.
 
 ```
-<div class="siimple-btn"></div>
+<div class="siimple-btn">
+    My button
+</div>
 ```
 
 A modifier of a block (colors, disabled, etc.) adds a double dash after the block name and then the modifier name:
 
 ```
-<div class="siimple-btn siimple-btn--primary"></div>
+<div class="siimple-btn siimple-btn--primary">
+    My blue button
+</div>
 ```
 
 There are also blocks that can contain elements inside. These elements adds a dash after the block name and is followed by the element name.
@@ -28,7 +32,9 @@ Also, any modifier bound to an element is denoted by a double dash after the ele
 
 ```
 <div class="siimple-menu">
-    <div class="siimple-menu-item siimple-menu-item--selected">Menu item</div>
+    <div class="siimple-menu-item siimple-menu-item--active">
+        Menu item
+    </div>
 </div>
 ```
 
