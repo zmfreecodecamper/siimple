@@ -11,7 +11,7 @@ description: "A special alert to grab attention in something important"
 }
 </style>
 
-Add `siimple-tip` to a `div` tag to create a tip element.
+A **siimple tip** is a special alert element designed to grab attention in something important in your website or application. To create a basic tip element, just add the `siimple-tip` class to a `<div>` element:
 
 :::snippet title="Basic tip example" lang="html"
 <div class="siimple-tip siimple-tip--primary">
@@ -22,7 +22,7 @@ Add `siimple-tip` to a `div` tag to create a tip element.
 
 #### Colored tip
 
-Set the tip color by adding a `siimple-tip--[COLOR]` class with the desired color.
+All the different colors specified in the [theming](/css/getting-started/theming.html) section can be used to customize your tip element:
 
 :::snippet title="Colored tip example" lang="html"
 <div class="siimple-tip siimple-tip--primary">
