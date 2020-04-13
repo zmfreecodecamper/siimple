@@ -3,10 +3,10 @@ title: "Btn"
 description: "The essential and classic button element"
 ---
 
-Add `siimple-btn` to a `button`, `input[type="submit"]` or `div` tag for creating a basic button.
+Buttons are essential elements in any website or application for **actions**. The `siimple-btn` class can be used in a `<button>`, `<input type="submit">`, `<a>` or `<div>` tag.
 
 :::snippet title="Basic button" lang="html"
-<button class="siimple-btn">My button</button>
+<button class="siimple-btn">Default button</button>
 :::
 
 
