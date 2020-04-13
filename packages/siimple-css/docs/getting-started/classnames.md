@@ -1,10 +1,10 @@
 ---
 title: "Class Names"
-description: "How @siimple/css is structured"
+description: "How siimple css is structured"
 ---
 
-**@siimple/css** is based on the [BEM](https://getbem.com/) (**B**lock **E**lement **M**odifier) methodology. 
-Each class has the prefix `siimple` and is followed by one dash and the block name.
+Class names in **siimple css** are based on the [BEM](https://getbem.com/) (**B**lock **E**lement **M**odifier) methodology. 
+Each class has the prefix `siimple` and is followed by one dash and the block name. For example, for building a button you should add a `siimple-btn` class to any `<div>` or `<button>` element:
 
 ```
 <div class="siimple-btn">
@@ -12,7 +12,7 @@ Each class has the prefix `siimple` and is followed by one dash and the block na
 </div>
 ```
 
-A modifier of a block (colors, disabled, etc.) adds a double dash after the block name and then the modifier name:
+Any modifier of a block (for example to change the block color) can be specified adding a double dash after the block name and then the modifier name. For example, for adding the primary color to the preoviuos button, you should add the class `siimple-btn--primary`:
 
 ```
 <div class="siimple-btn siimple-btn--primary">
@@ -20,7 +20,7 @@ A modifier of a block (colors, disabled, etc.) adds a double dash after the bloc
 </div>
 ```
 
-There are also blocks that can contain elements inside. These elements adds a dash after the block name and is followed by the element name.
+There are also blocks that can contain elements inside. Class names for these elements are specified adding a dash after the block name and followed by the element name. For example, to style each item of a menu, you should add the class `siimple-menu-item` to each item element:
 
 ```
 <div class="siimple-menu">
