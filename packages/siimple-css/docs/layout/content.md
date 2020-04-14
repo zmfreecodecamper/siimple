@@ -12,7 +12,9 @@ A **content** is a layout component that divides your website in section and pla
 </div>
 ```
 
-By default the container has the maximun width minus the `20px` of padding left and right. You can change the width of the content element using one of the following breakpoints:
+#### Content breakpoints
+
+By default the container has the maximun width minus the `20px` of padding left and right. You can change the width of the content element using one of the following breakpoints class names:
 
 - With `siimple-content--xsmall` it will have a maximum width of `480px`.
 - With `siimple-content--small` it will have a maximum width of `600px`.
@@ -20,9 +22,11 @@ By default the container has the maximun width minus the `20px` of padding left 
 - With `siimple-content--large` it will have a maximum width of `960px`.
 - With `siimple-content--xlarge` it will have a maximum width of `1280px`.
 
+On screens with sizes lower than the specified in the breakpoint class, the container will have the maximun width.
+
 ```html
 <div class="siimple-content siimple-content--medium">
-    768px container
+    Max 768px container
 </div>
 ```
 
