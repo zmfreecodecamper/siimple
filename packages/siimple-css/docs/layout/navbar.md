@@ -37,16 +37,33 @@ Here is a full navbar example:
 :::
 
 
-#### Theme
+#### Color
 
-Add `siimple-navbar--light` or `siimple-navbar--dark` class to the navbar container to switch to a light or a dark theme.
+Costomize the navbar adding one of the siimple colors described in the [theming page](/css/getting-started/theming.html).
 
 ```html
-<div class="siimple-navbar siimple-navbar--dark">
+<div class="siimple-navbar siimple-navbar--primary">
     <!-- Navbar content -->
 </div>
 ```
 
+#### Breakpoints
+
+By default the navbar has the maximun width minus the `20px` of padding left and right. You can change the width of the navbar element using one of the following breakpoints class names:
+
+- With `siimple-navbar--xsmall` it will have a maximum width of `480px`.
+- With `siimple-navbar--small` it will have a maximum width of `600px`.
+- With `siimple-navbar--medium` it will have a maximum width of `768px`.
+- With `siimple-navbar--large` it will have a maximum width of `960px`.
+- With `siimple-navbar--xlarge` it will have a maximum width of `1280px`.
+
+On screens with sizes lower than the specified in the breakpoint class, the navbar will have the maximun width.
+
+```html
+<div class="siimple-navbar siimple-navbar--medium">
+    <!-- Navbar content -->
+</div>
+```
 
 #### Brand
 
