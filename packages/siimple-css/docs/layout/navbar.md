@@ -67,7 +67,7 @@ On screens with sizes lower than the specified in the breakpoint class, the navb
 
 #### Brand
 
-The navbar brand is a container for your website logo. Remember that the brand is **always visible**, in both desktop (`> 1024px`) and mobile devices (`< 1024px`).
+The navbar brand is a container for your website logo. Remember that the brand is **always visible**, in both desktop (`>1024px`) and mobile devices (`<1024px`).
 
 ```html
 <div class="siimple-navbar">
@@ -104,7 +104,7 @@ The navbar menu is a `<div>` with a `siimple-navbar-menu` class that works as a 
 </div>
 ```
 
-The menu is **always visible** on desktop devices (`> 1024px`) and is always placed at the right side of the navbar. On mobile devices (`< 1024px`), it is **hidden by default**, and is only visible when the user press the toggle button. 
+The menu is **always visible** on desktop devices (`>1024px`) and is always placed at the right side of the navbar. On mobile devices (`<1024px`), it is **hidden by default**, and is only visible when the user press the toggle button. 
 
 :::tip:info title="No JavaScript required"
 You do not need JavaScript to display the menu on mobile devices. We have implemented a pure css solution, so the  menu is automatically displayed when user clicks on the toggle button.
