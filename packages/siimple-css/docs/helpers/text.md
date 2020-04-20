@@ -3,7 +3,7 @@ title: "Text helpers"
 description: "Basic text helpers"
 ---
 
-> Added in **v3.1.0**</div>
+> Added in **v3.1.0**
 
 #### Text alignment
 
