@@ -9,7 +9,7 @@ description: "Display block messages"
 }
 </style>
 
-Add `siimple-alert` to transform a `div` into an alert. 
+An **alert** is a colored notification block generally used to catch the attention of your users of something important. An alert can be created adding the `siimple-alert` class to a `<div>` tag.
 
 :::snippet lang="html" title="Basic alert example"
 <div class="siimple-alert siimple-alert--primary">
@@ -17,7 +17,10 @@ Add `siimple-alert` to transform a `div` into an alert.
 </div>
 :::
 
-You can specify the alert color by adding `siimple-alert--[COLOR]`.
+
+#### Colors
+
+You can specify the alert color using one of the colors defined in the [theming page](/css/getting-started/theming.html).
 
 :::snippet lang="html" title="Colored alerts example"
 <div class="siimple-alert siimple-alert--primary">
@@ -42,7 +45,7 @@ You can specify the alert color by adding `siimple-alert--[COLOR]`.
 
 > Added in **v3.1.0**.
 
-You can insert a titile in your alert adding a `div` tag with the class `siimple-alert-title`.
+You can insert a titile in your alert adding a `<div>` tag with the class `siimple-alert-title`.
 
 :::snippet lang="html" title="Alert title example"
 <div class="siimple-alert siimple-alert--error">
@@ -56,7 +59,7 @@ You can insert a titile in your alert adding a `div` tag with the class `siimple
 
 > Added in **v3.2.0**.
 
-You can add a `div` with a `siimple-alert-close` class to display a close button inside the alert component.
+You can add a `<div>` with a `siimple-alert-close` class to display a close button inside the alert component.
 
 :::snippet lang="html" title="Alert with a close icon"
 <div class="siimple-alert siimple-alert--warning">
