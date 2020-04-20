@@ -8,7 +8,6 @@ The **jumbotron** is full width container specially designed for calling attenti
 
 - **Title**: is the title of the jumbotron, with the class `siimple-jumbotron-title`.
 - **Subtitle**: is the subtitle of the jumbotron, with the class `siimple-jumbotron-subtitle`.
-- **Detail text**: is a container for additional text of the jumbotron, with the class `siimple-jumbotron-detail`.
 
 Here is a full example of a jumbotron element:
 
@@ -19,9 +18,6 @@ Here is a full example of a jumbotron element:
     </div>
     <div class="siimple-jumbotron-subtitle">
         This is the jumbotron subtitle
-    </div>
-    <div class="siimple-jumbotron-detail">
-        And this is the detail of the jumbotron element
     </div>
 </div>
 :::
