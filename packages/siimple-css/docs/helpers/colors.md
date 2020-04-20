@@ -7,7 +7,7 @@ description: "Change the color of the text or background"
 
 #### Text color
 
-Set the text color of any element. There is an extra class, `siimple--color-white` that sets the text color to white. 
+Set the text color of any element using the colors defined in the [theming page](/css/getting-started/theming.html). There is an additional class `siimple--color-white` that sets the text color to white. 
 
 :::snippet 
 <style>
@@ -27,7 +27,7 @@ Set the text color of any element. There is an extra class, `siimple--color-whit
 
 #### Background color
 
-Set the background color of any element. There is an extra class, `siimple--bg-white` that sets the background color to white.
+Set the background color of any element. There is an additional class `siimple--bg-white` that sets the background color to white.
 
 :::snippet
 <style>
