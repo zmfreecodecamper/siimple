@@ -22,7 +22,7 @@ Once you have the container of the breadcrumbs, just create as many as you want.
 
 #### Active crumb
 
-You can use the `siimple-breadcrumb-item--active` class to mark a crumb as active. This cna be used for example to inform the user about the current page.
+You can use the `siimple-breadcrumb-item--active` class to mark a crumb as active, for example to inform the user about the current page.
 
 ```
 <div class="siimple-breadcrumb siimple--mb-0">
