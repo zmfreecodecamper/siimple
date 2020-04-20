@@ -27,10 +27,10 @@ Here is a full navbar example:
     <!-- Navbar menu -->
     <div class="siimple-navbar-menu">
         <div class="siimple-navbar-item">
-            <div class="siimple-navbar-link">Products</div>
+            <a href="" class="siimple-navbar-link">Products</a>
         </div>
         <div class="siimple-navbar-item">
-            <div class="siimple-navbar-link">About</div>
+            <a href="" class="siimple-navbar-link">About</a>
         </div>
     </div>
 </div>
@@ -138,6 +138,38 @@ You can also put other elements inside an item, for example a button or an input
     </div>
 </div>
 ```
+
+#### Navbar link
+
+A navigation link with the class `siimple-navbar-link` that should be added as a child of the `siimple-navbar-item` element.
+
+You can also customize the navbar links status using the class `siimple-navbar-link--active` (for example to indicate the current page) and the class `siimple-navbar-link--disabled`.
+
+:::snippet lang="html" title="Navbar links"
+<div class="siimple-navbar siimple-navbar--light">
+    <div class="siimple-navbar-brand">
+        <strong>Navbar</strong>
+    </div>
+    <div class="siimple-navbar-toggle" tabindex="0">
+        <div class="siimple-navbar-navicon"></div>
+    </div>
+    <div class="siimple-navbar-menu">
+        <div class="siimple-navbar-item">
+            <a href="" class="siimple-navbar-link">Default</a>
+        </div>
+        <div class="siimple-navbar-item">
+            <a href="" class="siimple-navbar-link siimple-navbar-link--active">
+                Active
+            </a>
+        </div>
+        <div class="siimple-navbar-item">
+            <a href="" class="siimple-navbar-link siimple-navbar-link--disabled">
+                Disabled
+            </a>
+        </div>
+    </div>
+</div>
+:::
 
 
 #### Fixed navbar
