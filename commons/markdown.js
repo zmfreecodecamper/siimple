@@ -46,6 +46,36 @@ let createElement = function (name, props) {
     return element;
 };
 
+//Create a text element
+let createTextElement = function (value) {
+    //return value; //Return the text content
+    return createElement("text", {
+        "value": value
+    });
+};
+
+//Render a basic element
+let renderElement = function (tagname, attr, children) {
+    let element = `<${tagName}`;
+    Object.keys(attr).forEach(function (key) {
+        let value = attr[key];
+        if (typeof value !== "string") {
+            return null; //Ignore null or undefined attribute
+        }
+        let keyName = (key === "className") ? "class" : key;
+        element = element + ` ${keyName}="${value}"`;
+    });
+    //Check for no closed tag
+    if (tagname !== "img" && tagname !== "hr") {
+        element = element + `>${children}</${tagname}>`;
+    }
+    else {
+        element = element + " />"; //Close tag without children
+    }
+    //Return the element
+    return element;
+};
+
 //Markdown tokes
 let tokens = {
     // Heading
@@ -115,25 +145,33 @@ let tokens = {
 let parseNodes = function (nodes) {
     return Object.keys(nodes).map(function (key) {
         return Object.assign(nodes[key], {
-            "name": key
+            "name": key,
+            "type": "non-container"
         });
     });
 };
 
-//Generate a list with all block nodes
-let getBlockNodes = function () {
+//Generate a list with all nodes
+let getAllNodes = function () {
     return parseNodes({
         "heading": {
+            "inline": false,
             "test": tokens.heading,
             "parse": function (element, line, index, parser) {
                 matchRegex(line, tokens.heading, function (full, level, text) {
-                    element["level"] = level.length; //Save heading level
-                    element["children"] = parser(text.trim());
+                    element.attributes["level"] = level.length; //Save heading level
+                    element.children = parser(text.trim());
                 });
                 return false; //Stop processing lines
+            },
+            "render": function (attributes, children, options) {
+                let tagname = "h" + attributes.level; //Build heading tag
+                return renderElement(tagname, {"className": options.className[tagname]}, children);
             }
         },
         "blockquote": {
+            "inline": false,
+            "tagname": "blockquote",
             "test": tokens.blockquote,
             "parse": function (element, line, index, parser) {
                 if (line.charAt(0) === ">") {
@@ -147,6 +185,8 @@ let getBlockNodes = function () {
             }
         },
         "rule": {
+            "inline": false,
+            "tagname": "hr",
             "test": tokens.rule,
             "parse": function (element) {
                 delete element["children"]; //Delete element children
@@ -154,6 +194,8 @@ let getBlockNodes = function () {
             }
         },
         "table": {
+            "inline": false,
+            "tagname": "table",
             "test": tokens.tableRow,
             "parse": function (element, line, index, parser) {
                 if (index === 0) {
@@ -174,7 +216,28 @@ let getBlockNodes = function () {
                 return false; //Not valid line
             }
         },
+        "tableHeader": {
+            "inline": false,
+            "tagname": "thead",
+            "test": tokens.tableRow
+        },
+        "tableBody": {
+            "inline": false,
+            "test": tokens.tableRow,
+            "tagname": "tbody"
+        },
+        "tableRow": {
+            "inline": false,
+            "test": tokens.tableRow,
+            "tagname": "tr",
+        },
+        "tableCell": {
+            "inline": false,
+            "test": tokens.tableRow,
+            "tagname": "td"
+        },
         "code": {
+            "inline": false,
             "test": tokens.codeStart,
             "parse": function (element, line, index) {
                 if (index === 0) {
@@ -183,14 +246,20 @@ let getBlockNodes = function () {
                     return true; //Skip the first line
                 }
                 else if (tokens.codeEnd.test(line.trim()) === false) {
-                    element.value.push(line); //Save code line
+                    element["value"].push(line); //Save code line
+                    //element.children.push(line); //Save code line
                     return true;
                 }
                 //Default --> end of block
                 return false;
+            },
+            "render": function (attributes, children, options) {
+                let content = attributes["value"].join("\n");
+                return renderElement("pre", {"className": options.className["pre"]}, content);
             }
         },
         "list": {
+            "inline": false,
             "test": tokens.list,
             "parse": function (element, line, index, parser) {
                 if (index === 0 || tokens.list.test(line) === true) {
@@ -203,24 +272,30 @@ let getBlockNodes = function () {
                 }
                 //Default --> line not valid
                 return false;
-            }
+            },
+            "tagname": "li"
         },
         "html": {
+            "inline": false,
             "test": tokens.html,
             "parse": function (element, line, index) {
                 if (index === 0) {
-                    delete element["children"]; //Remove children field
+                    delete element.children; //Remove children field
                     element["value"] = []; //Initialize value list
                 }
                 if (line.trim().length !== 0) {
-                    element.value.push(line); //Save html code line
+                    element["value"].push(line); //Save html code line
                     return true;
                 }
                 //Empty line --> end html code block
                 return false;
+            },
+            "render": function (attributes, children, options) {
+                return attributes["value"].join("\n");
             }
         },
         "paragraph": {
+            "inline": false,
             "test": tokens.paragraph,
             "parse": function (element, line, index, parser) {
                 if (line.trim().length !== 0) {
@@ -231,54 +306,75 @@ let getBlockNodes = function () {
                 }
                 //Default --> end paragraph block
                 return false;
-            }
-        }
-    });
-};
-
-//Get a list with inline nodes
-let getInlineNodes = function () {
-    return parseNodes({
+            },
+            "tagname": "p"
+        },
         "image": {
+            "inline": true,
             "test": tokens.image,
             "parse": function (element, match) {
                 delete element["children"]; //Delete element children
                 element["alt"] = match[1].trim(); //Save image alt caption
                 element["src"] = match[2].trim(); //Save image src
+            },
+            "render": function (attributes, children, options) {
+                return renderElement("img", {
+                    "src": attributes["src"],
+                    "alt": attributes["alt"]
+                });
             }
         },
         "link": {
+            "inline": true,
             "test": tokens.link,
             "parse": function (element, match, index, parser) {
                 element["href"] = match[2].trim(); //Save link url
                 element["children"] = parser(match[1]); //Parse link children
+            },
+            "render": function (attributes, children, options) {
+                return renderElement("a", {
+                    "href": attributes["href"],
+                    "className": options.className["a"]
+                } children);
             }
         },
         "strong": {
+            "inline": true,
             "test": tokens.strong,
             "parse": function (element, match, index, parser) {
                 element["children"] = parser(match[1]); 
-            }
+            },
+            "tagname": "strong"
         },
         "emphasis": {
+            "inline": true,
             "test": tokens.emphasis,
             "parse": function (element, match, index, parser) {
                 element["children"] = parser(match[1]); 
-            }
+            },
+            "tagname": "em"
         },
         "inlineCode": {
+            "inline": true,
             "test": tokens.inlineCode,
             "parse": function (element, match, index, parser) {
-                delete element["children"]; //Delete children field
+                //element.children.push(createTextElement(match[1]));
+                delete element["children"]; //Remove children node
                 element["value"] = match[1]; //Save inline code
+            },
+            "render": function (attributes, children, options) {
+                return renderElement("code", {"className": options.className["code"]}, attributes.value)
             }
         }
     });
 };
 
 //Find the node that matches the provided string
-let matchNode = function (nodes, str, callback) {
+let matchNode = function (nodes, inline, str, callback) {
     for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].inline !== inline) {
+            continue; //Next node
+        }
         let match = nodes[i].test.exec(str);
         if (match !== null) {
             return callback(nodes[i], match);
@@ -288,6 +384,9 @@ let matchNode = function (nodes, str, callback) {
 
 //Container default options
 let containerDefaultOptions = {
+    "render": function () {
+        return ""; // By default return nothing
+    },
     "parseContent": true, //Parse content
     "allowEmptyLines": true, //Allow empty lines
     "delimiter": ":::" //Default container delimiter
@@ -301,6 +400,8 @@ let createContainerNode = function (name, options) {
     let containerEndRegex = new RegExp("^" + options.delimiter + "", ""); //Container end regex
     //console.log(containerStartRegex);
     return {
+        "type": "container",
+        "inline": false,
         "name": name,
         "test": containerStartRegex,
         "parse": function (element, line, index, parser) {
@@ -310,7 +411,7 @@ let createContainerNode = function (name, options) {
                     if (args === "") {
                         return null; //Nothing to parse
                     }
-                    Object.assign(element, parseAttributes(args)); //Parse and merge attributes
+                    Object.assign(element.attributes, parseAttributes(args)); //Parse and merge attributes
                 });
                 element["children"] = []; //Prevent children override
                 return true; //Nothing to parse
@@ -334,8 +435,24 @@ let createContainerNode = function (name, options) {
             }
             //Default: stop parsing lines
             return false;
-        }
+        },
+        "render": options.render
     };
+};
+
+//Generate nodes index
+let generateNodesIndex = function (nodes) {
+    let nodesIndex = {}; //Nodes index
+    nodes.forEach(function (node) {
+        nodesIndex[node.name] = index; //Save node index
+    });
+    //Return nodes index
+    return nodesIndex;
+};
+
+//Default render options
+let defaultRenderOptions = {
+    "className": {}
 };
 
 //Initialize markdown class
@@ -344,12 +461,15 @@ let Markdown = function () {
         return new Markdown();
     }
     //Initialize the list of nodes
-    this.blockNodes = getBlockNodes();
-    this.inlineNodes = getInlineNodes();
+    this.nodes = getAllNodes();
+    this.index = generateNodesIndex(this.nodes);
 };
 
 //Register methods
 Markdown.prototype = {
+    "__getNode": function (name) {
+        return this.nodes[this.index[name]];
+    },
     //Parse a string using inline nodes
     "parseInline": function (str) {
         let self = this;
@@ -357,12 +477,10 @@ Markdown.prototype = {
         //let nodes = getNodes(context.nodes, true); //Get inline nodes
         let start = 0; //Start index
         for (let i = 0; i < str.length; i++) {
-            matchNode(self.inlineNodes, str.substring(i), function (node, match) {
+            matchNode(self.nodes, true, str.substring(i), function (node, match) {
                 //Add the previous text
                 if (start < i) {
-                    elements.push(createElement("text", {
-                        "value": str.substring(start, i)
-                    }));
+                    elements.push(createTextElement(str.substring(start, i)));
                 }
                 //Create the new element
                 let element = createElement(node.name, {});
@@ -376,9 +494,7 @@ Markdown.prototype = {
         }
         //Check for text to add
         if (start < str.length) {
-            elements.push(createElement("text", {
-                "value": str.substring(start)
-            }));
+            elements.push(createTextElement(str.substring(start)));
         }
         //Return text elements
         return elements;
@@ -408,7 +524,7 @@ Markdown.prototype = {
                 return null; //TODO
             }
             //Find the block node for processing this line
-            return matchNode(self.blockNodes, line, function (node) {
+            return matchNode(self.nodes, false, line, function (node) {
                 let element = createElement(node.name, {});
                 let nextLine = node.parse(element, line, 0, function (s) {
                     return self.parseInline(s);
@@ -430,7 +546,58 @@ Markdown.prototype = {
     },
     //Register a container node
     "registerContainer": function (name, options) {
-        this.blockNodes.unshift(createContainerNode(name, options));
+        this.nodes.unshift(createContainerNode(name, options));
+        this.index = generateNodesIndex(this.nodes); //Rebuild
+    },
+    //Remove a container node
+    "removeContainer": function (name, options) {
+        this.nodes.filter(function (node) {
+            return !(node.name === "name" && node.type === "container");
+        });
+        this.index = generateNodesIndex(this.nodes); //Rebuild indexes
+    },
+    //Render a virtual markdown
+    "render": function (content, options) {
+        let self = this;
+        options = Object.assign({}, defaultRenderOptions, options);
+        //Render children recursive
+        let renderChildren = function (children, sep) {
+            if (typeof children === "undefined" || children === null) {
+                return ""; //Nothing to render
+            }
+            if (typeof children === "string") {
+                return children; //Return text children
+            }
+            //Render all child nodes
+            let parsedChildren = children.map(function (child) {
+                if (typeof child === "string") {
+                    return child; //Return string content
+                }
+                //Check for text or html node
+                if (child.type === "text") {
+                    return child.value; //Return text content
+                }
+                //Get node and render the child element
+                let node = self.__getNode(child.type);
+                if (typeof node === "undefined") {
+                    throw new Error(`Unknow node '${child.type}'`);
+                }
+                let children = renderChildren(child.children, "");
+                //Check for custom element renderer
+                if (typeof node.render === "function") {
+                    return node.render(child.attributes, children, options);
+                }
+                //Render the node
+                let attributes = Object.assign({}, child.attributes, {
+                    "className": options.className[node.tagname]
+                });
+                return renderElement(node.tagname, attributes, children);
+            });
+            //Return children joined
+            return parsedChildren.join(sep);
+        };
+        //Render content
+        return renderChildren(content, "\n");
     }
 };
 
