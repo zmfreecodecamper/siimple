@@ -56,7 +56,7 @@ let createTextElement = function (value) {
 
 //Render a basic element
 let renderElement = function (tagname, attr, children) {
-    let element = `<${tagName}`;
+    let element = `<${tagname}`;
     Object.keys(attr).forEach(function (key) {
         let value = attr[key];
         if (typeof value !== "string") {
@@ -159,7 +159,7 @@ let getAllNodes = function () {
             "test": tokens.heading,
             "parse": function (element, line, index, parser) {
                 matchRegex(line, tokens.heading, function (full, level, text) {
-                    element.attributes["level"] = level.length; //Save heading level
+                    element["level"] = level.length; //Save heading level
                     element.children = parser(text.trim());
                 });
                 return false; //Stop processing lines
@@ -273,6 +273,11 @@ let getAllNodes = function () {
                 //Default --> line not valid
                 return false;
             },
+            "tagname": "ul"
+        },
+        "listItem": {
+            "inline": false,
+            "test": tokens.list,
             "tagname": "li"
         },
         "html": {
@@ -335,7 +340,7 @@ let getAllNodes = function () {
                 return renderElement("a", {
                     "href": attributes["href"],
                     "className": options.className["a"]
-                } children);
+                }, children);
             }
         },
         "strong": {
@@ -411,7 +416,7 @@ let createContainerNode = function (name, options) {
                     if (args === "") {
                         return null; //Nothing to parse
                     }
-                    Object.assign(element.attributes, parseAttributes(args)); //Parse and merge attributes
+                    Object.assign(element, parseAttributes(args)); //Parse and merge attributes
                 });
                 element["children"] = []; //Prevent children override
                 return true; //Nothing to parse
@@ -443,7 +448,7 @@ let createContainerNode = function (name, options) {
 //Generate nodes index
 let generateNodesIndex = function (nodes) {
     let nodesIndex = {}; //Nodes index
-    nodes.forEach(function (node) {
+    nodes.forEach(function (node, index) {
         nodesIndex[node.name] = index; //Save node index
     });
     //Return nodes index
@@ -585,7 +590,7 @@ Markdown.prototype = {
                 let children = renderChildren(child.children, "");
                 //Check for custom element renderer
                 if (typeof node.render === "function") {
-                    return node.render(child.attributes, children, options);
+                    return node.render(child, children, options);
                 }
                 //Render the node
                 let attributes = Object.assign({}, child.attributes, {
