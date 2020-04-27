@@ -1,3 +1,5 @@
+let util = require("./util.js");
+
 //Match regex
 let matchRegex = function (line, sourceRegex, callback) {
     let regex = new RegExp(sourceRegex.source, "g"); //Clone the regex
@@ -56,24 +58,25 @@ let createTextElement = function (value) {
 
 //Render a basic element
 let renderElement = function (tagname, attr, children) {
-    let element = `<${tagname}`;
-    Object.keys(attr).forEach(function (key) {
-        let value = attr[key];
-        if (typeof value !== "string") {
-            return null; //Ignore null or undefined attribute
-        }
-        let keyName = (key === "className") ? "class" : key;
-        element = element + ` ${keyName}="${value}"`;
-    });
-    //Check for no closed tag
-    if (tagname !== "img" && tagname !== "hr") {
-        element = element + `>${children}</${tagname}>`;
-    }
-    else {
-        element = element + " />"; //Close tag without children
-    }
-    //Return the element
-    return element;
+    return util.createElement(tagname, attr, children);
+    //let element = `<${tagname}`;
+    //Object.keys(attr).forEach(function (key) {
+    //    let value = attr[key];
+    //    if (typeof value !== "string") {
+    //        return null; //Ignore null or undefined attribute
+    //    }
+    //    let keyName = (key === "className") ? "class" : key;
+    //    element = element + ` ${keyName}="${value}"`;
+    //});
+    ////Check for no closed tag
+    //if (tagname !== "img" && tagname !== "hr") {
+    //    element = element + `>${children}</${tagname}>`;
+    //}
+    //else {
+    //    element = element + " />"; //Close tag without children
+    //}
+    ////Return the element
+    //return element;
 };
 
 //Markdown tokes
@@ -255,7 +258,11 @@ let getAllNodes = function () {
             },
             "render": function (attributes, children, options) {
                 let content = attributes["value"].join("\n");
-                return renderElement("pre", {"className": options.className["pre"]}, content);
+                if (options.escapeCode === true) {
+                    content = util.escapeHtml(content); //Escape special chars
+                }
+                //Return the pre element
+                return renderElement("pre", {"className": options.className["code"]}, content);
             }
         },
         "list": {
@@ -339,7 +346,7 @@ let getAllNodes = function () {
             "render": function (attributes, children, options) {
                 return renderElement("a", {
                     "href": attributes["href"],
-                    "className": options.className["a"]
+                    "className": options.className["link"]
                 }, children);
             }
         },
@@ -368,7 +375,12 @@ let getAllNodes = function () {
                 element["value"] = match[1]; //Save inline code
             },
             "render": function (attributes, children, options) {
-                return renderElement("code", {"className": options.className["code"]}, attributes.value)
+                let value = attributes.value; //Get code value
+                if (options.escapeCode === true) {
+                    value = util.escapeHtml(value); //Replace special html chars
+                }
+                //Return code element
+                return renderElement("code", {"className": options.className["inlineCode"]}, value)
             }
         }
     });
@@ -457,6 +469,7 @@ let generateNodesIndex = function (nodes) {
 
 //Default render options
 let defaultRenderOptions = {
+    "escapeCode": true,
     "className": {}
 };
 
