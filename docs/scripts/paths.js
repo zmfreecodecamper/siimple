@@ -5,14 +5,13 @@ let resolveTo = function (to) {
     return path.resolve(__dirname, to);
 };
 
-let buildPath = resolveTo("../www");
-
 module.exports = {
+    "root": resolveTo("../"),
     "packages": resolveTo("../../packages"),
     "config": resolveTo("../config.json"),
-    "build": buildPath,
-    "buildConfig": path.join(buildPath, "config.json"),
-    "buildPages": path.join(buildPath, "pages")
+    "partials": resolveTo("../partials"),
+    "template": resolveTo("../page.html"),
+    "build": resolveTo("../www/")
 };
 
 
