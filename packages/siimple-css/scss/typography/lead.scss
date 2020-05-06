@@ -8,13 +8,17 @@
 
 @use "@siimple/lib" as siimple;
 
-//Paragraph class
-.#{siimple.$prefix}paragraph, 
-.#{siimple.$prefix}p {
+$lead-text-size: 20px !default;
+$lead-line-height: 30px !default;
+$lead-color: siimple.color-lighter("dark") !default;
+
+//Paragraph lead class
+.#{siimple.$prefix}lead {
     display: block;
-    //font-family: $siimple-default-text-font;
-    //line-height: siimple.$line-height;
-    //font-size: siimple.$text-size;
+    font-size: $lead-text-size;
+    line-height: $lead-line-height;
+    font-weight: siimple.$weight-bold;
+    color: $lead-color;
     margin-top: 0px;
     margin-bottom: siimple.$margin-bottom;
 }
